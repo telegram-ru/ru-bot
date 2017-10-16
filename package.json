@@ -1,0 +1,44 @@
+{
+  "name": "ru-bot",
+  "version": "0.1.0",
+  "description": "Telegram bot to manage spam and rules for @_ru community",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "eslint .",
+    "dev": "DEBUG=rubot:* nodemon -w src ./src",
+    "start": "pm2 startOrRestart ./process.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LestaD/ru_bot.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot"
+  ],
+  "engines": {
+    "node": ">=8.5.0"
+  },
+  "author": "Sergey Sova <i.am@lestad.net> (https://lestad.top)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LestaD/ru_bot/issues"
+  },
+  "homepage": "https://github.com/LestaD/ru_bot#readme",
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-atomix-base": "^4.3.2",
+    "husky": "^0.14.3",
+    "nodemon": "^1.12.1",
+    "pm2": "^2.7.1",
+    "sequelize-cli": "^3.0.0"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "dotenv": "^4.0.0",
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.14.0",
+    "telegraf": "^3.14.0"
+  }
+}
