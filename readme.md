@@ -43,11 +43,14 @@ grant all privileges on database rubot_test to rubot;
 grant all privileges on database rubot_production to rubot;
 ```
 
-Add next line to `/etc/postgresql/9.6/main/pg_hba.conf` (change `9.6` to your postgres version)
+Add next line to `/etc/postgresql/9.6/main/pg_hba.conf` (change `9.6` to your postgres version):
 
 ```
 local   all             rubot                                 md5
 ```
+Restart postgres.
+
+
 
 Use next commands to manipulate db schema:
 
