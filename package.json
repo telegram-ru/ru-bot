@@ -8,7 +8,9 @@
     "dev": "DEBUG=rubot:* nodemon -w src ./src",
     "start": "pm2 startOrRestart ./process.config.js",
     "migrate": "sequelize db:migrate",
-    "rollback": "sequelize db:migrate:undo"
+    "rollback": "sequelize db:migrate:undo",
+    "prepush": "npm test",
+    "precommit": "npm test --silent"
   },
   "repository": {
     "type": "git",
