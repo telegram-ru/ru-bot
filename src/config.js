@@ -13,4 +13,6 @@ module.exports = {
     token: BOT_TOKEN,
     username: BOT_USERNAME,
   },
+  dev: NODE_ENV === 'development',
+  prod: NODE_ENV !== 'development',
 }

@@ -43,7 +43,10 @@ grant all privileges on database rubot_test to rubot;
 grant all privileges on database rubot_production to rubot;
 ```
 
-Add next line to `/etc/postgresql/9.6/main/pg_hba.conf` (change `9.6` to your postgres version):
+Add next line to `pg_hba.conf` (change `9.6` to your postgres version):
+
+- linux: `/etc/postgresql/9.6/main/`
+- macOS: `/usr/local/var/postgres/`
 
 ```
 local   all             rubot                                 md5
