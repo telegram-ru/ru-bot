@@ -5,6 +5,4 @@ const { GroupBase } = require('./group-base')
 class Channel extends GroupBase {
 }
 
-module.exports = {
-  Channel,
-}
+module.exports = { Channel }

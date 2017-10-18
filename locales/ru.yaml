@@ -1,3 +1,9 @@
 common:
   greetings: |
     Привет ${user.first_name}!
+
+noty:
+  admin:
+    access-required: Доступ только для админов
+  chat:
+    only: Только для чатов

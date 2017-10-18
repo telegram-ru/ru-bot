@@ -6,9 +6,9 @@ const debug = require('debug')('rubot:index')
 
 const config = require('./config')
 const { sequelize } = require('./models')
-const { install } = require('./lib/runtime')
 
-const contextMethods = require('./context-methods')
+const installExtendedContext = require('./extended-context')
+const installCommands = require('./commands')
 
 
 if (!config.bot.token) {
@@ -29,13 +29,8 @@ if (config.dev) {
 
 bot.use(i18n.middleware())
 
-bot.command('start', ({ reply, i18n: i, from }) => {
-  reply(i.t('common.greetings', { user: from }))
-})
-
-install(bot, [
-  contextMethods,
-])
+installExtendedContext(bot)
+installCommands(bot)
 
 bot.startPolling()
 console.log('Start polling...') // eslint-disable-line no-console

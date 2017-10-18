@@ -1,7 +1,7 @@
-const debug = require('debug')('rubot:commands:start')
+const debug = require('debug')('rubot:commands:test')
 
 
 module.exports = ({ reply, i18n, from }) => {
-  debug('/start')
+  debug('/test')
   reply(i18n.t('common.greetings', { user: from }))
 }
