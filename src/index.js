@@ -1,7 +1,6 @@
 require('dotenv').config()
 const { resolve } = require('path')
 const Telegraf = require('telegraf')
-const I18n = require('telegraf-i18n')
 const debug = require('debug')('rubot:index')
 
 const config = require('./config')
@@ -17,17 +16,10 @@ if (!config.bot.token) {
 }
 
 const bot = new Telegraf(config.bot.token, { username: config.bot.username })
-const i18n = new I18n({
-  defaultLanguage: 'ru',
-  allowMissing: true,
-  directory: resolve(__dirname, '..', 'locales'),
-})
 
 if (config.dev) {
   bot.use(Telegraf.log())
 }
-
-bot.use(i18n.middleware())
 
 installExtendedContext(bot)
 installCommands(bot)

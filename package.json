@@ -43,7 +43,6 @@
     "pg": "^7.3.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.15.0",
-    "telegraf": "^3.14.0",
-    "telegraf-i18n": "^6.0.4"
+    "telegraf": "^3.14.0"
   }
 }

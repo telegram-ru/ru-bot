@@ -1,3 +1,0 @@
-common:
-  greetings: |
-    Hello ${user.first_name}!
