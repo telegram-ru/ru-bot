@@ -1,6 +1,7 @@
 {
   "extends": "atomix-base",
   "rules": {
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "object-curly-spacing": "off"
   }
 }
