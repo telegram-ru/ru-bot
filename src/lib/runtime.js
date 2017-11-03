@@ -1,37 +1,51 @@
+const debug = require('debug')('rubot:lib:runtime')
+const Telegraf = require('telegraf')
 
+const extendedContext = require('./extended-context')
 
-/* eslint-disable no-restricted-syntax */
 /**
- * @param {object} bot
- * @param {object[]} fnMapList
+ *
+ * @param {Telegraf} bot
+ * @param {((bot: Telegraf) => void)[]} featureList
  */
-const install = (bot, fnMapList) => {
-  for (const fnMap of fnMapList) {
-    // install(bot, [[fn, fn], [fn, fn, fn], [fn]])
-    if (Array.isArray(fnMap)) {
-      for (const fn of fnMap) {
-        if (typeof fn !== 'function' || fn.length !== 1) {
-          throw new TypeError('Installer should be function with one parameter')
-        }
-
-        fn(bot)
-      }
-    }
-    else { // install(bot, [{a: fn, b: fn}, {c: fn, d: fn}, {a: fn}])
-      for (const name of Object.keys(fnMap)) {
-        const fn = fnMap[name]
-
-        if (typeof fn !== 'function' || fn.length !== 1) {
-          throw new TypeError('Installer should be function with one parameter')
-        }
-
-        fn(bot)
-      }
-    }
-  }
+function installFeatures(bot, featureList) {
+  debug('installFeatures()', featureList)
+  featureList.forEach(feature => feature(bot))
 }
-/* eslint-enable no-restricted-syntax */
+
+async function fetchBotData() {
+  debug('fetchBotData() start')
+  this.context.bot = await this.telegram.getMe()
+  debug('fetchBotData() finish')
+}
+
+/**
+ * Create new instance of Telegraf bot
+ * extends it with features and context methods
+ *
+ * @param {string} token
+ * @param {((bot: Telegraf) => void)[]} features
+ * @param {{ username: string }} telegrafConfig
+ * @return {Telegraf}
+ */
+function createBot(token, features, telegrafConfig = {}) {
+  debug('createBot()', telegrafConfig)
+  const instance = new Telegraf(token, telegrafConfig)
+
+  if (process.env.NODE_ENV === 'development') {
+    instance.use(Telegraf.log())
+  }
+
+  // install context methods before features
+  extendedContext(instance)
+  instance.fetchBotData = fetchBotData
+
+  installFeatures(instance, features)
+
+  return instance
+}
 
 module.exports = {
-  install,
+  installFeatures,
+  createBot,
 }

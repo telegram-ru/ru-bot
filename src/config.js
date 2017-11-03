@@ -7,6 +7,8 @@ const {
   NODE_ENV = 'development',
 } = process.env
 
+process.env.NODE_ENV = NODE_ENV
+
 module.exports = {
   db: dbConfig[NODE_ENV],
   bot: {

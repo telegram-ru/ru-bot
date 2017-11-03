@@ -1,28 +1,30 @@
 require('dotenv').config()
-const { resolve } = require('path')
-const Telegraf = require('telegraf')
 const debug = require('debug')('rubot:index')
 
 const config = require('./config')
-const { sequelize } = require('./models')
-
-const installExtendedContext = require('./extended-context')
-const installCommands = require('./commands')
+// const { sequelize } = require('./models')
+const { createBot } = require('./lib/runtime')
+const botParticipation = require('./features/bot-participation')
 
 
 if (!config.bot.token) {
-  console.error('No telegram bot token provided.') // eslint-disable-line no-console
-  process.exit(1) // eslint-disable-line unicorn/no-process-exit
+  throw new Error('No telegram bot token provided')
 }
 
-const bot = new Telegraf(config.bot.token, { username: config.bot.username })
+const features = [
+  botParticipation,
+]
 
-if (config.dev) {
-  bot.use(Telegraf.log())
+const bot = createBot(config.bot.token, features, { username: config.bot.username })
+
+async function main() {
+  debug('main()')
+  await bot.fetchBotData()
+
+  debug('main() startPolling')
+  bot.startPolling()
+  console.log('Start polling...') // eslint-disable-line no-console
 }
 
-installExtendedContext(bot)
-installCommands(bot)
 
-bot.startPolling()
-console.log('Start polling...') // eslint-disable-line no-console
+main()

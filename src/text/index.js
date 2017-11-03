@@ -1,18 +1,4 @@
-function random(variants) {
-  const count = variants.length
-
-  return object => variants[Math.floor(Math.random() * count)](object)
-}
-
-function fullName({ first_name: first, last_name: last, username }) {
-  return [
-    first,
-    last,
-    username && `(${username})`,
-  ]
-    .filter(e => !!e)
-    .join(` `)
-}
+const { random, fullName, select, column } = require(`../lib/text`)
 
 
 module.exports = {
@@ -34,6 +20,19 @@ module.exports = {
       ({ admin }) => `${fullName(admin)}, ты админ, короч!`,
       ({ admin }) => `Привет, ${fullName(admin)}. Ты администратор в RU-сообществах.`,
     ]),
+  },
+
+  botParticipation: {
+    botAddedToChat: ({ chat, adder }) => column(
+      `Привет! Теперь ${select(chat.type, { supergroup: `супергруппа` }, `группа`)} "${chat.title}" под моей защитой.`,
+      `Меня добавил к вам ${fullName(adder)}.`,
+      `Администраторы уже получили права!`,
+      ``,
+      `Я могу:`,
+      `- Забанить спамера и удалить его сообщения`,
+      `- Забанить нарушителя`,
+      `- Удалять стикеры`,
+    ),
   },
 }
 
