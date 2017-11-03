@@ -8,14 +8,17 @@ module.exports = {
   },
 
   common: {
-    greetingsUser: random([
+  },
+
+  privateGreetings: {
+    userStart: random([
       ({ user }) => `Привет, ${fullName(user)}`,
       ({ user }) => `Здравствуйте, ${fullName(user)}!`,
       ({ user }) => `Hi! ${user.first_name}.`,
       ({ user }) => `${user.first_name}`,
       () => `Привет!`,
     ]),
-    greetingsAdmin: random([
+    adminStart: random([
       ({ admin }) => `Привет, ${fullName(admin)}, ты админ!`,
       ({ admin }) => `${fullName(admin)}, ты админ, короч!`,
       ({ admin }) => `Привет, ${fullName(admin)}. Ты администратор в RU-сообществах.`,

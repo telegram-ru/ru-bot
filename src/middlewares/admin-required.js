@@ -3,11 +3,11 @@ const { Extra } = require('telegraf')
 const text = require('../text')
 
 
-const adminRequired = async ({ message, reply, chat, getChannelClass, from }, next) => {
+const adminRequired = async ({ message, reply, chat, getChatClass, from }, next) => {
   if (chat && chat.type !== 'private') {
-    const channel = getChannelClass(chat.id)
+    const chatApi = getChatClass(chat.id)
 
-    if (await channel.isAdmin(from.user_id)) {
+    if (await chatApi.isAdmin(from.user_id)) {
       return next()
     }
 

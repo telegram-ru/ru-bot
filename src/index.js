@@ -4,16 +4,12 @@ const debug = require('debug')('rubot:index')
 const config = require('./config')
 // const { sequelize } = require('./models')
 const { createBot } = require('./lib/runtime')
-const botParticipation = require('./features/bot-participation')
+const features = require('./features')
 
 
 if (!config.bot.token) {
   throw new Error('No telegram bot token provided')
 }
-
-const features = [
-  botParticipation,
-]
 
 const bot = createBot(config.bot.token, features, { username: config.bot.username })
 

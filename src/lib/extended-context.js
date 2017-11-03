@@ -1,6 +1,6 @@
 const Telegraf = require('telegraf') // eslint-disable-line no-unused-vars
 const debug = require('debug')('rubot:context-methods')
-const { Channel } = require('./channel')
+const { Chat } = require('./chat')
 
 /* eslint-disable no-param-reassign */
 
@@ -19,17 +19,17 @@ function optionalCallbackQuery(...args) {
 }
 
 /**
- * Find channel class by its id
- * If not found create class for channel and add it
- * @param {string|number} channelId
- * @return {Channel}
+ * Find chat class by its id
+ * If not found create class for chat and add it
+ * @param {string|number} chatId
+ * @return {Chat}
  */
-function getChannelClass(channelId) {
-  if (!this.channels.has(channelId)) {
-    this.channels.set(channelId, new Channel(channelId, this.bot))
+function getChatClass(chatId) {
+  if (!this.chats.has(chatId)) {
+    this.chats.set(chatId, new Chat(chatId, this.bot))
   }
 
-  return this.channels.get(channelId)
+  return this.chats.get(chatId)
 }
 
 /**
@@ -38,9 +38,9 @@ function getChannelClass(channelId) {
  */
 function extendedContext(bot) {
   bot.context.rootInstance = bot
-  bot.context.channels = new Map()
+  bot.context.chats = new Map()
   bot.context.optionalCallbackQuery = optionalCallbackQuery.bind(bot.context)
-  bot.context.getChannelClass = getChannelClass.bind(bot.context)
+  bot.context.getChatClass = getChatClass.bind(bot.context)
 }
 
 module.exports = extendedContext
