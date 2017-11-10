@@ -1,8 +1,8 @@
 const debug = require('debug')('rubot:lib:chat')
-const { GroupBase } = require('./group-base')
+const { TelegramGroup } = require('./telegram-group')
 
 
-class Chat extends GroupBase {
+class Chat extends TelegramGroup {
 }
 
 module.exports = { Chat }

@@ -26,7 +26,7 @@ function optionalCallbackQuery(...args) {
  */
 function getChatClass(chatId) {
   if (!this.chats.has(chatId)) {
-    this.chats.set(chatId, new Chat(chatId, this.bot))
+    this.chats.set(chatId, new Chat(chatId, this.rootInstance))
   }
 
   return this.chats.get(chatId)

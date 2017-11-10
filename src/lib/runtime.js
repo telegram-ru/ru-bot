@@ -13,11 +13,6 @@ function installFeatures(bot, featureList) {
   featureList.forEach(feature => feature(bot))
 }
 
-async function fetchBotData() {
-  debug('fetchBotData() start')
-  this.context.bot = await this.telegram.getMe()
-  debug('fetchBotData() finish')
-}
 
 /**
  * Create new instance of Telegraf bot
@@ -38,7 +33,6 @@ function createBot(token, features, telegrafConfig = {}) {
 
   // install context methods before features
   extendedContext(instance)
-  instance.fetchBotData = fetchBotData
 
   installFeatures(instance, features)
 

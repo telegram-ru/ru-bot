@@ -1,4 +1,4 @@
-const debug = require('debug')('rubot:lib:group-base')
+const Debug = require('debug')
 const { makeName } = require('./string')
 
 
@@ -9,7 +9,7 @@ const TIMEOUT_ADMIN_UPDATE = 60000
  * GroupBase is parent for Channel and Chat
  * with common methods to fetch admins and manage messages
  */
-class GroupBase {
+class TelegramGroup {
   /**
    * @param {number} chatId
    * @param {object} botInstance
@@ -19,6 +19,7 @@ class GroupBase {
     this.id = chatId
     this.bot = botInstance
     this.tg = this.bot.telegram
+    this.debug = Debug(`rubot:lib:group-base:id#${chatId}`)
 
     this.admins = {
       list: [],
@@ -27,12 +28,19 @@ class GroupBase {
   }
 
   /**
+   * @return {Promise<boolean>}
+   */
+  isBotAdmin() {
+    return this.isAdmin(this.bot.context.botInfo)
+  }
+
+  /**
    * @param {boolean} force ignore timeout if `true`
    * @return {Promise<Array>}
    */
   async getAdmins(force = false) {
-    debug(`getAdmins(force: ${force}`)
-    debug(`nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
+    this.debug(`getAdmins(force: ${force})`)
+    this.debug(`nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
 
     if (!force && this.admins.nextUpdate > Date.now()) {
       return this.admins.list
@@ -53,7 +61,7 @@ class GroupBase {
       return this.admins.list
     }
     catch (error) {
-      debug('getAdmins() failed', error)
+      this.debug('getAdmins() failed', error)
       return []
     }
   }
@@ -63,15 +71,16 @@ class GroupBase {
    * @return {Promise<boolean>}
    */
   async isAdmin(user) {
-    debug('isAdmin(', user, ')')
-    debug('Current admins:', this.admins.list)
+    this.debug('isAdmin(', user, ')')
+    this.debug('Current admins:', this.admins.list)
 
     const adminList = await this.getAdmins()
-    debug('Fetched admins:', adminList)
+    this.debug('Fetched admins:', adminList)
 
     const found = adminList.find(admin => admin.id === user.id)
 
     if (found) {
+      this.debug(`Found admin with id ${user.id} with status `, found.status)
       return found.status === 'creator' || found.status === 'administrator'
     }
 
@@ -79,11 +88,12 @@ class GroupBase {
   }
 
   async deleteMessage(messageId) {
+    this.debug(`deleteMessage(${messageId})`)
     try {
       this.tg.deleteMessage(this.id, messageId)
     }
     catch (error) {
-      debug(`deleteMessage(${messageId}) failed`, error)
+      this.debug(`deleteMessage(${messageId}) failed`, error)
       // maybe already deleted or older that 48 hours
     }
   }
@@ -91,5 +101,5 @@ class GroupBase {
 
 module.exports = {
   TIMEOUT_ADMIN_UPDATE,
-  GroupBase,
+  TelegramGroup,
 }
