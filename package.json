@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/LestaD/ru_bot#readme",
   "devDependencies": {
-    "eslint": "^4.10.0",
-    "eslint-config-atomix-base": "^4.4.0",
+    "eslint": "^4.11.0",
+    "eslint-config-atomix-base": "^4.6.0",
     "husky": "^0.14.3",
     "nodemon": "^1.12.1",
     "pm2": "^2.7.2",
@@ -40,9 +40,9 @@
   "dependencies": {
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
-    "pg": "^7.3.0",
+    "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.22.0",
-    "telegraf": "^3.14.1"
+    "sequelize": "^4.22.6",
+    "telegraf": "^3.15.3"
   }
 }

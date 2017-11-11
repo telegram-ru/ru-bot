@@ -2,7 +2,7 @@ require('dotenv').config()
 const debug = require('debug')('rubot:index')
 
 const config = require('./config')
-// const { sequelize } = require('./models')
+const { sequelize } = require('./models')
 const { createBot } = require('./lib/runtime')
 const { Channel } = require('./lib/channel')
 const features = require('./features')
@@ -22,9 +22,11 @@ const bot = createBot(config.bot.token, features, { username: config.bot.usernam
 
 async function main() {
   debug('main()')
-  bot.context.botInfo = await bot.telegram.getMe()
+  await sequelize.authenticate()
 
+  bot.context.botInfo = await bot.telegram.getMe()
   bot.context.private = new Channel(config.bot.privateChannelId, bot)
+
   if (!await bot.context.private.canPostMessages()) {
     throw new Error('Bot should be admin and can post messages to private channel')
   }
@@ -32,6 +34,7 @@ async function main() {
   await Promise.all(CHAT_LIST.map((id) => {
     debug(`Create chat instance for id:${id}`)
     const chat = bot.context.getChatClass(id)
+
     return chat.getAdmins()
   }))
 
