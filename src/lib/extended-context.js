@@ -33,14 +33,31 @@ function getChatClass(chatId) {
 }
 
 /**
+ * Check if chat in list
+ * @param {Chat} chat
+ * @return {boolean}
+ */
+function allowedChat(chat) {
+  return this.chats.has(chat.id)
+}
+
+const bindedContextMethods = {
+  allowedChat,
+  getChatClass,
+  optionalCallbackQuery,
+}
+
+/**
  * Install context methods to bot
  * @param {Telegraf} bot
  */
 function extendedContext(bot) {
   bot.context.rootInstance = bot
   bot.context.chats = new Map()
-  bot.context.optionalCallbackQuery = optionalCallbackQuery.bind(bot.context)
-  bot.context.getChatClass = getChatClass.bind(bot.context)
+
+  Object.keys(bindedContextMethods).forEach((name) => {
+    bot.context[name] = bindedContextMethods[name].bind(bot.context)
+  })
 }
 
 module.exports = extendedContext
