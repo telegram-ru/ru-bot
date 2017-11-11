@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     authorId: DataTypes.STRING,
     messageId: DataTypes.STRING,
   }, {
+    timestamps: false,
     classMethods: {
       // associate(models) {
       //   // associations can be defined here

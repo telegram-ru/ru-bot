@@ -3,4 +3,5 @@
 module.exports = [
   require('./bot-participation'),
   require('./private-greetings'),
+  require('./spam-hammer'),
 ]

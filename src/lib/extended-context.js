@@ -37,12 +37,12 @@ function getChatClass(chatId) {
  * @param {Chat} chat
  * @return {boolean}
  */
-function allowedChat(chat) {
+function isChatInWhiteList(chat) {
   return this.chats.has(chat.id)
 }
 
 const bindedContextMethods = {
-  allowedChat,
+  isChatInWhiteList,
   getChatClass,
   optionalCallbackQuery,
 }
