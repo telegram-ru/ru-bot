@@ -38,7 +38,7 @@ create database rubot_development;
 create database rubot_test;
 create database rubot_production;
 
-grant all privileges on database rubot_legacy to rubot;
+grant all privileges on database rubot_development to rubot;
 grant all privileges on database rubot_test to rubot;
 grant all privileges on database rubot_production to rubot;
 ```
