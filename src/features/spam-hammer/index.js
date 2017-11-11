@@ -21,7 +21,9 @@ function handleEachMessage({ message, from, chat }, next) {
 }
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-function handleSpamCommand({ message, from, chat, update, match, reply, getChatClass }) {
+function handleSpamCommand({
+  message, from, chat, update, match, reply, privateChannel, getChatClass,
+}) {
   const [, reason] = match
   if (update.message.reply_to_message) {
     const replyMessage = update.message.reply_to_message
@@ -38,7 +40,17 @@ function handleSpamCommand({ message, from, chat, update, match, reply, getChatC
       await Message.destroy({
         transaction, where: { authorId, chatId },
       })
+
+      privateChannel.notifyBan({
+        banned: spammer,
+        chat: replyMessage.chat,
+        moder: from,
+        reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
+      })
+      // TODO: restrict user in this chat
     })
+
+    // TODO: delete messages and restrict user in all chats
   }
   else {
     reply(text.spamHammer.spamCommandShouldBeReplied(), Extra.inReplyTo(message.message_id))

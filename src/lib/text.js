@@ -26,10 +26,28 @@ function fullName({ first_name: first, last_name: last, username }) {
   return [
     first,
     last,
-    username && `(${username})`,
+    username && `(@${username})`,
   ]
     .filter(e => !!e)
     .join(' ')
+}
+
+/**
+ *
+ * @param {Chat} param0
+ * @return {string}
+ */
+function chatTitle({ title, username, id, type }) {
+  const parts = [
+    title,
+    username && `(@${username})`,
+  ].filter(e => !!e)
+
+  if (parts.length === 0) {
+    parts.push(`${type}:${id}`)
+  }
+
+  return parts.join(' ')
 }
 
 /**
@@ -56,6 +74,7 @@ function column(...list) {
 module.exports = {
   random,
   fullName,
+  chatTitle,
   select,
   column,
 }

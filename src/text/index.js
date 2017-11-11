@@ -1,4 +1,4 @@
-const { random, fullName, select, column } = require(`../lib/text`)
+const { random, fullName, select, column, chatTitle } = require(`../lib/text`)
 
 
 const text = {
@@ -40,7 +40,10 @@ const text = {
 
   spamHammer: {
     spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
-
+    userBannedWithReason: ({ banned, chat, moder, reason }) =>
+      `${fullName(banned)} забанен ${reason && `за ${reason} `} модератором ${fullName(moder)}`
+      + ` в ${select(chat.type, { supergroup: `супергруппе` }, `группе`)} ${chatTitle(chat)}`,
+    shortSpamReason: () => `спам`,
   },
 
   commands: {

@@ -112,6 +112,15 @@ class TelegramGroup {
       // maybe already deleted or older that 48 hours
     }
   }
+
+  /**
+   * @param {string} message
+   * @param {object} extra
+   * @return {Promise}
+   */
+  sendMessage(message, extra) {
+    return this.tg.sendMessage(this.id, message, extra)
+  }
 }
 
 module.exports = {

@@ -26,9 +26,9 @@ async function main() {
   await sequelize.authenticate()
 
   bot.context.botInfo = await bot.telegram.getMe()
-  bot.context.private = new Channel(config.bot.privateChannelId, bot)
+  bot.context.privateChannel = new Channel(config.bot.privateChannelId, bot)
 
-  if (!await bot.context.private.canPostMessages()) {
+  if (!await bot.context.privateChannel.canPostMessages()) {
     throw new Error('Bot should be admin and can post messages to private channel')
   }
 
