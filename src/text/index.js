@@ -1,7 +1,7 @@
 const { random, fullName, select, column } = require(`../lib/text`)
 
 
-module.exports = {
+const text = {
   notif: {
     groupOnly: () => `Только для групп`,
     adminOnly: () => `Доступ только для админов`,
@@ -37,5 +37,15 @@ module.exports = {
       `- Удалять стикеры`,
     ),
   },
+
+  spamHammer: {
+    spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
+  },
+
+  commands: {
+    spam: () => `!спам`,
+  },
 }
+
+module.exports = text
 

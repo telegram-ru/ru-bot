@@ -15,6 +15,7 @@ if (!config.bot.token) {
 /* eslint-disable no-magic-numbers */
 const CHAT_LIST = [
   -1001175826281, // test: RuBotGroup
+  -1001095675733, // IT Holywars
 ]
 /* eslint-enable no-magic-numbers */
 

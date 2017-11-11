@@ -16,6 +16,9 @@ module.exports = {
     messageId: {
       type: Sequelize.STRING,
     },
+    date: {
+      type: Sequelize.INTEGER,
+    },
   }).then(() => {
     queryInterface.addIndex('messages', {
       fields: ['chatId', 'authorId', 'messageId'],
