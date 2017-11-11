@@ -19,7 +19,7 @@ class TelegramGroup {
     this.id = chatId
     this.bot = botInstance
     this.tg = this.bot.telegram
-    this.debug = Debug(`rubot:lib:group-base:id#${chatId}`)
+    this.debug = Debug(`rubot:lib:telegram-group:id#${chatId}`)
 
     this.admins = {
       list: [],
@@ -35,12 +35,25 @@ class TelegramGroup {
   }
 
   /**
+   * @return {Promise<boolean>}
+   */
+  async canPostMessages() {
+    const admins = await this.getAdmins()
+    const found = admins.find(member => member.id === this.bot.context.botInfo.id)
+
+    if (found) {
+      return found.raw.can_post_messages
+    }
+
+    return false
+  }
+
+  /**
    * @param {boolean} force ignore timeout if `true`
    * @return {Promise<Array>}
    */
   async getAdmins(force = false) {
-    this.debug(`getAdmins(force: ${force})`)
-    this.debug(`nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
+    this.debug(`getAdmins(), nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
 
     if (!force && this.admins.nextUpdate > Date.now()) {
       return this.admins.list
@@ -55,6 +68,7 @@ class TelegramGroup {
         fullName: makeName(member.user),
         username: member.user.username,
         status: member.status,
+        raw: member,
       }))
       this.admins.nextUpdate = Date.now() + TIMEOUT_ADMIN_UPDATE
 
@@ -68,19 +82,20 @@ class TelegramGroup {
 
   /**
    * @param {User} user
-   * @return {Promise<boolean>}
+   * @return {Promise<{id, isBot, fullName, username, status, raw}>}
    */
   async isAdmin(user) {
     this.debug('isAdmin(', user, ')')
-    this.debug('Current admins:', this.admins.list)
+    // this.debug('Current admins:', this.admins.list)
 
     const adminList = await this.getAdmins()
-    this.debug('Fetched admins:', adminList)
+    // this.debug('Fetched admins:', adminList)
 
     const found = adminList.find(admin => admin.id === user.id)
 
     if (found) {
-      this.debug(`Found admin with id ${user.id} with status `, found.status)
+      // this.debug(`Found admin with id ${user.id} with status `, found.status)
+
       return found.status === 'creator' || found.status === 'administrator'
     }
 
