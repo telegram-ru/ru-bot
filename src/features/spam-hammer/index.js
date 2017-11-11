@@ -32,20 +32,8 @@ function handleSpamCommand({ message, from, chat, update, match, reply, getChatC
     sequelize.transaction(async (transaction) => {
       const list = await Message.findAll({ transaction, where: { authorId, chatId } })
 
-      try {
-        for (const msg of list) {
-          try {
-            await getChatClass(chat.id).deleteMessage(msg.messageId)
-          }
-          catch (error) {
-            debug(error)
-          }
-        }
-        await getChatClass(chat.id).deleteMessage(message.message_id)
-      }
-      catch (error) {
-        debug(error)
-      }
+      await list.map(msg => getChatClass(chat.id).deleteMessage(msg.messageId).catch(debug))
+      await getChatClass(chat.id).deleteMessage(message.message_id).catch(debug)
 
       await Message.destroy({
         transaction, where: { authorId, chatId },

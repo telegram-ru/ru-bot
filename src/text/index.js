@@ -40,6 +40,7 @@ const text = {
 
   spamHammer: {
     spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
+
   },
 
   commands: {
