@@ -9,7 +9,7 @@ function onNewChatMembers(ctx) {
   const { new_chat_members: newMembers, chat, from } = ctx.update.message
   debug('onNewChatMembers()', newMembers)
 
-  const ruBotAdded = newMembers.some(member => member.id === ctx.bot.id)
+  const ruBotAdded = newMembers.some(member => member.id === ctx.botInfo.id)
 
   if (ruBotAdded && (chat.type === 'supergroup' || chat.type === 'group')) {
     ctx.telegram.sendMessage(chat.id, text.botParticipation.botAddedToChat({ chat, adder: from }))
