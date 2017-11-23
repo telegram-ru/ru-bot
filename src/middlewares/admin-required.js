@@ -3,9 +3,9 @@ const { Extra } = require('telegraf')
 const text = require('../text')
 
 
-const adminRequired = async ({ message, reply, chat, getChatClass, from }, next) => {
+const adminRequired = async ({ message, reply, chat, getChat, from }, next) => {
   if (chat && chat.type !== 'private') {
-    const chatApi = getChatClass(chat.id)
+    const chatApi = getChat(chat.id)
 
     if (await chatApi.isAdmin(from)) {
       return next()
@@ -18,9 +18,9 @@ const adminRequired = async ({ message, reply, chat, getChatClass, from }, next)
   return reply(text.notif.groupOnly(), Extra.inReplyTo(message.message_id))
 }
 
-const adminRequiredSilenced = async ({ chat, getChatClass, from }, next) => {
+const adminRequiredSilenced = async ({ chat, getChat, from }, next) => {
   if (chat && chat.type !== 'private') {
-    const chatApi = getChatClass(chat.id)
+    const chatApi = getChat(chat.id)
 
     if (await chatApi.isAdmin(from)) {
       return next()

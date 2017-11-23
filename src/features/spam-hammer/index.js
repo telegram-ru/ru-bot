@@ -24,7 +24,7 @@ function handleEachMessage({ message, from, chat }, next) {
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 function handleSpamCommand({
-  message, from, chat, update, match, reply, privateChannel, getChatClass,
+  message, from, chat, update, match, reply, privateChannel, getChat,
 }) {
   const [, reason] = match
   if (update.message.reply_to_message) {
@@ -37,8 +37,8 @@ function handleSpamCommand({
       sequelize.transaction(async (transaction) => {
         const list = await Message.findAll({ transaction, where: { authorId, chatId } })
 
-        await list.map(msg => getChatClass(chat.id).deleteMessage(msg.messageId).catch(debug))
-        await getChatClass(chat.id).deleteMessage(message.message_id).catch(debug)
+        await list.map(msg => getChat(chat.id).deleteMessage(msg.messageId).catch(debug))
+        await getChat(chat.id).deleteMessage(message.message_id).catch(debug)
 
         await Message.destroy({
           transaction, where: { authorId, chatId },

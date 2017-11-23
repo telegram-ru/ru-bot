@@ -24,7 +24,7 @@ function optionalCallbackQuery(...args) {
  * @param {string|number} chatId
  * @return {Chat}
  */
-function getChatClass(chatId) {
+function getChat(chatId) {
   if (!this.chats.has(chatId)) {
     this.chats.set(chatId, new Chat(chatId, this.rootInstance))
   }
@@ -43,7 +43,7 @@ function isChatInWhiteList(chat) {
 
 const bindedContextMethods = {
   isChatInWhiteList,
-  getChatClass,
+  getChat,
   optionalCallbackQuery,
 }
 

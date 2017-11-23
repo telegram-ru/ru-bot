@@ -39,7 +39,7 @@ async function main() {
 
   await Promise.all(CHAT_LIST.map((id) => {
     debug(`Create chat instance for id:${id}`)
-    const chat = bot.context.getChatClass(id)
+    const chat = bot.context.getChat(id)
 
     return chat.getAdmins()
   }))
