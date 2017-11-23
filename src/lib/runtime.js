@@ -1,6 +1,6 @@
 const debug = require('debug')('rubot:lib:runtime')
 const Telegraf = require('telegraf')
-const Botanio = require('telegraf-botanio')
+const Botanio = require('botanio')
 
 const extendedContext = require('./extended-context')
 
@@ -27,16 +27,21 @@ function installFeatures(bot, featureList) {
 function createBot(token, botanioToken, features, telegrafConfig = {}) {
   debug('createBot()', telegrafConfig)
   const instance = new Telegraf(token, telegrafConfig)
-  const botanio = new Botanio(botanioToken)
+  const botan = Botanio(botanioToken)
 
-  instance.use(botanio.middleware())
+  instance.use((ctx, next) => {
+    ctx.botan = botan
+    next()
+  })
 
   if (process.env.NODE_ENV === 'development') {
     instance.use(Telegraf.log())
   }
   else {
     instance.use((ctx, next) => {
-      ctx.botanio.track('update')
+      if (ctx.update.message) {
+        ctx.botan.track(ctx.update.message, 'update')
+      }
       next()
     })
   }

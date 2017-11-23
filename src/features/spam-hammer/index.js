@@ -14,6 +14,8 @@ function handleEachMessage({ message, from, chat }, next) {
       chatId: chat.id,
       authorId: from.id,
       date: message.date,
+    }).catch((error) => {
+      debug('message create', error)
     })
   }
 
@@ -31,26 +33,31 @@ function handleSpamCommand({
     const authorId = String(spammer.id)
     const chatId = String(chat.id)
 
-    sequelize.transaction(async (transaction) => {
-      const list = await Message.findAll({ transaction, where: { authorId, chatId } })
+    try {
+      sequelize.transaction(async (transaction) => {
+        const list = await Message.findAll({ transaction, where: { authorId, chatId } })
 
-      await list.map(msg => getChatClass(chat.id).deleteMessage(msg.messageId).catch(debug))
-      await getChatClass(chat.id).deleteMessage(message.message_id).catch(debug)
+        await list.map(msg => getChatClass(chat.id).deleteMessage(msg.messageId).catch(debug))
+        await getChatClass(chat.id).deleteMessage(message.message_id).catch(debug)
 
-      await Message.destroy({
-        transaction, where: { authorId, chatId },
+        await Message.destroy({
+          transaction, where: { authorId, chatId },
+        })
+
+        privateChannel.notifyBan({
+          banned: spammer,
+          chat: replyMessage.chat,
+          moder: from,
+          reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
+        })
+        // TODO: restrict user in this chat
       })
 
-      privateChannel.notifyBan({
-        banned: spammer,
-        chat: replyMessage.chat,
-        moder: from,
-        reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
-      })
-      // TODO: restrict user in this chat
-    })
-
-    // TODO: delete messages and restrict user in all chats
+      // TODO: delete messages and restrict user in all chats
+    }
+    catch (error) {
+      debug('Sequelize transaction', error)
+    }
   }
   else {
     reply(text.spamHammer.spamCommandShouldBeReplied(), Extra.inReplyTo(message.message_id))
