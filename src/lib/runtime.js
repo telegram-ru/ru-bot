@@ -29,11 +29,16 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
   const instance = new Telegraf(token, telegrafConfig)
   const botanio = new Botanio(botanioToken)
 
+  instance.use(botanio.middleware())
+
   if (process.env.NODE_ENV === 'development') {
     instance.use(Telegraf.log())
   }
   else {
-    instance.use(botanio.middleware())
+    instance.use((ctx, next) => {
+      ctx.botanio.track('update')
+      next()
+    })
   }
 
   // install context methods before features
