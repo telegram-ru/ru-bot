@@ -1,5 +1,6 @@
 const debug = require('debug')('rubot:lib:runtime')
 const Telegraf = require('telegraf')
+const Botanio = require('telegraf-botanio')
 
 const extendedContext = require('./extended-context')
 
@@ -23,12 +24,16 @@ function installFeatures(bot, featureList) {
  * @param {{ username: string }} telegrafConfig
  * @return {Telegraf}
  */
-function createBot(token, features, telegrafConfig = {}) {
+function createBot(token, botanioToken, features, telegrafConfig = {}) {
   debug('createBot()', telegrafConfig)
   const instance = new Telegraf(token, telegrafConfig)
+  const botanio = new Botanio(botanioToken)
 
   if (process.env.NODE_ENV === 'development') {
     instance.use(Telegraf.log())
+  }
+  else {
+    instance.use(botanio.middleware())
   }
 
   // install context methods before features

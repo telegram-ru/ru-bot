@@ -3,6 +3,7 @@ const dbConfig = require('../config/database.json')
 
 const {
   BOT_TOKEN,
+  BOTANIO_TOKEN,
   PRIVATE_CHANNEL_ID,
   BOT_USERNAME = 'ru_community_bot',
   NODE_ENV = 'development',
@@ -14,6 +15,7 @@ module.exports = {
   db: dbConfig[NODE_ENV],
   bot: {
     token: BOT_TOKEN,
+    botanioToken: BOTANIO_TOKEN,
     username: BOT_USERNAME,
     privateChannelId: PRIVATE_CHANNEL_ID,
   },

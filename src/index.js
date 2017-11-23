@@ -19,7 +19,12 @@ const CHAT_LIST = [
 ]
 /* eslint-enable no-magic-numbers */
 
-const bot = createBot(config.bot.token, features, { username: config.bot.username })
+const bot = createBot(
+  config.bot.token,
+  config.bot.botanioToken,
+  features,
+  { username: config.bot.username }
+)
 
 async function main() {
   debug('main()')
