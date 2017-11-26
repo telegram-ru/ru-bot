@@ -50,6 +50,7 @@ function handleSpamCommand({
           moder: from,
           reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
         })
+        // TODO: add user to database
         // TODO: restrict user in this chat
       })
 

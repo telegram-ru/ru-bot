@@ -16,6 +16,8 @@ function onNewChatMembers(ctx) {
     ctx.telegram.sendMessage(chat.id, text.botParticipation.botAddedToChat({ chat, adder: from }))
   }
   */
+
+  // TODO: check if user in our spam list
 }
 
 
