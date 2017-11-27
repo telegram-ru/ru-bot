@@ -30,12 +30,12 @@
   },
   "homepage": "https://github.com/LestaD/ru_bot#readme",
   "devDependencies": {
-    "eslint": "^4.11.0",
+    "eslint": "^4.12.0",
     "eslint-config-atomix-base": "^4.6.0",
     "husky": "^0.14.3",
     "nodemon": "^1.12.1",
-    "pm2": "^2.7.2",
-    "sequelize-cli": "^3.0.0"
+    "pm2": "^2.8.0",
+    "sequelize-cli": "^3.1.0"
   },
   "dependencies": {
     "botanio": "0.0.6",
@@ -43,7 +43,7 @@
     "dotenv": "^4.0.0",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.22.6",
-    "telegraf": "^3.15.3"
+    "sequelize": "^4.23.1",
+    "telegraf": "^3.16.4"
   }
 }

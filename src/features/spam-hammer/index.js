@@ -68,6 +68,12 @@ function handleSpamCommand({
 
 
 module.exports = function featureSpamHammer(bot) {
-  bot.on('message', allowWhiteListChat, handleEachMessage)
-  bot.hears(new RegExp(`^${text.commands.spam()}( .*)?`), allowWhiteListChat, adminRequiredSilenced, handleSpamCommand)
+  bot.on(
+    'message',
+    allowWhiteListChat, handleEachMessage
+  )
+  bot.hears(
+    new RegExp(`^${text.commands.spam()}( .*)?`),
+    allowWhiteListChat, adminRequiredSilenced, handleSpamCommand
+  )
 }
