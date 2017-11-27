@@ -16,7 +16,8 @@ if (!config.bot.token) {
 }
 
 try {
-  CHAT_LIST = require('../.chatlist.js') // eslint-disable-line global-require
+  const obj = require('../.chatlist.json') // eslint-disable-line global-require
+  CHAT_LIST = [...Object.values(obj)]
 }
 catch (error) {
   if (error.code === 'MODULE_NOT_FOUND') {
