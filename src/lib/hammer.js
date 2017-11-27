@@ -17,7 +17,12 @@ class Hammer {
   async blacklistUser(user) {
     debug('blacklistUser', user.id)
     for (const chat of this.ctx.ownedChats) {
-      await chat.kickMember(user)
+      try {
+        await chat.kickMember(user)
+      }
+      catch (error) {
+        debug('kickMember', error)
+      }
     }
 
     await Blocked.create({
