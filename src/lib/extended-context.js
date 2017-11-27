@@ -1,6 +1,8 @@
 const Telegraf = require('telegraf') // eslint-disable-line no-unused-vars
 const debug = require('debug')('rubot:context-methods')
 const { Chat } = require('./chat')
+const { Hammer } = require('./hammer')
+
 
 /* eslint-disable no-param-reassign */
 
@@ -32,6 +34,10 @@ function getChat(chatId) {
   return this.chats.get(chatId)
 }
 
+function getHammer() {
+  return new Hammer(this)
+}
+
 /**
  * Check if chat in list
  * @param {Chat} chat
@@ -42,8 +48,9 @@ function isChatInWhiteList(chat) {
 }
 
 const bindedContextMethods = {
-  isChatInWhiteList,
   getChat,
+  getHammer,
+  isChatInWhiteList,
   optionalCallbackQuery,
 }
 
