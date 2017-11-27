@@ -121,6 +121,33 @@ class TelegramGroup {
   sendMessage(message, extra) {
     return this.tg.sendMessage(this.id, message, extra)
   }
+
+  /**
+   * @see https://core.telegram.org/bots/api#restrictchatmember
+   * @see https://core.telegram.org/bots/api#user
+   * @param {TelegramUser} user
+   * @param {{}} params
+   */
+  restrictMember(user, params) {
+    const extra = Object.assign({
+      can_send_messages: false,
+      can_send_media_messages: false,
+      can_send_other_messages: false,
+      can_add_web_page_previews: false,
+      // until_date: Date.now() + (60 * 60 * 24),
+    }, params)
+
+    return this.tg.restrictChatMember(this.id, user.id, extra)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#kickchatmember
+   * @see https://core.telegram.org/bots/api#user
+   * @param {TelegramUser} user
+   */
+  kickMember(user) {
+    return this.tg.kickChatMember(this.id, user.id, { until_date: Date.now() })
+  }
 }
 
 module.exports = {

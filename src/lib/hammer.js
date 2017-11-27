@@ -1,5 +1,5 @@
 const debug = require('debug')('rubot:lib:hammer')
-const { Blocked, Message } = require('../models')
+const { Blocked, Message, sequelize } = require('../models')
 
 /* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
 
@@ -15,7 +15,12 @@ class Hammer {
    * @param {TelegramUser} user
    */
   async blacklistUser(user) {
-    return Blocked.create({
+    debug('blacklistUser', user.id)
+    for (const chat of this.ctx.ownedChats) {
+      await chat.kickMember(user)
+    }
+
+    await Blocked.create({
       target: user.id,
       type: 'user',
     })
@@ -62,6 +67,7 @@ class Hammer {
    * @param {TelegramUser} user
    */
   async dropMessagesOf(user) {
+    debug('dropMessagesOf', user.id)
     const allMessages = await Message.findAll({
       where: { authorId: user.id },
     })

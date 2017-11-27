@@ -32,6 +32,8 @@ async function main() {
 
   bot.context.botInfo = await bot.telegram.getMe()
   bot.context.privateChannel = new Channel(config.bot.privateChannelId, bot)
+  // TODO: hardcoded chatlist
+  bot.context.ownedChats = []
 
   if (!await bot.context.privateChannel.canPostMessages()) {
     throw new Error('Bot should be admin and can post messages to private channel')
@@ -41,6 +43,7 @@ async function main() {
     debug(`Create chat instance for id:${id}`)
     const chat = bot.context.getChat(id)
 
+    bot.context.ownedChats.push(chat)
     return chat.getAdmins()
   }))
 

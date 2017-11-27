@@ -23,39 +23,28 @@ function handleEachMessage({ message, from, chat }, next) {
 }
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-function handleSpamCommand({
-  message, from, chat, update, match, reply, privateChannel, getChat,
+async function handleSpamCommand({
+  message, from, chat, update, match, reply, privateChannel, getChat, getHammer,
 }) {
   const [, reason] = match
   if (update.message.reply_to_message) {
     const replyMessage = update.message.reply_to_message
     const spammer = replyMessage.from
-    const authorId = String(spammer.id)
-    const chatId = String(chat.id)
 
     try {
-      sequelize.transaction(async (transaction) => {
-        const list = await Message.findAll({ transaction, where: { authorId, chatId } })
+      const hammer = getHammer()
 
-        await list.map(msg => getChat(chat.id).deleteMessage(msg.messageId).catch(debug))
-        await getChat(chat.id).deleteMessage(message.message_id).catch(debug)
+      await hammer.blacklistUser(spammer)
+      await hammer.dropMessagesOf(spammer.id)
 
-        await Message.destroy({
-          transaction, where: { authorId, chatId },
-        })
-
-        privateChannel.notifyBan({
-          banned: spammer,
-          chat: replyMessage.chat,
-          moder: from,
-          reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
-        })
-        // TODO: add user to database
-        // TODO: restrict user in this chat and delete his messages
-        // TODO: search all entities
+      await privateChannel.notifyBan({
+        banned: spammer,
+        chat: replyMessage.chat,
+        moder: from,
+        reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
       })
 
-      // TODO: delete messages and restrict user in all chats
+      // TODO: search all entities
     }
     catch (error) {
       debug('Sequelize transaction', error)
