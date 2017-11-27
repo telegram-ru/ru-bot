@@ -24,5 +24,5 @@ module.exports = {
   }).then(() => queryInterface.addIndex('blockeds', {
     fields: ['targetId', 'type'],
   })),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('blockeds'),
+  down: queryInterface => queryInterface.dropTable('blockeds'),
 }

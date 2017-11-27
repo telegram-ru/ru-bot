@@ -1,5 +1,5 @@
 const debug = require('debug')('rubot:lib:hammer')
-const { Blocked, Message, sequelize } = require('../models')
+const { Blocked, Message } = require('../models')
 
 /* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
 

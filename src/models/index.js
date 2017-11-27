@@ -9,7 +9,6 @@ const basename = path.basename(__filename)
 const config = require('../config').db
 
 
-console.log(config)
 const { DB_PASSWORD } = process.env
 const db = {}
 let sequelize = null

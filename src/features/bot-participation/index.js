@@ -1,12 +1,16 @@
 const debug = require('debug')('rubot:features:bot-participation:index')
-const text = require('../../text')
+// const text = require('../../text')
 
 /**
  * Executes if bot exist in joined users
  * Add group to db, fetch admins and bot rights
  */
 function onNewChatMembers(ctx) {
-  const { new_chat_members: newMembers, chat, from } = ctx.update.message
+  const {
+    new_chat_members: newMembers,
+    // chat,
+    // from,
+  } = ctx.update.message
   debug('onNewChatMembers()', newMembers)
 
   /*

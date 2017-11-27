@@ -3,7 +3,7 @@ const { Extra } = require('telegraf')
 const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
-const { Message, sequelize } = require('../../models')
+const { Message } = require('../../models')
 
 
 function handleEachMessage({ message, from, chat }, next) {
@@ -24,8 +24,9 @@ function handleEachMessage({ message, from, chat }, next) {
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, chat, update, match, reply, privateChannel, getChat, getHammer,
+  message, from, update, match, reply, privateChannel, getHammer,
 }) {
+  debug('handleSpamCommand')
   const [, reason] = match
   if (update.message.reply_to_message) {
     const replyMessage = update.message.reply_to_message
@@ -47,7 +48,7 @@ async function handleSpamCommand({
       // TODO: search all entities
     }
     catch (error) {
-      debug('Sequelize transaction', error)
+      debug('handleSpamCommand failed', error)
     }
   }
   else {

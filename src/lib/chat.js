@@ -1,4 +1,4 @@
-const debug = require('debug')('rubot:lib:chat')
+// const debug = require('debug')('rubot:lib:chat')
 const { TelegramGroup } = require('./telegram-group')
 
 
