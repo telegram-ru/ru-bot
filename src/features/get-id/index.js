@@ -11,6 +11,6 @@ function onIdCommand({ reply, chat, message }) {
 }
 
 
-module.exports = function featurePrivateGreetings(bot) {
+module.exports = function featureGetId(bot) {
   bot.hears(/^!id$/, onIdCommand)
 }

@@ -22,7 +22,7 @@ try {
 catch (error) {
   if (error.code === 'MODULE_NOT_FOUND') {
     // eslint-disable-next-line no-console
-    console.log('ERROR: Maybe you forget create .chatlist.js ?')
+    console.log('ERROR: Maybe you forget create .chatlist.json ?')
     process.exit(-1) // eslint-disable-line unicorn/no-process-exit
   }
 
