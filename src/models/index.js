@@ -30,8 +30,8 @@ fs
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
     const model = sequelize.import(path.join(__dirname, file))
-    model.name[0] = model.name[0].toUpperCase()
-    db[model.name] = model
+    const name = model.name.charAt(0).toUpperCase() + model.name.slice(1)
+    db[name] = model
   })
 
 Object.keys(db).forEach((modelName) => {
