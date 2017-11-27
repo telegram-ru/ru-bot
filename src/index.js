@@ -8,16 +8,25 @@ const { Channel } = require('./lib/channel')
 const features = require('./features')
 
 
+let CHAT_LIST
+
+
 if (!config.bot.token) {
   throw new Error('No telegram bot token provided')
 }
 
-/* eslint-disable no-magic-numbers */
-const CHAT_LIST = [
-  -1001175826281, // test: RuBotGroup
-  -1001095675733, // IT Holywars
-]
-/* eslint-enable no-magic-numbers */
+try {
+  CHAT_LIST = require('../.chatlist.js') // eslint-disable-line global-require
+}
+catch (error) {
+  if (error.code === 'MODULE_NOT_FOUND') {
+    // eslint-disable-next-line no-console
+    console.log('ERROR: Maybe you forget create .chatlist.js ?')
+    process.exit(-1) // eslint-disable-line unicorn/no-process-exit
+  }
+
+  throw error
+}
 
 const bot = createBot(
   config.bot.token,
