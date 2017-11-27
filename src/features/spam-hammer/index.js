@@ -3,7 +3,7 @@ const { Extra } = require('telegraf')
 const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
-const { message: Message, sequelize } = require('../../models')
+const { Message, sequelize } = require('../../models')
 
 
 function handleEachMessage({ message, from, chat }, next) {
@@ -51,7 +51,8 @@ function handleSpamCommand({
           reason: `${text.spamHammer.shortSpamReason()}${reason || ''}`,
         })
         // TODO: add user to database
-        // TODO: restrict user in this chat
+        // TODO: restrict user in this chat and delete his messages
+        // TODO: search all entities
       })
 
       // TODO: delete messages and restrict user in all chats
