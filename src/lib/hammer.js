@@ -5,7 +5,7 @@ const { Blocked, Message } = require('../models')
 
 class Hammer {
   constructor(context) {
-    this.bot = context.botInstance
+    this.bot = context.rootInstance
     this.ctx = context
   }
 
@@ -26,7 +26,7 @@ class Hammer {
     }
 
     await Blocked.create({
-      target: user.id,
+      targetId: user.id,
       type: 'user',
     })
   }
@@ -53,10 +53,10 @@ class Hammer {
    * @param {'user'|'url'} type
    * @param {string} target
    */
-  async hasInBlacklist(type, target) {
+  async hasInBlacklist(type, targetId) {
     try {
-      const result = await Blocked.findAll({
-        where: { type, target },
+      const result = await Blocked.findOne({
+        where: { type, targetId },
       })
 
       // TODO: check what return SequelizeModel.findAll
@@ -74,7 +74,7 @@ class Hammer {
   async dropMessagesOf(user) {
     debug('dropMessagesOf', user.id)
     const allMessages = await Message.findAll({
-      where: { authorId: user.id },
+      where: { authorId: String(user.id) },
     })
 
     if (allMessages.length !== 0) {
