@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "eslint .",
-    "dev": "DEBUG=rubot:* nodemon -e yaml,js,json -w locales -w src ./src",
+    "dev": "cross-env DEBUG=rubot:* nodemon -e yaml,js,json -w locales -w src ./src",
     "start": "pm2 startOrRestart ./process.config.js",
     "migrate": "sequelize db:migrate",
     "rollback": "sequelize db:migrate:undo",
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/LestaD/ru_bot#readme",
   "devDependencies": {
+    "cross-env": "^5.1.1",
     "eslint": "^4.12.0",
     "eslint-config-atomix-base": "^4.6.0",
     "husky": "^0.14.3",
