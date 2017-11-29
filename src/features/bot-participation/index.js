@@ -25,7 +25,7 @@ async function onNewChatMembers(ctx) {
   const hammer = ctx.getHammer()
 
   for (const member of newMembers) {
-    const isSpammer = await hammer.hasIsBlacklist('user', member.id)
+    const isSpammer = await hammer.hasInBlacklist('user', member.id)
 
     if (isSpammer) {
       const chatInstance = ctx.getChat(chat.id)
