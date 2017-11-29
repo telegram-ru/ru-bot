@@ -36,7 +36,7 @@ async function handleSpamCommand({
       const hammer = getHammer()
 
       await hammer.blacklistUser(spammer)
-      await hammer.dropMessagesOf(spammer.id)
+      await hammer.dropMessagesOf(spammer)
 
       await privateChannel.notifyBan({
         banned: spammer,
