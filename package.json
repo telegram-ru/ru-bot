@@ -4,7 +4,8 @@
   "description": "Telegram bot to manage spam and rules for @_ru community",
   "main": "src/index.js",
   "scripts": {
-    "test": "npm run test:lint",
+    "test": "npm run test:lint && npm run test:code",
+    "test:code": "ava",
     "test:lint": "eslint .",
     "dev": "cross-env DEBUG=rubot:* nodemon -e yaml,js,json -w locales -w src ./src",
     "start": "pm2 startOrRestart ./process.config.js",
@@ -31,13 +32,16 @@
   },
   "homepage": "https://github.com/LestaD/ru_bot#readme",
   "devDependencies": {
+    "ava": "^0.24.0",
     "cross-env": "^5.1.1",
     "eslint": "^4.12.0",
     "eslint-config-atomix-base": "^5.0.0",
     "husky": "^0.14.3",
     "nodemon": "^1.12.1",
+    "nyc": "^11.3.0",
     "pm2": "^2.8.0",
-    "sequelize-cli": "^3.1.0"
+    "sequelize-cli": "^3.1.0",
+    "sinon": "^4.1.2"
   },
   "dependencies": {
     "botanio": "0.0.6",
@@ -47,5 +51,10 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.23.2",
     "telegraf": "^3.16.4"
+  },
+  "ava": {
+    "files": [
+      "src/**/*.test.js"
+    ]
   }
 }
