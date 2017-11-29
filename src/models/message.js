@@ -13,6 +13,7 @@ const Message = (sequelize, DataTypes) => {
       // },
     },
   })
+
   return message
 }
 

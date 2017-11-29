@@ -3,7 +3,9 @@ const { Extra } = require('telegraf')
 const text = require('../text')
 
 
-const adminRequired = async ({ message, reply, chat, getChat, from }, next) => {
+const adminRequired = async ({
+  message, reply, chat, getChat, from,
+}, next) => {
   if (chat && chat.type !== 'private') {
     const chatApi = getChat(chat.id)
 

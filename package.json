@@ -4,7 +4,8 @@
   "description": "Telegram bot to manage spam and rules for @_ru community",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint .",
+    "test": "npm run test:lint",
+    "test:lint": "eslint .",
     "dev": "cross-env DEBUG=rubot:* nodemon -e yaml,js,json -w locales -w src ./src",
     "start": "pm2 startOrRestart ./process.config.js",
     "migrate": "sequelize db:migrate",
@@ -32,7 +33,7 @@
   "devDependencies": {
     "cross-env": "^5.1.1",
     "eslint": "^4.12.0",
-    "eslint-config-atomix-base": "^4.6.0",
+    "eslint-config-atomix-base": "^5.0.0",
     "husky": "^0.14.3",
     "nodemon": "^1.12.1",
     "pm2": "^2.8.0",
@@ -44,7 +45,7 @@
     "dotenv": "^4.0.0",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.23.1",
+    "sequelize": "^4.23.2",
     "telegraf": "^3.16.4"
   }
 }

@@ -1,16 +1,17 @@
-const debug = require('debug')('rubot:features:bot-participation:index')
+const debug = require('debug')('rubot:features:botparticipation:index')
 // const text = require('../../text')
 
 /**
  * Executes if bot exist in joined users
  * Add group to db, fetch admins and bot rights
  */
-function onNewChatMembers(ctx) {
+async function onNewChatMembers(ctx) {
   const {
     new_chat_members: newMembers,
-    // chat,
+    chat,
     // from,
   } = ctx.update.message
+
   debug('onNewChatMembers()', newMembers)
 
   /*
@@ -21,7 +22,19 @@ function onNewChatMembers(ctx) {
   }
   */
 
-  // TODO: check if user in our spam list
+  const hammer = ctx.getHammer()
+
+  for (const member of newMembers) {
+    const isSpammer = await hammer.hasIsBlacklist('user', member.id)
+
+    if (isSpammer) {
+      const chatInstance = ctx.getChat(chat.id)
+
+      await chatInstance.kickMember(member)
+      await hammer.dropMessagesOf(member)
+      this.private.notifySpammerAutoban({ chat, banned: member })
+    }
+  }
 }
 
 

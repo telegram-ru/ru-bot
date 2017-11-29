@@ -37,7 +37,9 @@ function fullName({ first_name: first, last_name: last, username }) {
  * @param {Chat} param0
  * @return {string}
  */
-function chatTitle({ title, username, id, type }) {
+function chatTitle({
+  title, username, id, type,
+}) {
   const parts = [
     title,
     username && `(@${username})`,

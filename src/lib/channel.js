@@ -13,6 +13,15 @@ class Channel extends TelegramGroup {
       reason, chat, moder, banned,
     }))
   }
+
+  /**
+   * Spammer {banned} automatically banned in {chat}
+   */
+  notifySpammerAutoban({ chat, banned }) {
+    debug('notifySpammerAutoban', chat.id, banned.id)
+
+    this.sendMessage(text.spamHammer.spammerAutobanned({ chat, banned }))
+  }
 }
 
 module.exports = { Channel }

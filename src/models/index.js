@@ -31,6 +31,7 @@ fs
   .forEach((file) => {
     const model = sequelize.import(path.join(__dirname, file))
     const name = model.name.charAt(0).toUpperCase() + model.name.slice(1)
+
     db[name] = model
   })
 

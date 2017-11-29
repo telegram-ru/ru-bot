@@ -5,7 +5,7 @@ const { Blocked, Message } = require('../models')
 
 class Hammer {
   constructor(context) {
-    this.bot = context.botInstance
+    this.bot = context.rootInstance
     this.ctx = context
   }
 
@@ -26,7 +26,7 @@ class Hammer {
     }
 
     await Blocked.create({
-      target: user.id,
+      targetId: String(user.id),
       type: 'user',
     })
   }
@@ -39,7 +39,7 @@ class Hammer {
   async blacklistEntity(entity) {
     if (entity.text_link) {
       return Blocked.create({
-        target: entity.url,
+        targetId: entity.url,
         type: 'url',
       })
     }
@@ -53,13 +53,12 @@ class Hammer {
    * @param {'user'|'url'} type
    * @param {string} target
    */
-  async hasInBlacklist(type, target) {
+  async hasInBlacklist(type, targetId) {
     try {
-      const result = await Blocked.findAll({
-        where: { type, target },
+      const result = await Blocked.findOne({
+        where: { type, targetId: String(targetId) },
       })
 
-      // TODO: check what return SequelizeModel.findAll
       return !!result
     }
     catch (error) {
@@ -68,19 +67,21 @@ class Hammer {
   }
 
   /**
+   * Delete messages of user in all owned chats
    * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
    */
-  async dropMessagesOf(user) {
+  async dropMessagesOf(user, limit = 10) { // eslint-disable-line no-magic-numbers
     debug('dropMessagesOf', user.id)
     const allMessages = await Message.findAll({
       where: { authorId: user.id },
+      limit,
     })
 
     if (allMessages.length !== 0) {
       for (const { authorId, chatId, messageId } of allMessages) {
         try {
-          await this.bot.deleteMessage(chatId, messageId)
+          await this.bot.telegram.deleteMessage(chatId, messageId)
         }
         catch (error) {
           debug('dropMessagesOf', { authorId, chatId, messageId }, 'failed', error)

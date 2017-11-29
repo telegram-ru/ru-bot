@@ -28,6 +28,7 @@ async function handleSpamCommand({
 }) {
   debug('handleSpamCommand')
   const [, reason] = match
+
   if (update.message.reply_to_message) {
     const replyMessage = update.message.reply_to_message
     const spammer = replyMessage.from
@@ -36,7 +37,7 @@ async function handleSpamCommand({
       const hammer = getHammer()
 
       await hammer.blacklistUser(spammer)
-      await hammer.dropMessagesOf(spammer.id)
+      await hammer.dropMessagesOf(spammer)
 
       await privateChannel.notifyBan({
         banned: spammer,

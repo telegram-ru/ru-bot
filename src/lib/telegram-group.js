@@ -18,7 +18,7 @@ class TelegramGroup {
   constructor(chatId, botInstance) {
     this.id = chatId
     this.bot = botInstance
-    this.tg = this.bot.telegram
+    this.telegram = this.bot.telegram
     this.debug = Debug(`rubot:lib:telegram-group:id#${chatId}`)
 
     this.admins = {
@@ -60,7 +60,7 @@ class TelegramGroup {
     }
 
     try {
-      const chatAdmins = await this.tg.getChatAdministrators(this.id)
+      const chatAdmins = await this.telegram.getChatAdministrators(this.id)
 
       this.admins.list = chatAdmins.map(member => ({
         id: member.user.id,
@@ -102,10 +102,14 @@ class TelegramGroup {
     return false
   }
 
+  /**
+   * Delete message from current chat by message id
+   * @param {number} messageId
+   */
   async deleteMessage(messageId) {
     this.debug(`deleteMessage(${messageId})`)
     try {
-      this.tg.deleteMessage(this.id, messageId)
+      this.telegram.deleteMessage(this.id, messageId)
     }
     catch (error) {
       this.debug(`deleteMessage(${messageId}) failed`, error)
@@ -119,7 +123,7 @@ class TelegramGroup {
    * @return {Promise}
    */
   sendMessage(message, extra) {
-    return this.tg.sendMessage(this.id, message, extra)
+    return this.telegram.sendMessage(this.id, message, extra)
   }
 
   /**
@@ -137,7 +141,7 @@ class TelegramGroup {
       // until_date: Date.now() + (60 * 60 * 24),
     }, params)
 
-    return this.tg.restrictChatMember(this.id, user.id, extra)
+    return this.telegram.restrictChatMember(this.id, user.id, extra)
   }
 
   /**
@@ -146,7 +150,7 @@ class TelegramGroup {
    * @param {TelegramUser} user
    */
   kickMember(user) {
-    return this.tg.kickChatMember(this.id, user.id, { until_date: Date.now() })
+    return this.telegram.kickChatMember(this.id, user.id, { until_date: Date.now() })
   }
 }
 
