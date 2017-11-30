@@ -1,11 +1,24 @@
 const sinon = require('sinon')
+const faker = require('faker')
 
 
+const ID_USER_START = 10000
 const ID_MESSAGE_START = 1000000
 const ID_CHAT_START = 1000
 
+let ID_USER = ID_USER_START
 let ID_MESSAGE = ID_MESSAGE_START
 let ID_CHAT = ID_CHAT_START
+
+class User {
+  constructor() {
+    this.id = ++ID_USER
+    this.is_bot = false
+    this.first_name = faker.name.firstName()
+    this.last_name = faker.name.lastName()
+    this.username = faker.internet.userName(this.first_name, this.last_name)
+  }
+}
 
 class Chat {
   constructor() {
@@ -13,11 +26,19 @@ class Chat {
     this.type = 'private'
   }
 
+  /**
+   *
+   * @param {'private'|'group'|'supergroup'|'channel'} type
+   */
   $type(type) {
     this.type = type
     return this
   }
 
+  /**
+   *
+   * @param {string} title
+   */
   $title(title) {
     this.title = title
     return this
@@ -30,6 +51,10 @@ class Message {
     this.date = Date.now()
     this.chat = new Chat()
   }
+
+  $from() {
+    this.from = new User()
+  }
 }
 
 class Context {
@@ -39,9 +64,16 @@ class Context {
 
   constructor() {
     this.message = new Message()
-    this.chat = this.message.chat
 
     this.reply = sinon.stub().resolves()
+  }
+
+  get from() {
+    return this.message.from
+  }
+
+  get chat() {
+    return this.message.chat
   }
 }
 
