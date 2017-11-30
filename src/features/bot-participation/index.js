@@ -32,7 +32,7 @@ async function onNewChatMembers(ctx) {
 
       await chatInstance.kickMember(member)
       await hammer.dropMessagesOf(member)
-      this.private.notifySpammerAutoban({ chat, banned: member })
+      ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
     }
   }
 }
