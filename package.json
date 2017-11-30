@@ -5,8 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "test": "npm run test:lint && npm run test:code",
-    "test:code": "ava",
+    "test:code": "nyc ava",
     "test:lint": "eslint .",
+    "coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "dev": "cross-env DEBUG=rubot:* nodemon -e yaml,js,json -w locales -w src ./src",
     "start": "pm2 startOrRestart ./process.config.js",
     "migrate": "sequelize db:migrate",
@@ -33,6 +34,7 @@
   "homepage": "https://github.com/LestaD/ru_bot#readme",
   "devDependencies": {
     "ava": "^0.24.0",
+    "codecov": "^3.0.0",
     "cross-env": "^5.1.1",
     "eslint": "^4.12.0",
     "eslint-config-atomix-base": "^5.0.0",
