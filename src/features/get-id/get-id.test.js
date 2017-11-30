@@ -13,14 +13,13 @@ test('!id command reply with chat id', async (t) => {
   const bot = {
     hears(re, fn) {
       t.is(re.toString(), /^!id$/.toString())
+      t.true(typeof fn === 'function')
       testFn = fn
     },
   }
   const context = Context.create()
 
   installFeature(bot)
-  t.true(typeof testFn === 'function')
-
   testFn(context)
   t.true(context.reply.calledWith(context.chat.id, Extra.inReplyTo(context.message.message_id)))
 })
