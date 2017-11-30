@@ -74,7 +74,7 @@ class Hammer {
   async dropMessagesOf(user, limit = 10) { // eslint-disable-line no-magic-numbers
     debug('dropMessagesOf', user.id)
     const allMessages = await Message.findAll({
-      where: { authorId: user.id },
+      where: { authorId: String(user.id)},
       limit,
     })
 
