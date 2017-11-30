@@ -18,7 +18,7 @@ const text = {
       ({ user }) => `Здравствуйте, ${fullName(user)}!`,
       ({ user }) => `Hi! ${user.first_name}.`,
       ({ user }) => `${user.first_name}`,
-      () => `Привет!`,
+      // () => `Привет!`,
     ]),
     adminStart: random([
       ({ admin }) => `Привет, ${fullName(admin)}, ты админ!`,
