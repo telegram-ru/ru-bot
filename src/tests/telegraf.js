@@ -10,6 +10,8 @@ let ID_USER = ID_USER_START
 let ID_MESSAGE = ID_MESSAGE_START
 let ID_CHAT = ID_CHAT_START
 
+/* eslint-disable class-methods-use-this */
+
 class User {
   constructor() {
     this.id = ++ID_USER
@@ -76,6 +78,7 @@ class Context {
     return this.message.chat
   }
 }
+
 
 module.exports = {
   Context,
