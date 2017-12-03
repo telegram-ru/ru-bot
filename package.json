@@ -59,5 +59,17 @@
     "files": [
       "src/**/*.test.js"
     ]
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.test.js",
+      "src/tests/**/*",
+      "db/**/*",
+      "node_modules/**/*",
+      "config/**/*"
+    ],
+    "include": [
+      "src/**/*.js"
+    ]
   }
 }
