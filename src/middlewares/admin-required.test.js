@@ -33,7 +33,7 @@ test('test adminRequired for admin and type group', async (t) => {
 })
 
 test('test adminRequired for admin and type private', async (t) => {
-  const { ctx, res, next } = t.context.create()
+  const { ctx, next } = t.context.create()
 
   ctx.chat.isAdmin = sinon.stub().resolves(true)
   ctx.chat.$type('private')
@@ -46,7 +46,7 @@ test('test adminRequired for admin and type private', async (t) => {
 })
 
 test('test adminRequired for regular user and type group', async (t) => {
-  const { ctx, res, next } = t.context.create()
+  const { ctx, next } = t.context.create()
 
   ctx.chat.isAdmin = sinon.stub().resolves(false)
   ctx.chat.$type('group')
@@ -59,7 +59,7 @@ test('test adminRequired for regular user and type group', async (t) => {
 })
 
 test('test adminRequired for regular user and type private', async (t) => {
-  const { ctx, res, next } = t.context.create()
+  const { ctx, next } = t.context.create()
 
   ctx.chat.isAdmin = sinon.stub().resolves(false)
   ctx.chat.$type('private')
@@ -86,7 +86,7 @@ test('test adminRequiredSilenced for admin and type group', async (t) => {
 })
 
 test('test adminRequiredSilenced for regular user and type group', async (t) => {
-  const { ctx, res, next } = t.context.create()
+  const { ctx, next } = t.context.create()
 
   ctx.chat.isAdmin = sinon.stub().resolves(false)
   ctx.chat.$type('private')
