@@ -5,6 +5,7 @@ const config = require('./config')
 const { sequelize } = require('./models')
 const { createBot } = require('./lib/runtime')
 const { Channel } = require('./lib/channel')
+const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
 
@@ -40,6 +41,10 @@ const bot = createBot(
 async function main() {
   debug('main()')
   await sequelize.authenticate()
+
+  if (process.env.ELASTIC_LOG) {
+    await elasticPing()
+  }
 
   bot.context.botInfo = await bot.telegram.getMe()
   bot.context.privateChannel = new Channel(config.bot.privateChannelId, bot)
