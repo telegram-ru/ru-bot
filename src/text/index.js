@@ -43,8 +43,8 @@ const text = {
   spamHammer: {
     spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
     userBannedWithReason: ({ banned, chat, moder, reason }) => (
-      `${fullName(banned)} забанен ${reason && `за ${reason} `} модератором ${fullName(moder)}`
-      + ` в ${select(chat.type, { supergroup: `супергруппе` }, `группе`)} ${chatTitle(chat)}`
+      `${fullName(banned)} забанен ${reason && `за ${reason}`} ${fullName(moder)}`
+      + ` в ${chatTitle(chat)}`
     ),
     shortSpamReason: () => `спам`,
     spammerAutobanned: ({ chat, banned }) => `Спамер ${fullName(banned)} автоматически забанен в ${chatTitle(chat)}`,
