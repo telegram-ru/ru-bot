@@ -56,7 +56,6 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
           type: 'message',
           id: String(ctx.update.message.message_id),
           body: ctx.update.message,
-          timestamp: ctx.update.message.date,
         }).catch((error) => {
           console.error('Cant push to elastic', error) // eslint-disable-line no-console
         })
