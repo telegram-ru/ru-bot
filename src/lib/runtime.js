@@ -54,8 +54,10 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
         push({
           index: `rubot-${process.env.NODE_ENV || 'undefined'}`,
           type: 'message',
-          id: String(ctx.update.message.message_id),
-          body: ctx.update.message,
+          id: `${ctx.update.message.message_id}-${ctx.update.chat.id}-${ctx.update.from.id}`,
+          body: Object.assign({
+            timestamp: new Date(ctx.update.message.date * 1000).toISOString(),
+          }, ctx.update.message),
         }).catch((error) => {
           console.error('Cant push to elastic', error) // eslint-disable-line no-console
         })
