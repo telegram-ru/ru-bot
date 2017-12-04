@@ -25,10 +25,10 @@ function elasticPing() {
 }
 
 
-function push({ index, type, id, body, timestamp }) {
-  debug('push(', { index, type, id, timestamp }, ')')
+function push({ index, type, id, body }) {
+  debug('push(', { index, type, id }, ')')
   return new Promise((resolve, reject) => {
-    client.create({ index, type, id, body, timestamp }, (error, response) => {
+    client.create({ index, type, id, body }, (error, response) => {
       if (error) reject(error)
       else resolve(response)
     })
