@@ -1,6 +1,6 @@
 {
   "name": "ru-bot",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Telegram bot to manage spam and rules for @_ru community",
   "main": "src/index.js",
   "scripts": {
@@ -50,6 +50,7 @@
     "botanio": "0.0.6",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
+    "elasticsearch": "^14.0.0",
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.23.2",
@@ -58,6 +59,18 @@
   "ava": {
     "files": [
       "src/**/*.test.js"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.test.js",
+      "src/tests/**/*",
+      "db/**/*",
+      "node_modules/**/*",
+      "config/**/*"
+    ],
+    "include": [
+      "src/**/*.js"
     ]
   }
 }

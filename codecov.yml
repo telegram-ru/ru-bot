@@ -9,3 +9,10 @@ comment:
 parsers:
   javascript:
     enable_partials: yes
+
+ignore:
+  - "**/*.test.js"
+  - "src/tests/**/*"
+  - "db/**/*"
+  - "node_modules/**/*"
+  - "config/**/*"

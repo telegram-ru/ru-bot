@@ -3,6 +3,7 @@ const Telegraf = require('telegraf')
 const Botanio = require('botanio')
 
 const extendedContext = require('./extended-context')
+const { push } = require('./elastic')
 
 /**
  *
@@ -37,10 +38,28 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
   if (process.env.NODE_ENV === 'development') {
     instance.use(Telegraf.log())
   }
-  else {
+
+  if (process.env.BOTANIO_LOG) {
     instance.use((ctx, next) => {
       if (ctx.update.message) {
         ctx.botan.track(ctx.update.message, 'update')
+      }
+      next()
+    })
+  }
+
+  if (process.env.ELASTIC_LOG) {
+    instance.use((ctx, next) => {
+      if (ctx.update.message) {
+        push({
+          index: `rubot-${process.env.NODE_ENV || 'undefined'}`,
+          type: 'message',
+          id: String(ctx.update.message.message_id),
+          body: ctx.update.message,
+          timestamp: ctx.update.message.date,
+        }).catch((error) => {
+          console.error('Cant push to elastic', error) // eslint-disable-line no-console
+        })
       }
       next()
     })
