@@ -16,9 +16,12 @@ class Hammer {
    */
   async blacklistUser(user) {
     debug('blacklistUser', user.id)
+    const blacklistedIn = []
+
     for (const chat of this.ctx.ownedChats) {
       try {
         await chat.kickMember(user)
+        blacklistedIn.push(chat)
       }
       catch (error) {
         debug('kickMember', error)
@@ -29,6 +32,8 @@ class Hammer {
       targetId: String(user.id),
       type: 'user',
     })
+
+    return blacklistedIn
   }
 
   /**
