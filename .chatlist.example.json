@@ -1,3 +1,10 @@
 {
-  "IT Holywars": -1001095675733
+  "IT Holywars": {
+    "id": -1001095675733,
+    "stickers": {
+      "remove": true,
+      "restrict": true
+    }
+  },
+  "Another Chat without settings": -100
 }

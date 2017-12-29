@@ -1,5 +1,5 @@
 const {
-  random, fullName, select, column, chatTitle,
+  random, fullName, fullNameId, select, column, chatTitle,
 } = require(`../lib/text`)
 
 
@@ -10,6 +10,8 @@ const text = {
   },
 
   common: {
+    commandShouldBeReplied: command => `Командой ${command} нужно отвечать на сообщение`,
+    actionCancel: () => `Отмена`,
   },
 
   privateGreetings: {
@@ -41,17 +43,28 @@ const text = {
   },
 
   spamHammer: {
-    spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
-    userBannedWithReason: ({ banned, chat, moder, reason }) => (
-      `${fullName(banned)} забанен ${reason && `за ${reason} `} модератором ${fullName(moder)}`
-      + ` в ${select(chat.type, { supergroup: `супергруппе` }, `группе`)} ${chatTitle(chat)}`
+    userBannedWithReason: ({ banned, chats, moder, reason }) => (
+      `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
+      + ` в ${chats.map(chatTitle).join(`, `)}`
+    ),
+    userUnspammed: ({ moder, spammer }) => (
+      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
     ),
     shortSpamReason: () => `спам`,
-    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullName(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    actionUnspam: () => `Разбанить`,
+  },
+
+  readonlyMode: {
+    fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => (
+      `${fullName(fluder)} #${fluder.id} получил #ReadOnly от ${fullName(moder)}`
+      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
+    ),
   },
 
   commands: {
     spam: () => `!спам`,
+    readonly: () => `!ро`,
   },
 }
 

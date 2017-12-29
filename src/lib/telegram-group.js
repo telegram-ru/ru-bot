@@ -17,6 +17,11 @@ class TelegramGroup {
    */
   constructor(chatId, botInstance) {
     this.id = chatId
+    /**
+     * Options from .chatlist.json
+     * @type {{ stickers: { remove: boolean, restrict: boolean } }}
+     */
+    this.options = {}
     this.bot = botInstance
     this.telegram = this.bot.telegram
     this.debug = Debug(`rubot:lib:telegram-group:id#${chatId}`)
@@ -28,6 +33,14 @@ class TelegramGroup {
   }
 
   /**
+   * Options from .chatlist.json
+   * @param {{ stickers: Object }} options
+   */
+  setOptions(options) {
+    this.options = options
+  }
+
+  /**
    * @return {Promise<boolean>}
    */
   isBotAdmin() {
@@ -35,9 +48,21 @@ class TelegramGroup {
   }
 
   /**
+   * Get settings of stickers in group
+   * @return {{ remove: boolean, restrict: boolean }}
+   */
+  getStickersOptions() {
+    return Object.assign({
+      remove: false,
+      restrict: false,
+    }, this.options.stickers)
+  }
+
+  /**
    * @return {Promise<boolean>}
    */
   async canPostMessages() {
+    this.debug('canPostMessages()')
     const admins = await this.getAdmins()
     const found = admins.find(member => member.id === this.bot.context.botInfo.id)
 
@@ -123,6 +148,7 @@ class TelegramGroup {
    * @return {Promise}
    */
   sendMessage(message, extra) {
+    this.debug('sendMessage(', { message, extra }, ')')
     return this.telegram.sendMessage(this.id, message, extra)
   }
 
@@ -133,6 +159,7 @@ class TelegramGroup {
    * @param {{}} params
    */
   restrictMember(user, params) {
+    this.debug('restrictMember(', { user, params }, ')')
     const extra = Object.assign({
       can_send_messages: false,
       can_send_media_messages: false,
@@ -150,7 +177,17 @@ class TelegramGroup {
    * @param {TelegramUser} user
    */
   kickMember(user) {
+    this.debug('kickMember(', user, ')')
     return this.telegram.kickChatMember(this.id, user.id, { until_date: Date.now() })
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#unbanchatmember
+   * @param {TelegramUser} user
+   */
+  unbanMember(user) {
+    this.debug('unbanMember(', user, ')')
+    return this.telegram.unbanChatMember(this.id, user.id)
   }
 }
 

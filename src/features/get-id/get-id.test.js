@@ -19,7 +19,8 @@ test('!id command reply with chat id', async (t) => {
   }
   const context = Context.create()
 
+  context.message.$from()
   installFeature(bot)
   testFn(context)
-  t.true(context.reply.calledWith(context.chat.id, Extra.inReplyTo(context.message.message_id)))
+  t.true(context.reply.calledWith(`Chat: ${context.chat.id}\nUser: ${context.from.id}`, Extra.inReplyTo(context.message.message_id)))
 })
