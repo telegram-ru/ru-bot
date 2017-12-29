@@ -1,0 +1,11 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        ".chatlist.json",
+        ".chatlist.example.json"
+      ],
+      "url": "./chatlist.schema.json"
+    }
+  ]
+}

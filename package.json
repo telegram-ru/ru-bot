@@ -48,6 +48,7 @@
     "supports-color": "^5.1.0"
   },
   "dependencies": {
+    "ajv": "^5.5.2",
     "botanio": "0.0.6",
     "debug": "git+https://github.com/visionmedia/debug.git",
     "dotenv": "^4.0.0",

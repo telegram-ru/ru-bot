@@ -41,9 +41,36 @@ async function onNewChatMembers(ctx) {
   }
 }
 
+/**
+ * Check each sticker and check options
+ * - Remove sticker
+ * - Restrict user to send stickers
+ */
+async function handleStickerSend({ message, chat, from, getChat, deleteMessage }) {
+  debug('handleStickerSend', message)
+  const chatInstance = getChat(chat.id)
+  const stickersOptions = chatInstance.getStickersOptions()
+
+  if (stickersOptions.remove) {
+    debug('handleStickerSend:removeSticker', await deleteMessage())
+  }
+
+  if (stickersOptions.restrict) {
+    debug('handleStickerSend:restrictUser')
+    await chatInstance.restrictMember(from, {
+      // TODO(ssova): get member settings and merge it
+      can_send_messages: true,
+      can_send_media_messages: true,
+      can_add_web_page_previews: true,
+      can_send_other_messages: false,
+    })
+  }
+}
+
 
 function featureBotParticipation(bot) {
   bot.on('new_chat_members', allowWhiteListChat, onNewChatMembers)
+  bot.on('sticker', allowWhiteListChat, handleStickerSend)
 }
 
 module.exports = featureBotParticipation
