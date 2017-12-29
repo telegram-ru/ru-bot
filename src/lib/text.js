@@ -32,6 +32,10 @@ function fullName({ first_name: first, last_name: last, username }) {
     .join(' ')
 }
 
+function fullNameId(user) {
+  return `${fullName(user)} #${user.id}`
+}
+
 /**
  *
  * @param {Chat} param0
@@ -74,6 +78,7 @@ function column(...list) {
 module.exports = {
   random,
   fullName,
+  fullNameId,
   chatTitle,
   select,
   column,

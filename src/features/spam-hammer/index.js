@@ -45,6 +45,7 @@ async function handleSpamCommand({
         moder: from,
         reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
       })
+      /** @see https://core.telegram.org/bots/api#forwardmessage */
 
       await deleteMessage()
 
@@ -59,7 +60,6 @@ async function handleSpamCommand({
   }
 }
 /* eslint-enable no-restricted-syntax */
-
 
 module.exports = function featureSpamHammer(bot) {
   bot.on(
