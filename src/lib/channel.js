@@ -42,6 +42,13 @@ class Channel extends TelegramGroup {
     debug('forwardMessage', { chat, message })
     return this.telegram.forwardMessage(this.id, chat.id, message.message_id)
   }
+
+  notifyReadonly({ fluder, chat, moder, reason }, extra) {
+    debug('notifyReadonly', fluder.id, chat.id)
+    return this.sendMessage(text.readonlyMode.fluderReadonlyIn({
+      fluder, chat, moder, reason,
+    }), extra)
+  }
 }
 
 module.exports = { Channel }

@@ -5,5 +5,6 @@ module.exports = [
   require('./get-id'),
   require('./spam-hammer'),
   require('./bot-participation'),
+  require('./readonly-mode'),
   require('./private-greetings'),
 ]

@@ -25,10 +25,11 @@ const adminRequiredSilenced = async ({ chat, getChat, from }, next) => {
     const chatApi = getChat(chat.id)
 
     if (await chatApi.isAdmin(from)) {
+      debug('adminRequiredSilenced', chat.id, from.id, true)
       return next()
     }
   }
-
+  debug('adminRequiredSilenced', chat.id, from.id, false)
   return null
 }
 

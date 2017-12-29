@@ -10,6 +10,7 @@ const text = {
   },
 
   common: {
+    commandShouldBeReplied: command => `Командой ${command} нужно отвечать на сообщение`,
     actionCancel: () => `Отмена`,
   },
 
@@ -42,7 +43,6 @@ const text = {
   },
 
   spamHammer: {
-    spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
     userBannedWithReason: ({ banned, chats, moder, reason }) => (
       `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
       + ` в ${chats.map(chatTitle).join(`, `)}`
@@ -55,8 +55,16 @@ const text = {
     actionUnspam: () => `Разбанить`,
   },
 
+  readonlyMode: {
+    fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => (
+      `${fullName(fluder)} #${fluder.id} получил #ReadOnly от ${fullName(moder)}`
+      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
+    ),
+  },
+
   commands: {
     spam: () => `!спам`,
+    readonly: () => `!ро`,
   },
 }
 
