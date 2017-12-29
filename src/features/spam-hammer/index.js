@@ -59,7 +59,6 @@ async function handleSpamCommand({
 
       const blacklistedList = await hammer.blacklistUser(spammer)
 
-      console.log({ blacklistedList })
       await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       await privateChannel.notifyBan({
         banned: spammer,
@@ -72,7 +71,7 @@ async function handleSpamCommand({
       await hammer.dropMessagesOf(spammer)
       await deleteMessage()
 
-      // TODO: search all entities
+      // TODO: search all entities in message (urls)
     }
     catch (error) {
       debug('handleSpamCommand ERROR', error)
