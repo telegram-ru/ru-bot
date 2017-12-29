@@ -9,7 +9,7 @@ class Channel extends TelegramGroup {
    */
   notifyBan({ reason, chats, moder, banned }, extra) {
     debug('notifyBan', reason, chats, moder.id, banned.id)
-    this.sendMessage(
+    return this.sendMessage(
       text.spamHammer.userBannedWithReason({
         reason, chats, moder, banned,
       }),
@@ -22,7 +22,7 @@ class Channel extends TelegramGroup {
    */
   notifyUnspam({ chats, moder, spammer }) {
     debug('notifyUnspam', chats, moder.id, spammer.id)
-    this.sendMessage(text.spamHammer.userUnspammed({
+    return this.sendMessage(text.spamHammer.userUnspammed({
       chats, moder, spammer,
     }))
   }
@@ -32,10 +32,15 @@ class Channel extends TelegramGroup {
    */
   notifySpammerAutoban({ chat, banned }, extra) {
     debug('notifySpammerAutoban', chat.id, banned.id)
-    this.sendMessage(
+    return this.sendMessage(
       text.spamHammer.spammerAutobanned({ chat, banned }),
       extra,
     )
+  }
+
+  forwardMessage({ chat, message }) {
+    debug('forwardMessage', { chat, message })
+    return this.telegram.forwardMessage(this.id, chat.id, message.message_id)
   }
 }
 

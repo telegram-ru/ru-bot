@@ -45,7 +45,7 @@ async function handleEachMessage({
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, update, match, reply, privateChannel, getHammer, deleteMessage,
+  message, from, update, chat, match, reply, privateChannel, getHammer, deleteMessage,
 }) {
   debug('handleSpamCommand')
   const [, reason] = match
@@ -59,7 +59,8 @@ async function handleSpamCommand({
 
       const blacklistedList = await hammer.blacklistUser(spammer)
 
-      await hammer.dropMessagesOf(spammer)
+      console.log({ blacklistedList })
+      await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       await privateChannel.notifyBan({
         banned: spammer,
         chats: blacklistedList,
@@ -68,6 +69,7 @@ async function handleSpamCommand({
       }, keyboardUnspamUser({ banned: spammer }).extra())
       /** @see https://core.telegram.org/bots/api#forwardmessage */
 
+      await hammer.dropMessagesOf(spammer)
       await deleteMessage()
 
       // TODO: search all entities
