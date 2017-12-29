@@ -10,6 +10,7 @@ const text = {
   },
 
   common: {
+    actionCancel: () => `Отмена`,
   },
 
   privateGreetings: {
@@ -46,11 +47,12 @@ const text = {
       `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
       + ` в ${chats.map(chatTitle).join(`, `)}`
     ),
-    userUnspammed: ({ chats, moder, spammer }) => (
-      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)} в ${chats.map(chatTitle).join(`, `)}`
+    userUnspammed: ({ moder, spammer }) => (
+      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}}`
     ),
     shortSpamReason: () => `спам`,
     spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    actionUnspam: () => `Разбанить`,
   },
 
   commands: {

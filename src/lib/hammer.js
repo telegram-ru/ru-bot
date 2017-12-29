@@ -24,7 +24,7 @@ class Hammer {
         blacklistedIn.push(chat)
       }
       catch (error) {
-        debug('kickMember', error)
+        debug('blacklistUser:kickMember', error)
       }
     }
 
@@ -34,6 +34,30 @@ class Hammer {
     })
 
     return blacklistedIn
+  }
+
+  /**
+   * Remove user by id from blacklist
+   * @param {TelegramUser} user
+   */
+  async whitelistUser(user) {
+    debug('whitelistUser', user.id)
+
+    for (const chat of this.ctx.ownedChats) {
+      try {
+        await chat.unbanMember(user)
+      }
+      catch (error) {
+        debug('whitelistUser:unbanMember', { user }, error)
+      }
+    }
+
+    await Blocked.destroy({
+      where: {
+        targetId: String(user.id),
+        type: 'user',
+      },
+    })
   }
 
   /**

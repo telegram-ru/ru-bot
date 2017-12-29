@@ -1,5 +1,6 @@
 const debug = require('debug')('rubot:features:botparticipation:index')
 // const text = require('../../text')
+const { keyboardUnspamUser } = require('../spam-hammer/keyboards') // TODO(ssova): remove outfeature import
 
 /**
  * Executes if bot exist in joined users
@@ -30,7 +31,10 @@ async function onNewChatMembers(ctx) {
 
     if (isSpammer) {
       await hammer.dropMessagesOf(member)
-      await ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
+      await ctx.privateChannel.notifySpammerAutoban(
+        { chat, banned: member },
+        keyboardUnspamUser({ banned: member }).extra(),
+      )
       debug('onNewChatMembers():kickMember', await chatInstance.kickMember(member))
     }
   }
