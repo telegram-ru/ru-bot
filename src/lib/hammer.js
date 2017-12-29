@@ -89,10 +89,14 @@ class Hammer {
           await this.bot.telegram.deleteMessage(chatId, messageId)
         }
         catch (error) {
-          debug('dropMessagesOf', { authorId, chatId, messageId }, 'failed', error)
+          debug('dropMessagesOf::telegram.deleteMessage', { authorId, chatId, messageId }, 'failed', error)
         }
       }
     }
+
+    Message.destroy({
+      where: { authorId: String(user.id) },
+    }).catch(error => debug('dropMessagesOf::Message.destroy', { authorId: user.id }, error))
   }
 }
 
