@@ -23,16 +23,15 @@ async function onNewChatMembers(ctx) {
   */
 
   const hammer = ctx.getHammer()
+  const chatInstance = ctx.getChat(chat.id)
 
   for (const member of newMembers) {
     const isSpammer = await hammer.hasInBlacklist('user', member.id)
 
     if (isSpammer) {
-      const chatInstance = ctx.getChat(chat.id)
-
       await hammer.dropMessagesOf(member)
-      await chatInstance.kickMember(member)
-      ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
+      await ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
+      debug('onNewChatMembers():kickMember', await chatInstance.kickMember(member))
     }
   }
 }

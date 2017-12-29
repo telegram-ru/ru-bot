@@ -6,8 +6,11 @@ const { adminRequiredSilenced } = require('../../middlewares/admin-required')
 const { Message } = require('../../models')
 
 
-function handleEachMessage({ message, from, chat }, next) {
+async function handleEachMessage({
+  message, from, chat, getHammer, getChat, privateChannel,
+}, next) {
   debug(`handleEachMessage(messageId: ${message.message_id}, fromId: ${from.id}, chatId: ${chat.id}`)
+
   if (chat.type !== 'private') {
     Message.create({
       messageId: message.message_id,
@@ -15,11 +18,25 @@ function handleEachMessage({ message, from, chat }, next) {
       authorId: from.id,
       date: message.date,
     }).catch((error) => {
-      debug('message create', error)
+      debug('handleEachMessage:Message.create ERROR', error)
     })
-  }
 
-  next()
+    next()
+
+    const hammer = getHammer()
+    const isSpammer = await hammer.hasInBlacklist('user', from.id)
+
+    if (isSpammer) {
+      const chatInstance = getChat(chat.id)
+
+      await hammer.dropMessagesOf(from)
+      await privateChannel.notifySpammerAutoban({ chat, banned: from })
+      debug('handleEachMessage():kickMember', await chatInstance.kickMember(from))
+    }
+  }
+  else {
+    next()
+  }
 }
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
@@ -52,7 +69,7 @@ async function handleSpamCommand({
       // TODO: search all entities
     }
     catch (error) {
-      debug('handleSpamCommand failed', error)
+      debug('handleSpamCommand ERROR', error)
     }
   }
   else {
