@@ -17,6 +17,11 @@ class TelegramGroup {
    */
   constructor(chatId, botInstance) {
     this.id = chatId
+    /**
+     * Options from .chatlist.json
+     * @type {{ stickers: { remove: boolean, restrict: boolean } }}
+     */
+    this.options = {}
     this.bot = botInstance
     this.telegram = this.bot.telegram
     this.debug = Debug(`rubot:lib:telegram-group:id#${chatId}`)
@@ -28,10 +33,29 @@ class TelegramGroup {
   }
 
   /**
+   * Options from .chatlist.json
+   * @param {{ stickers: Object }} options
+   */
+  setOptions(options) {
+    this.options = options
+  }
+
+  /**
    * @return {Promise<boolean>}
    */
   isBotAdmin() {
     return this.isAdmin(this.bot.context.botInfo)
+  }
+
+  /**
+   * Get settings of stickers in group
+   * @return {{ remove: boolean, restrict: boolean }}
+   */
+  getStickersOptions() {
+    return Object.assign({
+      remove: false,
+      restrict: false,
+    }, this.options.stickers)
   }
 
   /**
