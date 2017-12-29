@@ -4,6 +4,7 @@ const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
 const { Message } = require('../../models')
+const { installKeyboardActions, keyboardUnspamUser } = require('./keyboards')
 
 
 async function handleEachMessage({
@@ -30,7 +31,10 @@ async function handleEachMessage({
       const chatInstance = getChat(chat.id)
 
       await hammer.dropMessagesOf(from)
-      await privateChannel.notifySpammerAutoban({ chat, banned: from })
+      await privateChannel.notifySpammerAutoban(
+        { chat, banned: from },
+        keyboardUnspamUser({ banned: from }).extra(),
+      )
       debug('handleEachMessage():kickMember', await chatInstance.kickMember(from))
     }
   }
@@ -61,7 +65,7 @@ async function handleSpamCommand({
         chats: blacklistedList,
         moder: from,
         reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
-      })
+      }, keyboardUnspamUser({ banned: spammer }).extra())
       /** @see https://core.telegram.org/bots/api#forwardmessage */
 
       await deleteMessage()
@@ -87,4 +91,6 @@ module.exports = function featureSpamHammer(bot) {
     new RegExp(`^${text.commands.spam()}( .*)?`),
     allowWhiteListChat, adminRequiredSilenced, handleSpamCommand
   )
+
+  installKeyboardActions(bot)
 }

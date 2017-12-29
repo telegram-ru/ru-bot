@@ -156,6 +156,15 @@ class TelegramGroup {
     this.debug('kickMember(', user, ')')
     return this.telegram.kickChatMember(this.id, user.id, { until_date: Date.now() })
   }
+
+  /**
+   * @see https://core.telegram.org/bots/api#unbanchatmember
+   * @param {TelegramUser} user
+   */
+  unbanMember(user) {
+    this.debug('unbanMember(', user, ')')
+    return this.telegram.unbanChatMember(this.id, user.id)
+  }
 }
 
 module.exports = {
