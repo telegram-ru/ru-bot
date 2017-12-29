@@ -5,7 +5,7 @@ const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
 
 
-/** 1 day in milliseconds */
+/** 1 day in seconds */
 const RO_TIME = 86400
 const SECOND = 1000
 
