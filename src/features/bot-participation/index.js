@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:botparticipation:index')
+const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 // const text = require('../../text')
 
 /**
@@ -37,9 +38,26 @@ async function onNewChatMembers(ctx) {
   }
 }
 
+/**
+ * Check each sticker and check options
+ * - Remove sticker
+ * - Restrict user to send stickers
+ */
+async function handleStickerSend({ message, chat, getChat, deleteMessage }) {
+  debug('handleStickerSend', message)
+  const stickersOptions = getChat(chat.id).getStickersOptions()
+
+  console.log(stickersOptions)
+  if (stickersOptions.remove) {
+    debug('handleStickerSend:removeSticker')
+    debug('deleteMessage', await deleteMessage())
+  }
+}
+
 
 function featureBotParticipation(bot) {
   bot.on('new_chat_members', onNewChatMembers)
+  bot.on('sticker', allowWhiteListChat, handleStickerSend)
 }
 
 module.exports = featureBotParticipation
