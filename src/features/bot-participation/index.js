@@ -31,8 +31,8 @@ async function onNewChatMembers(ctx) {
     if (isSpammer) {
       const chatInstance = ctx.getChat(chat.id)
 
-      await chatInstance.kickMember(member)
       await hammer.dropMessagesOf(member)
+      await chatInstance.kickMember(member)
       ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
     }
   }
