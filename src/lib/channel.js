@@ -8,9 +8,16 @@ class Channel extends TelegramGroup {
    * User banned with message
    */
   notifyBan({ reason, chats, moder, banned }) {
-    debug('notifyBan', reason, chats.id, moder.id, banned.id)
+    debug('notifyBan', reason, chats, moder.id, banned.id)
     this.sendMessage(text.spamHammer.userBannedWithReason({
       reason, chats, moder, banned,
+    }))
+  }
+
+  notifyUnspam({ chats, moder, spammer }) {
+    debug('notifyUnspam', chats, moder.id, spammer.id)
+    this.sendMessage(text.spamHammer.userUnspammed({
+      chats, moder, spammer,
     }))
   }
 
