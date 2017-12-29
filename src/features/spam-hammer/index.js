@@ -55,7 +55,10 @@ async function handleSpamCommand({
     }
   }
   else {
-    reply(text.spamHammer.spamCommandShouldBeReplied(), Extra.inReplyTo(message.message_id))
+    reply(
+      text.common.commandShouldBeReplied(text.commands.spam()),
+      Extra.inReplyTo(message.message_id)
+    )
   }
 }
 /* eslint-enable no-restricted-syntax */

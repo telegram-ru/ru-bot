@@ -22,6 +22,13 @@ class Channel extends TelegramGroup {
 
     this.sendMessage(text.spamHammer.spammerAutobanned({ chat, banned }))
   }
+
+  notifyReadonly({ fluder, chat, moder, reason }, extra) {
+    debug('notifyReadonly', fluder.id, chat.id)
+    return this.sendMessage(text.readonlyMode.fluderReadonlyIn({
+      fluder, chat, moder, reason,
+    }))
+  }
 }
 
 module.exports = { Channel }

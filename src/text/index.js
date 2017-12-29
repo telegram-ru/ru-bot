@@ -10,6 +10,7 @@ const text = {
   },
 
   common: {
+    commandShouldBeReplied: command => `Командой ${command} нужно отвечать на сообщение`,
   },
 
   privateGreetings: {
@@ -41,7 +42,6 @@ const text = {
   },
 
   spamHammer: {
-    spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
     userBannedWithReason: ({ banned, chats, moder, reason }) => (
       `${fullName(banned)} #${banned.id} забанен ${reason && `за ${reason} `}${fullName(moder)}`
       + ` в ${chats.map(chatTitle).join(`, `)}`
@@ -50,8 +50,16 @@ const text = {
     spammerAutobanned: ({ chat, banned }) => `Спамер ${fullName(banned)} автоматически забанен в ${chatTitle(chat)}`,
   },
 
+  readonlyMode: {
+    fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => (
+      `${fullName(fluder)} #${fluder.id} получил #ReadOnly от ${fullName(moder)}`
+      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
+    ),
+  },
+
   commands: {
     spam: () => `!спам`,
+    readonly: () => `!ро`,
   },
 }
 
