@@ -57,7 +57,6 @@ const text = {
 
   commands: {
     spam: () => `!спам`,
-    noSpam: () => `!не спам`,
   },
 }
 
