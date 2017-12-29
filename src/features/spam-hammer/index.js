@@ -24,7 +24,7 @@ function handleEachMessage({ message, from, chat }, next) {
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, update, match, reply, privateChannel, getHammer,
+  message, from, update, match, reply, privateChannel, getHammer, deleteMessage,
 }) {
   debug('handleSpamCommand')
   const [, reason] = match
@@ -36,15 +36,17 @@ async function handleSpamCommand({
     try {
       const hammer = getHammer()
 
-      await hammer.blacklistUser(spammer)
-      await hammer.dropMessagesOf(spammer)
+      const blacklistedList = await hammer.blacklistUser(spammer)
 
+      await hammer.dropMessagesOf(spammer)
       await privateChannel.notifyBan({
         banned: spammer,
-        chat: replyMessage.chat,
+        chats: blacklistedList,
         moder: from,
         reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
       })
+
+      await deleteMessage()
 
       // TODO: search all entities
     }
