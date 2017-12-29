@@ -49,8 +49,9 @@ async function handleUnspamUserOk({
 }) {
   const [, targetId] = match
   const hammer = getHammer()
+  const { message } = update.callback_query
 
-  debug('handleUnspamUserOk', targetId, { from, message: update.callback_query.message })
+  debug('handleUnspamUserOk', targetId, { from, message })
   try {
     editMessageText(`${message.text}\n${text.spamHammer.userUnspammed({ moder: from, spammer: { id: targetId } })}`)
     await hammer.whitelistUser({ id: targetId })
