@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:botparticipation:index')
+const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 // const text = require('../../text')
 const { keyboardUnspamUser } = require('../spam-hammer/keyboards') // TODO(ssova): remove outfeature import
 
@@ -42,7 +43,7 @@ async function onNewChatMembers(ctx) {
 
 
 function featureBotParticipation(bot) {
-  bot.on('new_chat_members', onNewChatMembers)
+  bot.on('new_chat_members', allowWhiteListChat, onNewChatMembers)
 }
 
 module.exports = featureBotParticipation
