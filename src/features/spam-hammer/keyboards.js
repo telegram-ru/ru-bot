@@ -45,14 +45,12 @@ function handleUnspamUserNo({ match, editMessageReplyMarkup }) {
  * Real unban and remove button
  */
 async function handleUnspamUserOk({
-  match, from, editMessageText,
-  update: { callback_query: { message } },
-  getHammer,
+  match, from, editMessageText, update, getHammer,
 }) {
   const [, targetId] = match
   const hammer = getHammer()
 
-  debug('handleUnspamUserOk', targetId, { from, message })
+  debug('handleUnspamUserOk', targetId, { from, message: update.callback_query.message })
   try {
     editMessageText(`${message.text}\n${text.spamHammer.userUnspammed({ moder: from, spammer: { id: targetId } })}`)
     await hammer.whitelistUser({ id: targetId })
