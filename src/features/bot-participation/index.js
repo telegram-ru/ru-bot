@@ -66,7 +66,7 @@ async function handleStickerSend({ message, chat, from, getChat, deleteMessage }
 
 
 function featureBotParticipation(bot) {
-  bot.on('new_chat_members', onNewChatMembers)
+  bot.on('new_chat_members', allowWhiteListChat, onNewChatMembers)
   bot.on('sticker', allowWhiteListChat, handleStickerSend)
 }
 
