@@ -1,5 +1,5 @@
 const {
-  random, fullName, select, column, chatTitle,
+  random, fullName, fullNameId, select, column, chatTitle,
 } = require(`../lib/text`)
 
 
@@ -10,6 +10,7 @@ const text = {
   },
 
   common: {
+    actionCancel: () => `Отмена`,
   },
 
   privateGreetings: {
@@ -43,11 +44,15 @@ const text = {
   spamHammer: {
     spamCommandShouldBeReplied: () => `Командой ${text.commands.spam()} нужно отвечать на сообщение`,
     userBannedWithReason: ({ banned, chats, moder, reason }) => (
-      `${fullName(banned)} #${banned.id} забанен ${reason && `за ${reason} `}${fullName(moder)}`
+      `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
       + ` в ${chats.map(chatTitle).join(`, `)}`
     ),
+    userUnspammed: ({ moder, spammer }) => (
+      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
+    ),
     shortSpamReason: () => `спам`,
-    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullName(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    actionUnspam: () => `Разбанить`,
   },
 
   commands: {

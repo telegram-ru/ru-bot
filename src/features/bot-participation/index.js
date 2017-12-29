@@ -1,6 +1,7 @@
 const debug = require('debug')('rubot:features:botparticipation:index')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 // const text = require('../../text')
+const { keyboardUnspamUser } = require('../spam-hammer/keyboards') // TODO(ssova): remove outfeature import
 
 /**
  * Executes if bot exist in joined users
@@ -24,16 +25,18 @@ async function onNewChatMembers(ctx) {
   */
 
   const hammer = ctx.getHammer()
+  const chatInstance = ctx.getChat(chat.id)
 
   for (const member of newMembers) {
     const isSpammer = await hammer.hasInBlacklist('user', member.id)
 
     if (isSpammer) {
-      const chatInstance = ctx.getChat(chat.id)
-
-      await chatInstance.kickMember(member)
       await hammer.dropMessagesOf(member)
-      ctx.privateChannel.notifySpammerAutoban({ chat, banned: member })
+      await ctx.privateChannel.notifySpammerAutoban(
+        { chat, banned: member },
+        keyboardUnspamUser({ banned: member }).extra(),
+      )
+      debug('onNewChatMembers():kickMember', await chatInstance.kickMember(member))
     }
   }
 }

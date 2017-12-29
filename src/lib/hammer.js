@@ -21,10 +21,10 @@ class Hammer {
     for (const chat of this.ctx.ownedChats) {
       try {
         await chat.kickMember(user)
-        blacklistedIn.push(chat)
+        blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
       }
       catch (error) {
-        debug('kickMember', error)
+        debug('blacklistUser:kickMember', error)
       }
     }
 
@@ -34,6 +34,30 @@ class Hammer {
     })
 
     return blacklistedIn
+  }
+
+  /**
+   * Remove user by id from blacklist
+   * @param {TelegramUser} user
+   */
+  async whitelistUser(user) {
+    debug('whitelistUser', user.id)
+
+    for (const chat of this.ctx.ownedChats) {
+      try {
+        await chat.unbanMember(user)
+      }
+      catch (error) {
+        debug('whitelistUser:unbanMember', { user }, error)
+      }
+    }
+
+    await Blocked.destroy({
+      where: {
+        targetId: String(user.id),
+        type: 'user',
+      },
+    })
   }
 
   /**
@@ -89,10 +113,14 @@ class Hammer {
           await this.bot.telegram.deleteMessage(chatId, messageId)
         }
         catch (error) {
-          debug('dropMessagesOf', { authorId, chatId, messageId }, 'failed', error)
+          debug('dropMessagesOf::telegram.deleteMessage', { authorId, chatId, messageId }, 'failed', error)
         }
       }
     }
+
+    Message.destroy({
+      where: { authorId: String(user.id) },
+    }).catch(error => debug('dropMessagesOf::Message.destroy', { authorId: user.id }, error))
   }
 }
 
