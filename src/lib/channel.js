@@ -27,7 +27,7 @@ class Channel extends TelegramGroup {
     debug('notifyReadonly', fluder.id, chat.id)
     return this.sendMessage(text.readonlyMode.fluderReadonlyIn({
       fluder, chat, moder, reason,
-    }))
+    }), extra)
   }
 }
 

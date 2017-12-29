@@ -3,7 +3,6 @@ const Extra = require('telegraf/extra')
 const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
-const { Message } = require('../../models')
 
 
 /** 1 day in milliseconds */
