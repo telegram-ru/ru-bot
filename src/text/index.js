@@ -48,7 +48,7 @@ const text = {
       + ` в ${chats.map(chatTitle).join(`, `)}`
     ),
     userUnspammed: ({ moder, spammer }) => (
-      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}}`
+      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
     ),
     shortSpamReason: () => `спам`,
     spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,

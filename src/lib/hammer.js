@@ -21,7 +21,7 @@ class Hammer {
     for (const chat of this.ctx.ownedChats) {
       try {
         await chat.kickMember(user)
-        blacklistedIn.push(chat)
+        blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
       }
       catch (error) {
         debug('blacklistUser:kickMember', error)
