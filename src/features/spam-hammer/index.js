@@ -4,10 +4,14 @@ const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
 const { Message } = require('../../models')
+const { installKeyboardActions, keyboardUnspamUser } = require('./keyboards')
 
 
-function handleEachMessage({ message, from, chat }, next) {
+async function handleEachMessage({
+  message, from, chat, getHammer, getChat, privateChannel,
+}, next) {
   debug(`handleEachMessage(messageId: ${message.message_id}, fromId: ${from.id}, chatId: ${chat.id}`)
+
   if (chat.type !== 'private') {
     Message.create({
       messageId: message.message_id,
@@ -15,16 +19,33 @@ function handleEachMessage({ message, from, chat }, next) {
       authorId: from.id,
       date: message.date,
     }).catch((error) => {
-      debug('message create', error)
+      debug('handleEachMessage:Message.create ERROR', error)
     })
-  }
 
-  next()
+    next()
+
+    const hammer = getHammer()
+    const isSpammer = await hammer.hasInBlacklist('user', from.id)
+
+    if (isSpammer) {
+      const chatInstance = getChat(chat.id)
+
+      await hammer.dropMessagesOf(from)
+      await privateChannel.notifySpammerAutoban(
+        { chat, banned: from },
+        keyboardUnspamUser({ banned: from }).extra(),
+      )
+      debug('handleEachMessage():kickMember', await chatInstance.kickMember(from))
+    }
+  }
+  else {
+    next()
+  }
 }
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, update, match, reply, privateChannel, getHammer, deleteMessage,
+  message, from, update, chat, match, reply, privateChannel, getHammer, deleteMessage,
 }) {
   debug('handleSpamCommand')
   const [, reason] = match
@@ -38,20 +59,22 @@ async function handleSpamCommand({
 
       const blacklistedList = await hammer.blacklistUser(spammer)
 
-      await hammer.dropMessagesOf(spammer)
+      await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       await privateChannel.notifyBan({
         banned: spammer,
         chats: blacklistedList,
         moder: from,
         reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
-      })
+      }, keyboardUnspamUser({ banned: spammer }).extra())
+      /** @see https://core.telegram.org/bots/api#forwardmessage */
 
+      await hammer.dropMessagesOf(spammer)
       await deleteMessage()
 
-      // TODO: search all entities
+      // TODO: search all entities in message (urls)
     }
     catch (error) {
-      debug('handleSpamCommand failed', error)
+      debug('handleSpamCommand ERROR', error)
     }
   }
   else {
@@ -63,7 +86,6 @@ async function handleSpamCommand({
 }
 /* eslint-enable no-restricted-syntax */
 
-
 module.exports = function featureSpamHammer(bot) {
   bot.on(
     'message',
@@ -73,4 +95,6 @@ module.exports = function featureSpamHammer(bot) {
     new RegExp(`^${text.commands.spam()}( .*)?`),
     allowWhiteListChat, adminRequiredSilenced, handleSpamCommand
   )
+
+  installKeyboardActions(bot)
 }

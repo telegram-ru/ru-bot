@@ -31,6 +31,17 @@ test('fullName(user) should get correct result', (t) => {
   t.is(text.fullName({ first_name: 'Foo', last_name: 'Bar', username: 'foobar' }), 'Foo Bar (@foobar)')
 })
 
+test('fullNameId(user) should get correct result', (t) => {
+  t.is(text.fullNameId({ id: 1, first_name: 'Foo' }), 'Foo #1')
+  t.is(text.fullNameId({ id: 1, last_name: 'Bar' }), 'Bar #1')
+  t.is(text.fullNameId({ id: 1, username: 'foobar' }), '(@foobar) #1')
+
+  t.is(text.fullNameId({ id: 2, first_name: 'Foo', last_name: 'Bar' }), 'Foo Bar #2')
+  t.is(text.fullNameId({ id: 2, first_name: 'Foo', username: 'foobar' }), 'Foo (@foobar) #2')
+  t.is(text.fullNameId({ id: 2, last_name: 'Bar', username: 'foobar' }), 'Bar (@foobar) #2')
+  t.is(text.fullNameId({ id: 2, first_name: 'Foo', last_name: 'Bar', username: 'foobar' }), 'Foo Bar (@foobar) #2')
+})
+
 test('chatTitle(chat) should return correct name', (t) => {
   t.is(text.chatTitle({ type: 'private', id: 1 }), 'private:1')
   t.is(text.chatTitle({ type: 'private', id: 1, title: 'Chat' }), 'Chat')
