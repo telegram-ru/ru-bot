@@ -1,16 +1,14 @@
 /* eslint-disable no-magic-numbers */
-
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
-
-
-const basename = path.basename(__filename)
 const config = require('../config').db
 
 
+const basename = path.basename(__filename)
 const { DB_PASSWORD } = process.env
 const db = {}
+
 let sequelize = null
 
 if (config.use_env_variable) {
@@ -27,7 +25,7 @@ else {
 
 fs
   .readdirSync(__dirname)
-  .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .filter((file) => (!file.startsWith('.')) && (file !== basename) && (file.endsWith('.js')))
   .forEach((file) => {
     const model = sequelize.import(path.join(__dirname, file))
     const name = model.name.charAt(0).toUpperCase() + model.name.slice(1)

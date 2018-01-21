@@ -4,7 +4,7 @@ const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { keyboardUnspamUser } = require('../spam-hammer/keyboards') // TODO(ssova): remove outfeature import
 
 /**
- * Executes if bot exist in joined users
+ * Executes if the bot exists in joined users
  * Add group to db, fetch admins and bot rights
  */
 async function onNewChatMembers(ctx) {
