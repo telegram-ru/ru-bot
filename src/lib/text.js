@@ -13,7 +13,7 @@
 function random(variants) {
   const count = variants.length
 
-  return object => variants[Math.floor(Math.random() * count)](object)
+  return (object) => variants[Math.floor(Math.random() * count)](object)
 }
 
 /**
@@ -28,7 +28,7 @@ function fullName({ first_name: first, last_name: last, username }) {
     last,
     username && `(@${username})`,
   ]
-    .filter(e => !!e)
+    .filter(Boolean)
     .join(' ')
 }
 
@@ -45,7 +45,8 @@ function chatTitle({ title, username, id, type }) {
   const parts = [
     title,
     username && `(@${username})`,
-  ].filter(e => !!e)
+  ]
+    .filter(Boolean)
 
   if (parts.length === 0) {
     parts.push(`${type}:${id}`)
