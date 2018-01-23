@@ -19,7 +19,7 @@ class TelegramGroup {
     this.id = chatId
     /**
      * Options from .chatlist.json
-     * @type {{ stickers: { remove: boolean, restrict: boolean } }}
+     * @type {{ stickers: { remove: boolean, restrict: boolean, allowedStickerPacks: Array } }}
      */
     this.options = {}
     this.bot = botInstance
@@ -55,6 +55,7 @@ class TelegramGroup {
     return Object.assign({
       remove: false,
       restrict: false,
+      allowedStickerPacks: [],
     }, this.options.stickers)
   }
 
