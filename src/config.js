@@ -15,8 +15,8 @@ module.exports = {
   db: dbConfig[NODE_ENV],
   bot: {
     token: BOT_TOKEN,
-    botanioToken: BOTANIO_TOKEN,
     username: BOT_USERNAME,
+    botanioToken: BOTANIO_TOKEN,
     privateChannelId: PRIVATE_CHANNEL_ID,
   },
   dev: NODE_ENV === 'development',
