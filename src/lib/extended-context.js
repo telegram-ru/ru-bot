@@ -14,7 +14,7 @@ const { Hammer } = require('./hammer')
 function optionalCallbackQuery(...args) {
   if (this.callbackQuery) {
     return this.answerCallbackQuery(...args)
-      .catch(error => debug(`Can't answer callback query #${this.callbackQuery.id}`, error))
+      .catch((error) => debug(`Can't answer callback query #${this.callbackQuery.id}`, error))
   }
 
   return Promise.resolve()
@@ -34,6 +34,10 @@ function getChat(chatId) {
   return this.chats.get(chatId)
 }
 
+/**
+ * Creates a new hammer instance
+ * @return {Hammer}
+ */
 function newHammer() {
   return new Hammer(this)
 }
@@ -47,7 +51,7 @@ function isChatInWhiteList(chat) {
   return this.chats.has(chat.id)
 }
 
-const bindedContextMethods = {
+const boundContextMethods = {
   getChat,
   newHammer,
   isChatInWhiteList,
@@ -62,8 +66,8 @@ function extendedContext(bot) {
   bot.context.rootInstance = bot
   bot.context.chats = new Map()
 
-  Object.keys(bindedContextMethods).forEach((name) => {
-    bot.context[name] = bindedContextMethods[name].bind(bot.context)
+  Object.keys(boundContextMethods).forEach((name) => {
+    bot.context[name] = boundContextMethods[name].bind(bot.context)
   })
 }
 
