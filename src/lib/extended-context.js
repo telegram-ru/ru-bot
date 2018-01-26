@@ -34,7 +34,7 @@ function getChat(chatId) {
   return this.chats.get(chatId)
 }
 
-function getHammer() {
+function newHammer() {
   return new Hammer(this)
 }
 
@@ -49,7 +49,7 @@ function isChatInWhiteList(chat) {
 
 const bindedContextMethods = {
   getChat,
-  getHammer,
+  newHammer,
   isChatInWhiteList,
   optionalCallbackQuery,
 }

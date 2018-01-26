@@ -8,7 +8,7 @@ const { installKeyboardActions, keyboardUnspamUser } = require('./keyboards')
 
 
 async function handleEachMessage({
-  message, from, chat, getHammer, getChat, privateChannel,
+  message, from, chat, newHammer, getChat, privateChannel,
 }, next) {
   debug(`handleEachMessage(messageId: ${message.message_id}, fromId: ${from.id}, chatId: ${chat.id}`)
 
@@ -24,7 +24,7 @@ async function handleEachMessage({
 
     next()
 
-    const hammer = getHammer()
+    const hammer = newHammer()
     const isSpammer = await hammer.hasInBlacklist('user', from.id)
 
     if (isSpammer) {
@@ -45,7 +45,7 @@ async function handleEachMessage({
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, update, chat, match, reply, privateChannel, getHammer, deleteMessage,
+  message, from, update, chat, match, reply, privateChannel, newHammer, deleteMessage,
 }) {
   debug('handleSpamCommand')
   const [, reason] = match
@@ -55,7 +55,7 @@ async function handleSpamCommand({
     const spammer = replyMessage.from
 
     try {
-      const hammer = getHammer()
+      const hammer = newHammer()
 
       const blacklistedList = await hammer.blacklistUser(spammer)
 

@@ -45,10 +45,10 @@ function handleUnspamUserNo({ match, editMessageReplyMarkup }) {
  * Real unban and remove button
  */
 async function handleUnspamUserOk({
-  match, from, editMessageText, update, getHammer,
+  match, from, editMessageText, update, newHammer,
 }) {
   const [, targetId] = match
-  const hammer = getHammer()
+  const hammer = newHammer()
   const { message } = update.callback_query
 
   debug('handleUnspamUserOk', targetId, { from, message })

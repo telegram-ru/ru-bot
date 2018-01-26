@@ -24,7 +24,7 @@ async function onNewChatMembers(ctx) {
   }
   */
 
-  const hammer = ctx.getHammer()
+  const hammer = ctx.newHammer()
   const chatInstance = ctx.getChat(chat.id)
 
   for (const member of newMembers) {
