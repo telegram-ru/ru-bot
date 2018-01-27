@@ -10,40 +10,46 @@ class InvalidChatlistError extends TypeError {
     super(message)
     this.name = 'InvalidChatlistError'
     this.stack = errors.reverse()
-      .map(error => `${error.dataPath} ${error.message}`)
+      .map((error) => `${error.dataPath} ${error.message}`)
       .join('\n')
   }
 }
 
-
+/**
+ * Validates the chatlist
+ *
+ * @param {Object} list
+ * @throws {InvalidChatlistError}
+ * @return {bool|void}
+ */
 function validateChatList(list) {
   if (!validate(list)) {
     throw new InvalidChatlistError('Invalid .chatlist.json file', validate.errors)
   }
+  return true
 }
 
 /**
- * Convert object of chat id and chat options to chat options
- *
+ * Converts { "ChatName": -11111 } to { "ChatName": { id: -11111, .... } }
  * Important! Thit function must be in sync with chatlist.schema.json
- * @param {{}} list
- * @return {{}}
+ *
+ * @param {Object} list
+ * @return {Object}
  */
 function normalizeChatList(list) {
   return Object.keys(list).reduce((acc, name) => {
-    // Convert { "ChatName": -11111 } to { "ChatName": { id: -11111, .... } }
     if (typeof list[name] === 'number') {
       acc[name] = {
         id: list[name],
         stickers: {
           remove: false,
           restrict: false,
+          allowedStickerPacks: [],
         },
       }
+      return acc
     }
-    else {
-      acc[name] = list[name]
-    }
+    acc[name] = list[name]
     return acc
   }, {})
 }
