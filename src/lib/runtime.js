@@ -5,6 +5,9 @@ const Botanio = require('botanio')
 const extendedContext = require('./extended-context')
 const { push } = require('./elastic')
 
+
+const ms = 1000
+
 /**
  * Installs the list of features to the bot instance
  *
@@ -56,7 +59,7 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
           type: 'message',
           id: `M${ctx.update.message.message_id}C${ctx.update.message.chat.id}F${ctx.update.message.from.id}`,
           body: Object.assign({
-            timestamp: new Date(ctx.update.message.date * 1000).toISOString(),
+            timestamp: new Date(ctx.update.message.date * ms).toISOString(),
           }, ctx.update.message),
         }).catch((error) => {
           console.error('Cant push to elastic', error) // eslint-disable-line no-console
