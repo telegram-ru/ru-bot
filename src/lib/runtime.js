@@ -19,11 +19,11 @@ function installFeatures(bot, list) {
   list.forEach((feature) => feature(bot))
 }
 
-
 /**
  * Creates a new Telegraf bot, extending it with features and context methods.
  *
  * @param {string} token
+ * @param {string} botanioToken
  * @param {((bot: Telegraf) => void)[]} features
  * @param {{ username: string }} telegrafConfig
  * @return {Telegraf}
