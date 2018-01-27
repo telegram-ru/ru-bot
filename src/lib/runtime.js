@@ -6,19 +6,19 @@ const extendedContext = require('./extended-context')
 const { push } = require('./elastic')
 
 /**
+ * Installs the list of features to the bot instance
  *
  * @param {Telegraf} bot
- * @param {((bot: Telegraf) => void)[]} featureList
+ * @param {((bot: Telegraf) => void)[]} list
  */
-function installFeatures(bot, featureList) {
-  debug('installFeatures()', featureList)
-  featureList.forEach(feature => feature(bot))
+function installFeatures(bot, list) {
+  debug('installFeatures()', list)
+  list.forEach((feature) => feature(bot))
 }
 
 
 /**
- * Create new instance of Telegraf bot
- * extends it with features and context methods
+ * Creates a new Telegraf bot, extending it with features and context methods.
  *
  * @param {string} token
  * @param {((bot: Telegraf) => void)[]} features
@@ -27,20 +27,20 @@ function installFeatures(bot, featureList) {
  */
 function createBot(token, botanioToken, features, telegrafConfig = {}) {
   debug('createBot()', telegrafConfig)
-  const instance = new Telegraf(token, telegrafConfig)
+  const bot = new Telegraf(token, telegrafConfig)
   const botan = Botanio(botanioToken)
 
-  instance.use((ctx, next) => {
+  bot.use((ctx, next) => {
     ctx.botan = botan
     next()
   })
 
   if (process.env.NODE_ENV === 'development') {
-    instance.use(Telegraf.log())
+    bot.use(Telegraf.log())
   }
 
   if (process.env.BOTANIO_LOG) {
-    instance.use((ctx, next) => {
+    bot.use((ctx, next) => {
       if (ctx.update.message) {
         ctx.botan.track(ctx.update.message, 'update')
       }
@@ -49,7 +49,7 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
   }
 
   if (process.env.ELASTIC_LOG) {
-    instance.use((ctx, next) => {
+    bot.use((ctx, next) => {
       if (ctx.update.message) {
         push({
           index: `rubot-${process.env.NODE_ENV || 'undefined'}`,
@@ -66,12 +66,12 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
     })
   }
 
-  // install context methods before features
-  extendedContext(instance)
+  // extend the context methods before features
+  extendedContext(bot)
 
-  installFeatures(instance, features)
+  installFeatures(bot, features)
 
-  return instance
+  return bot
 }
 
 module.exports = {
