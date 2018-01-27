@@ -10,7 +10,7 @@ const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
 
-let CHAT_LIST
+let chatList
 /* eslint-disable unicorn/no-process-exit, no-console */
 
 if (!config.bot.token) {
@@ -21,7 +21,7 @@ try {
   const chatlistConfig = require('../.chatlist.json') // eslint-disable-line global-require
 
   validateChatList(chatlistConfig)
-  CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))]
+  chatList = [...Object.values(normalizeChatList(chatlistConfig))]
 }
 catch (error) {
   if (error.code === 'MODULE_NOT_FOUND') {
@@ -62,7 +62,7 @@ async function main() {
     throw new Error('Bot should be admin and can post messages to private channel')
   }
 
-  await Promise.all(CHAT_LIST.map((options) => {
+  await Promise.all(chatList.map((options) => {
     debug(`Create chat instance for id:${options.id}`)
     const chat = bot.context.getChat(options.id)
 
