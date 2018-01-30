@@ -26,6 +26,15 @@ Development mode use `nodemon`
 npm run dev
 ```
 
+Create commits through [`commitizen`](https://github.com/commitizen/cz-cli):
+
+```shell
+npm install --global commitizen
+
+# commit
+git cz
+```
+
 ## Database
 
 See config in `config/database.json`

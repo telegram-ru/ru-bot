@@ -25,5 +25,5 @@ module.exports = {
       unique: true,
     })
   }),
-  down: queryInterface => queryInterface.dropTable('messages'),
+  down: (queryInterface) => queryInterface.dropTable('messages'),
 }

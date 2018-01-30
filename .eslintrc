@@ -1,5 +1,5 @@
 {
-  "extends": "atomix-base",
+  "extends": "@atomix/eslint-config",
   "rules": {
     "object-curly-newline": "off",
     "object-curly-spacing": "off"

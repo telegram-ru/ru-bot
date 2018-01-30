@@ -10,7 +10,7 @@ class InvalidChatlistError extends TypeError {
     super(message)
     this.name = 'InvalidChatlistError'
     this.stack = errors.reverse()
-      .map(error => `${error.dataPath} ${error.message}`)
+      .map((error) => `${error.dataPath} ${error.message}`)
       .join('\n')
   }
 }
