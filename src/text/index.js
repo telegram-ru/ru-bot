@@ -43,9 +43,9 @@ const text = {
   },
 
   spamHammer: {
-    userBannedWithReason: ({ banned, chats, moder, reason }) => (
+    userBannedWithReason: ({ banned, chats, originChat, moder, reason }) => (
       `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
-      + ` в ${chats.map(chatTitle).join(`, `)}`
+      + ` в ${chatTitle(originChat)}\n ${chats.map(chatTitle).join(`\n`)}`
     ),
     userUnspammed: ({ moder, spammer }) => (
       `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`

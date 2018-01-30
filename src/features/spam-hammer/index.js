@@ -61,8 +61,9 @@ async function handleSpamCommand({
 
       await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       await privateChannel.notifyBan({
+        originChat: chat,
         banned: spammer,
-        chats: blacklistedList,
+        chats: blacklistedList.filter((blacklisted) => blacklisted.id !== chat.id),
         moder: from,
         reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
       }, keyboardUnspamUser({ banned: spammer }).extra())
