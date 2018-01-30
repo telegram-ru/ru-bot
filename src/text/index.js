@@ -10,7 +10,7 @@ const text = {
   },
 
   common: {
-    commandShouldBeReplied: command => `Командой ${command} нужно отвечать на сообщение`,
+    commandShouldBeReplied: (command) => `Командой ${command} нужно отвечать на сообщение`,
     actionCancel: () => `Отмена`,
   },
 

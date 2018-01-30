@@ -120,7 +120,7 @@ class Hammer {
 
     Message.destroy({
       where: { authorId: String(user.id) },
-    }).catch(error => debug('dropMessagesOf::Message.destroy', { authorId: user.id }, error))
+    }).catch((error) => debug('dropMessagesOf::Message.destroy', { authorId: user.id }, error))
   }
 }
 

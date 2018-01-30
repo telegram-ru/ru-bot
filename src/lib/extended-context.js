@@ -14,7 +14,7 @@ const { Hammer } = require('./hammer')
 function optionalCallbackQuery(...args) {
   if (this.callbackQuery) {
     return this.answerCallbackQuery(...args)
-      .catch(error => debug(`Can't answer callback query #${this.callbackQuery.id}`, error))
+      .catch((error) => debug(`Can't answer callback query #${this.callbackQuery.id}`, error))
   }
 
   return Promise.resolve()

@@ -64,7 +64,7 @@ class TelegramGroup {
   async canPostMessages() {
     this.debug('canPostMessages()')
     const admins = await this.getAdmins()
-    const found = admins.find(member => member.id === this.bot.context.botInfo.id)
+    const found = admins.find((member) => member.id === this.bot.context.botInfo.id)
 
     if (found) {
       return found.raw.can_post_messages
@@ -87,7 +87,7 @@ class TelegramGroup {
     try {
       const chatAdmins = await this.telegram.getChatAdministrators(this.id)
 
-      this.admins.list = chatAdmins.map(member => ({
+      this.admins.list = chatAdmins.map((member) => ({
         id: member.user.id,
         isBot: member.user.is_bot,
         fullName: makeName(member.user),
@@ -116,7 +116,7 @@ class TelegramGroup {
     const adminList = await this.getAdmins()
     // this.debug('Fetched admins:', adminList)
 
-    const found = adminList.find(admin => admin.id === user.id)
+    const found = adminList.find((admin) => admin.id === user.id)
 
     if (found) {
       // this.debug(`Found admin with id ${user.id} with status `, found.status)

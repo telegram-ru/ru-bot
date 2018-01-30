@@ -12,7 +12,7 @@ const { push } = require('./elastic')
  */
 function installFeatures(bot, featureList) {
   debug('installFeatures()', featureList)
-  featureList.forEach(feature => feature(bot))
+  featureList.forEach((feature) => feature(bot))
 }
 
 
