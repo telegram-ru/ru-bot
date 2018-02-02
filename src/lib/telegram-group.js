@@ -2,11 +2,11 @@ const debug = require('debug')
 const { makeName } = require('./string')
 
 
-const ADMIN_TIMEOUT = 60000
+const { ADMIN_TIMEOUT } = process.env
 
 
 /**
- * GroupBase is a parent for the Channel and the Chat with a
+ * TelegramGroup is a parent for the Channel and the Chat with a
  * common methods to fetch admins and to manage messages.
  */
 class TelegramGroup {
@@ -14,8 +14,7 @@ class TelegramGroup {
    * Create an instance of the TelegramGroup class.
    *
    * @param {number} chatId The working group ID
-   * @param {Object} bot The bot instance
-   * @return {Promise<Array>}
+   * @param {Telegraf} bot The bot instance
    */
   constructor(chatId, bot) {
     this.id = chatId
@@ -23,16 +22,12 @@ class TelegramGroup {
     this.bot = bot
     this.telegram = bot.telegram
     this.debug = debug(`rubot:lib:telegram-group:id#${chatId}`)
-    this.admins = {
-      list: [],
-      nextUpdate: Date.now() - ADMIN_TIMEOUT,
-    }
+    this.admins = { list: [], nextUpdate: Date.now() - ADMIN_TIMEOUT }
   }
 
   /**
    * Sets options from the chatlist.json
-   * @param {{ stickers: Object }} options
-   * { remove: boolean, restrict: boolean, allowedStickerPacks: Array }
+   * @param {{ remove: boolean, restrict: boolean, allowed: Array }} options
    */
   setOptions(options) {
     this.options = options
@@ -48,39 +43,36 @@ class TelegramGroup {
 
   /**
    * Get settings of stickers in group
-   * @return {{ remove: boolean, restrict: boolean, allowedStickerPacks: Array }}
+   * @return {{ remove: boolean, restrict: boolean, allowed: Array }}
    */
   getStickersOptions() {
     return Object.assign({
       remove: false,
       restrict: false,
-      allowedStickerPacks: [],
+      allowed: [],
     }, this.options.stickers)
   }
 
   /**
    * Determines if can post messages
-   * @return {Promise<boolean>}
+   * @return {boolean}
    */
   async canPostMessages() {
     this.debug('canPostMessages()')
+
     const admins = await this.getAdmins()
-    const found = admins.find((member) => member.id === this.bot.context.botInfo.id)
+    const found = admins.find(({ id }) => id === this.bot.context.botInfo.id)
 
-    if (found) {
-      return found.raw.can_post_messages
-    }
-
-    return false
+    return found ? found.raw.can_post_messages : false
   }
 
   /**
    * Gets all admins
    * @param {boolean} force ignore timeout if `true`
-   * @return {Promise<Array>}
+   * @return {Array}
    */
   async getAdmins(force = false) {
-    this.debug(`getAdmins(), nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
+    this.debug(`getAdmins(${force}), nextUpdate: ${this.admins.nextUpdate}, now: ${Date.now()}`)
 
     if (!force && this.admins.nextUpdate > Date.now()) {
       return this.admins.list
@@ -110,50 +102,47 @@ class TelegramGroup {
 
   /**
    * Determines if the user is admin
-   * @param {User} user
-   * @return {Promise<{id, isBot, fullName, username, status, raw}>}
+   * @param {TelegramUser} user
+   * @return {boolean}
    */
   async isAdmin(user) {
-    this.debug('isAdmin(', user, ')')
+    this.debug(`isAdmin(${user})`)
     // this.debug('Current admins:', this.admins.list)
+    // this.debug('Fetched admins:', adminList)
+    // this.debug(`Found admin with id ${user.id} with status `, found.status)
 
     const adminList = await this.getAdmins()
-    // this.debug('Fetched admins:', adminList)
+    const found = adminList.find(({ id }) => id === user.id)
 
-    const found = adminList.find(admin => admin.id === user.id)
-
-    if (found) {
-      // this.debug(`Found admin with id ${user.id} with status `, found.status)
-
-      return found.status === 'creator' || found.status === 'administrator'
-    }
-
-    return false
+    return found
+      ? ['creator', 'administrator'].includes(found.status)
+      : false
   }
 
   /**
    * Deletes a message from the current chat by its id
-   * @param {number} messageId
+   * @param {number} id
    */
-  async deleteMessage(messageId) {
-    this.debug(`deleteMessage(${messageId})`)
+  async deleteMessage(id) {
+    this.debug(`deleteMessage(${id})`)
 
     try {
-      this.telegram.deleteMessage(this.id, messageId)
+      this.telegram.deleteMessage(this.id, id)
     }
     catch (error) {
-      this.debug(`deleteMessage(${messageId}) failed`, error)
+      this.debug(`deleteMessage(${id}) failed`, error)
     }
   }
 
   /**
    * Sends the message
+   * @see https://core.telegram.org/bots/api#sendmessage
    * @param {string} message
-   * @param {Object} extra
+   * @param {Object|Extra} extra
    * @return {Promise}
    */
   sendMessage(message, extra) {
-    this.debug('sendMessage(', { message, extra }, ')')
+    this.debug(`sendMessage(${{ message, extra }})`)
 
     return this.telegram.sendMessage(this.id, message, extra)
   }
@@ -163,18 +152,18 @@ class TelegramGroup {
    * @see https://core.telegram.org/bots/api#restrictchatmember
    * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
-   * @param {{}} params
+   * @param {Object} params
    */
-  restrictMember(user, params) {
-    this.debug('restrictMember(', { user, params }, ')')
+  restrictMember(user, extra) {
+    this.debug(`restrictMember(${{ user, extra }})`)
 
-    const extra = Object.assign({
+    extra = Object.assign({ // eslint-disable-line no-param-reassign
       can_send_messages: false,
       can_send_media_messages: false,
       can_send_other_messages: false,
       can_add_web_page_previews: false,
       // until_date: Date.now() + (60 * 60 * 24),
-    }, params)
+    }, extra)
 
     return this.telegram.restrictChatMember(this.id, user.id, extra)
   }
@@ -186,21 +175,24 @@ class TelegramGroup {
    * @param {TelegramUser} user
    */
   kickMember(user) {
-    this.debug('kickMember(', user, ')')
+    this.debug(`kickMember(${user})`)
 
-    return this.telegram.kickChatMember(this.id, user.id, { until_date: Date.now() })
+    return this.telegram.kickChatMember(this.id, user.id, {
+      until_date: Date.now(),
+    })
   }
 
   /**
    * Unban the member for a group
    * @see https://core.telegram.org/bots/api#unbanchatmember
+   * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
    */
   unbanMember(user) {
-    this.debug('unbanMember(', user, ')')
+    this.debug(`unbanMember(${user})`)
 
     return this.telegram.unbanChatMember(this.id, user.id)
   }
 }
 
-module.exports = { ADMIN_TIMEOUT, TelegramGroup }
+module.exports = { TelegramGroup }

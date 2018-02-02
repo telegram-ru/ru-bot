@@ -5,7 +5,7 @@ const config = require('./config')
 const { sequelize } = require('./models')
 const { createBot } = require('./lib/runtime')
 const { Channel } = require('./lib/channel')
-const { InvalidChatlistError, validateChatList, normalizeChatList } = require('./lib/chatlist-validate')
+const { InvalidChatListError, validateChatList, normalizeChatList } = require('./lib/chatlist-validate')
 const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
@@ -29,7 +29,7 @@ catch (error) {
     process.exit(-1)
   }
 
-  if (error instanceof InvalidChatlistError) {
+  if (error instanceof InvalidChatListError) {
     console.error(error.message)
     console.error(error.stack)
     process.exit(-1)

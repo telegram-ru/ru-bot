@@ -69,7 +69,7 @@ function createBot(token, botanioToken, features, telegrafConfig = {}) {
     })
   }
 
-  // extend the context methods before features
+  // Extend the context methods before features install
   extendedContext(bot)
 
   installFeatures(bot, features)
