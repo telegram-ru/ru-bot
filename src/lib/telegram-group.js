@@ -27,7 +27,7 @@ class TelegramGroup {
 
   /**
    * Sets options from the chatlist.json
-   * @param {{ remove: boolean, restrict: boolean, allowed: Array }} options
+   * @param {{ remove: boolean, restrict: boolean, allowed: Array<number> }} options
    */
   setOptions(options) {
     this.options = options
@@ -35,7 +35,7 @@ class TelegramGroup {
 
   /**
    * Determines if the bot is admin
-   * @return {Promise<boolean>}
+   * @return {boolean}
    */
   isBotAdmin() {
     return this.isAdmin(this.bot.context.botInfo)
@@ -43,14 +43,13 @@ class TelegramGroup {
 
   /**
    * Get settings of stickers in group
-   * @return {{ remove: boolean, restrict: boolean, allowed: Array }}
+   * @return {{ remove: boolean, restrict: boolean, allowed: Array<number> }}
    */
   getStickersOptions() {
-    return Object.assign({
-      remove: false,
-      restrict: false,
-      allowed: [],
-    }, this.options.stickers)
+    return Object.assign(
+      { remove: false, restrict: false, allowed: [] },
+      this.options.stickers
+    )
   }
 
   /**
