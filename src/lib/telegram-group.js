@@ -1,4 +1,4 @@
-const debug = require('debug')
+const createDebug = require('debug')
 const { makeName } = require('./string')
 
 
@@ -12,7 +12,6 @@ const { ADMIN_TIMEOUT } = process.env
 class TelegramGroup {
   /**
    * Create an instance of the TelegramGroup class.
-   *
    * @param {number} chatId The working group ID
    * @param {Telegraf} bot The bot instance
    */
@@ -21,7 +20,7 @@ class TelegramGroup {
     this.options = {}
     this.bot = bot
     this.telegram = bot.telegram
-    this.debug = debug(`rubot:lib:telegram-group:id#${chatId}`)
+    this.debug = createDebug(`rubot:lib:telegram-group:id#${chatId}`)
     this.admins = { list: [], nextUpdate: Date.now() - ADMIN_TIMEOUT }
   }
 

@@ -51,7 +51,7 @@ async function handleStickerSend({ message, chat, from, getChat, deleteMessage }
   const chatInstance = getChat(chat.id)
   const stickersOptions = chatInstance.getStickersOptions()
 
-  if (stickersOptions.remove) {
+  if (stickersOptions.remove && !stickersOptions.allowed.includes(message.sticker.set_name)) {
     debug('handleStickerSend:removeSticker', await deleteMessage())
   }
 
