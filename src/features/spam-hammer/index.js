@@ -57,6 +57,7 @@ async function handleSpamCommand({
     try {
       const hammer = getHammer()
 
+      await deleteMessage()
       const blacklistedList = await hammer.blacklistUser(spammer)
 
       await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
@@ -70,7 +71,6 @@ async function handleSpamCommand({
       /** @see https://core.telegram.org/bots/api#forwardmessage */
 
       await hammer.dropMessagesOf(spammer)
-      await deleteMessage()
 
       // TODO: search all entities in message (urls)
     }
