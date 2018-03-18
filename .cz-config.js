@@ -18,6 +18,7 @@ module.exports = {
     { name: '!private-greetings' },
     { name: '!readonly-mode' },
     { name: '!spam-hammer' },
+    { name: '!status' },
     { name: 'index' },
     { name: 'lib' },
     { name: 'middlewares' },
