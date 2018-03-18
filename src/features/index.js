@@ -7,4 +7,5 @@ module.exports = [
   require('./bot-participation'),
   require('./readonly-mode'),
   require('./private-greetings'),
+  require('./status'),
 ]

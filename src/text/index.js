@@ -62,9 +62,16 @@ const text = {
     ),
   },
 
+  status: {
+    check: (botName) => (
+      `Чат обслуживается ботом ${botName}`
+    ),
+  },
+
   commands: {
     spam: () => `!спам`,
     readonly: () => `!ро`,
+    status: () => `!статус`,
   },
 }
 
