@@ -60,7 +60,12 @@ async function handleSpamCommand({
       await deleteMessage()
       const blacklistedList = await hammer.blacklistUser(spammer)
 
-      await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
+      try {
+        await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
+      }
+      catch (error) {
+        debug('handleSpamCommand: cant forward message', message.reply_to_message)
+      }
       await privateChannel.notifyBan({
         originChat: chat,
         banned: spammer,
