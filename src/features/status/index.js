@@ -9,7 +9,7 @@ async function checkStatus({
 }) {
   try {
     debug('status check')
-    await deleteMessage(message.messge_id)
+    await deleteMessage(message.message_id)
     reply(text.status.check(options.username))
   }
   catch (error) {
