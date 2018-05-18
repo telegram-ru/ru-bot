@@ -57,7 +57,6 @@ async function handleSpamCommand({
     try {
       const hammer = getHammer()
 
-      await deleteMessage()
       const blacklistedList = await hammer.blacklistUser(spammer)
 
       try {
@@ -75,7 +74,13 @@ async function handleSpamCommand({
       }, keyboardUnspamUser({ banned: spammer }).extra())
       /** @see https://core.telegram.org/bots/api#forwardmessage */
 
-      await hammer.dropMessagesOf(spammer)
+      try {
+        await hammer.dropMessagesOf(spammer)
+      }
+      catch (error) {
+        debug('handleSpamCommand dropMessagesOfSpammer failed', error)
+      }
+      await deleteMessage()
 
       // TODO: search all entities in message (urls)
     }
