@@ -62,6 +62,13 @@ const text = {
     ),
   },
 
+  banHammer: {
+    fluderBannedIn: ({ fluder, chat, moder, reason }) => (
+      `${fullName(fluder)} #${fluder.id} получил #BAN от ${fullName(moder)}`
+      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
+    ),
+  },
+
   status: {
     check: (botName) => (
       `Чат обслуживается ботом ${botName}`
@@ -72,6 +79,7 @@ const text = {
     spam: () => `!спам`,
     readonly: () => `!ро`,
     status: () => `!статус`,
+    ban: () => `!бан`,
   },
 }
 

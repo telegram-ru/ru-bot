@@ -13,6 +13,7 @@ module.exports = {
     { value: 'WIP', name: 'WIP:      Work in progress' },
   ],
   scopes: [
+    { name: '!ban-hammer' },
     { name: '!bot-participation' },
     { name: '!get-id' },
     { name: '!private-greetings' },
