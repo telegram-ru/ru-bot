@@ -1,6 +1,6 @@
 {
   "name": "ru-bot",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Telegram bot to manage spam and rules for @_ru community",
   "main": "src/index.js",
   "scripts": {
