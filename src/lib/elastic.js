@@ -9,30 +9,17 @@ function elasticPing() {
 
   if (!client) {
     client = new elasticsearch.Client({
-      host: 'localhost:9200',
+      host: 'es:9200',
       log: 'trace',
     })
   }
 
-  return new Promise((resolve, reject) => {
-    client.ping({ requestTimeout: 500 }, (error) => {
-      if (error) {
-        return reject(error)
-      }
-      return resolve()
-    })
-  })
+  return client.ping({ requestTimeout: 500 })
 }
-
 
 function push({ index, type, id, body }) {
   debug('push(', { index, type, id }, ')')
-  return new Promise((resolve, reject) => {
-    client.create({ index, type, id, body }, (error, response) => {
-      if (error) reject(error)
-      else resolve(response)
-    })
-  })
+  return client.create({ index, type, id, body })
 }
 
 module.exports = {
