@@ -18,7 +18,7 @@ if (!config.bot.token) {
 }
 
 try {
-  const chatlistConfig = require('../.chatlist.json') // eslint-disable-line global-require
+  const chatlistConfig = require('./.chatlist.json') // eslint-disable-line global-require
 
   validateChatList(chatlistConfig)
   CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))]

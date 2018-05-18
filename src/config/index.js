@@ -1,24 +1,23 @@
-const dbConfig = require('../config/database.json')
+require('dotenv').config()
+const dbConfig = require('./database.json')
 
 
+const environment = process.env
 const {
   BOT_TOKEN,
-  BOTANIO_TOKEN,
   PRIVATE_CHANNEL_ID,
   BOT_USERNAME = 'ru_community_bot',
   NODE_ENV = 'development',
-} = process.env
-
-process.env.NODE_ENV = NODE_ENV
+} = environment
 
 module.exports = {
-  db: dbConfig[NODE_ENV],
+  environment,
   bot: {
     token: BOT_TOKEN,
-    botanioToken: BOTANIO_TOKEN,
     username: BOT_USERNAME,
     privateChannelId: PRIVATE_CHANNEL_ID,
   },
+  db: environment.DB_URL || dbConfig[NODE_ENV],
   dev: NODE_ENV === 'development',
   prod: NODE_ENV !== 'development',
 }

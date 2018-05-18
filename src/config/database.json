@@ -2,22 +2,22 @@
   "development": {
     "username": "rubot",
     "password": "rubot",
-    "database": "rubot_development",
-    "host": "127.0.0.1",
+    "database": "rubot",
+    "host": "db",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
     "password": "rubot",
-    "database": "rubot_test",
-    "host": "127.0.0.1",
+    "database": "rubot",
+    "host": "db",
     "dialect": "postgres"
   },
   "production": {
     "username": "rubot",
     "password": "rubot",
-    "database": "rubot_production",
-    "host": "127.0.0.1",
+    "database": "rubot",
+    "host": "db",
     "dialect": "postgres"
   }
 }
