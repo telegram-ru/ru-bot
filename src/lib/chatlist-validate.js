@@ -1,5 +1,5 @@
 const Ajv = require('ajv')
-const schema = require('../../chatlist.schema')
+const schema = require('../chatlist.schema')
 
 
 const ajv = new Ajv()

@@ -1,4 +1,3 @@
-require('dotenv').config()
 const debug = require('debug')('rubot:index')
 
 const config = require('./config')
@@ -18,7 +17,7 @@ if (!config.bot.token) {
 }
 
 try {
-  const chatlistConfig = require('../.chatlist.json') // eslint-disable-line global-require
+  const chatlistConfig = require('./.chatlist.json') // eslint-disable-line global-require
 
   validateChatList(chatlistConfig)
   CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))]
@@ -40,7 +39,6 @@ catch (error) {
 
 const bot = createBot(
   config.bot.token,
-  config.bot.botanioToken,
   features,
   { username: config.bot.username }
 )

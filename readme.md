@@ -11,8 +11,6 @@ npm install
 
 ## Start
 
-Production mode use `pm2`, see `process.config.js`
-
 ```shell
 npm start
 ```

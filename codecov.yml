@@ -13,6 +13,6 @@ parsers:
 ignore:
   - "**/*.test.js"
   - "src/tests/**/*"
-  - "db/**/*"
+  - "src/db/**/*"
   - "node_modules/**/*"
-  - "config/**/*"
+  - "src/config/**/*"

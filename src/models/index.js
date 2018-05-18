@@ -3,27 +3,29 @@
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
+const config = require('../config')
 
 
 const basename = path.basename(__filename)
-const config = require('../config').db
 
-
-const { DB_PASSWORD } = process.env
 const db = {}
-let sequelize = null
+let sequelizeOptions = {
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+}
 
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable])
+if (typeof config.db === 'string') {
+  sequelizeOptions = [config.db, sequelizeOptions]
 }
 else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password || DB_PASSWORD,
-    config,
-  )
+  sequelizeOptions = [Object.assign({}, sequelizeOptions, config.db)]
 }
+
+const sequelize = new Sequelize(...sequelizeOptions)
 
 fs
   .readdirSync(__dirname)
