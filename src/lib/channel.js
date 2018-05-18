@@ -49,6 +49,13 @@ class Channel extends TelegramGroup {
       fluder, chat, moder, reason,
     }), extra)
   }
+
+  notifyKickBan({ fluder, chat, moder, reason }, extra) {
+    debug('notifyKickBan', fluder.id, chat.id)
+    return this.sendMessage(text.banHammer.fluderBannedIn({
+      fluder, chat, moder, reason,
+    }), extra)
+  }
 }
 
 module.exports = { Channel }
