@@ -1,4 +1,3 @@
-require('dotenv').config()
 const debug = require('debug')('rubot:index')
 
 const config = require('./config')
@@ -40,7 +39,6 @@ catch (error) {
 
 const bot = createBot(
   config.bot.token,
-  config.bot.botanioToken,
   features,
   { username: config.bot.username }
 )
