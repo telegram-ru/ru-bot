@@ -9,13 +9,23 @@ const config = require('../config')
 const basename = path.basename(__filename)
 
 const db = {}
-const sequelize = new Sequelize(config.db, {
+let sequelizeOptions = {
   pool: {
     max: 5,
     min: 0,
     acquire: 30000,
     idle: 10000,
-  }})
+  },
+}
+
+if (typeof config.db === 'string') {
+  sequelizeOptions = [config.db, sequelizeOptions]
+}
+else {
+  sequelizeOptions = [Object.assign({}, sequelizeOptions, config.db)]
+}
+
+const sequelize = new Sequelize(...sequelizeOptions)
 
 fs
   .readdirSync(__dirname)
