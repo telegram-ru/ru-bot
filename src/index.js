@@ -1,6 +1,7 @@
+console.log(process.env)
 const debug = require('debug')('rubot:index')
 
-const config = require('./config')
+const { bot: botConfig, environment } = require('./config')
 const { sequelize } = require('./models')
 const { createBot } = require('./lib/runtime')
 const { Channel } = require('./lib/channel')
@@ -8,11 +9,10 @@ const { InvalidChatlistError, validateChatList, normalizeChatList } = require('.
 const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
-
 let CHAT_LIST
 /* eslint-disable unicorn/no-process-exit, no-console */
 
-if (!config.bot.token) {
+if (!environment.BOT_TOKEN) {
   throw new Error('No telegram bot token provided')
 }
 
@@ -38,21 +38,21 @@ catch (error) {
 }
 
 const bot = createBot(
-  config.bot.token,
+  botConfig.token,
   features,
-  { username: config.bot.username }
+  { username: botConfig.username }
 )
 
 async function main() {
   debug('main()')
   await sequelize.authenticate()
 
-  if (process.env.ELASTIC_LOG) {
+  if (environment.ELASTICSEARCH_URL) {
     await elasticPing()
   }
 
   bot.context.botInfo = await bot.telegram.getMe()
-  bot.context.privateChannel = new Channel(config.bot.privateChannelId, bot)
+  bot.context.privateChannel = new Channel(botConfig.privateChannelId, bot)
   // TODO: hardcoded chatlist
   bot.context.ownedChats = []
 

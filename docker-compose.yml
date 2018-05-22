@@ -2,22 +2,29 @@ version: '3'
 services:
   app:
     build: .
-    restart: always
+    restart: on-failure
     env_file:
      - ./.env
-  db:
+  postgres:
     image: postgres:9-alpine
     restart: always
     volumes:
       - ./data/pgsql:/var/lib/postgresql
-    env_file:
-     - ./.env
     ports:
       - 5432:5432
-  es:
+  admin:
+    image: sosedoff/pgweb
+    restart: always
+    ports:
+      - 10000:8081
+  elasticsearch:
     image: elastic/elasticsearch:6.2.4
     restart: always
     volumes:
       - ./data/elastic
-    env_file:
-      - ./.env
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.2.4
+    ports:
+      - 10001:5601
+    links:
+      - elasticsearch
