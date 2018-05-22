@@ -1,6 +1,7 @@
 const debug = require('debug')('rubot:lib:runtime')
 const Telegraf = require('telegraf')
 
+const { environment } = require('../config')
 const extendedContext = require('./extended-context')
 const { push } = require('./elastic')
 
@@ -28,15 +29,15 @@ function createBot(token, features, telegrafConfig = {}) {
   debug('createBot()', telegrafConfig)
   const instance = new Telegraf(token, telegrafConfig)
 
-  if (process.env.NODE_ENV === 'development') {
+  if (environment.NODE_ENV === 'development') {
     instance.use(Telegraf.log())
   }
 
-  if (process.env.ELASTIC_LOG) {
+  if (environment.ELASTICSEARCH_URL) {
     instance.use((ctx, next) => {
       if (ctx.update.message) {
         push({
-          index: `rubot-${process.env.NODE_ENV || 'undefined'}`,
+          index: `rubot-${environment.NODE_ENV || 'undefined'}`,
           type: 'message',
           id: `M${ctx.update.message.message_id}C${ctx.update.message.chat.id}F${ctx.update.message.from.id}`,
           body: Object.assign({
