@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import hammer from './hammer'
+import './hammer'
 
 
 test.todo('hammer')

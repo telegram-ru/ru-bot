@@ -30,6 +30,7 @@ if (environment.DATABASE_URL) {
 else {
   db = dbConfig[NODE_ENV]
 }
+
 module.exports = {
   db,
   environment,

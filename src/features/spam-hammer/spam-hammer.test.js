@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import featureSpamHammer from './'
+import '.'
 
 
 test.todo('featureSpamHammer')

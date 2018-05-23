@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import chat from './chat'
+import './chat'
 
 
 test.todo('chat')

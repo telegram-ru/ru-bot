@@ -3,7 +3,7 @@ import sinon from 'sinon'
 import { Extra } from 'telegraf'
 import { Context } from '../tests/telegraf'
 import text from '../text'
-import { adminRequired, adminRequiredSilenced } from './admin-required'
+import { adminRequired } from './admin-required'
 
 /* eslint-disable no-param-reassign */
 

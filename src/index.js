@@ -1,4 +1,3 @@
-console.log(process.env)
 const debug = require('debug')('rubot:index')
 
 const { bot: botConfig, environment } = require('./config')
@@ -8,6 +7,7 @@ const { Channel } = require('./lib/channel')
 const { InvalidChatlistError, validateChatList, normalizeChatList } = require('./lib/chatlist-validate')
 const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
+
 
 let CHAT_LIST
 /* eslint-disable unicorn/no-process-exit, no-console */

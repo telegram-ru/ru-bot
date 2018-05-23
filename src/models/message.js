@@ -1,6 +1,5 @@
-
-const Message = (sequelize, DataTypes) => {
-  const message = sequelize.define('message', {
+function message(sequelize, DataTypes) {
+  return sequelize.define('message', {
     chatId: DataTypes.STRING,
     authorId: DataTypes.STRING,
     messageId: DataTypes.STRING,
@@ -13,8 +12,6 @@ const Message = (sequelize, DataTypes) => {
       // },
     },
   })
-
-  return message
 }
 
-module.exports = Message
+module.exports = message

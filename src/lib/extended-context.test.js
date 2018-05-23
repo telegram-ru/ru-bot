@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import extendedContext from './extended-context'
+import './extended-context'
 
 
 test.todo('extendedContext')

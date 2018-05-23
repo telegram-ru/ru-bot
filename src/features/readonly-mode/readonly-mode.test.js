@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import featureReadonlyMode from './'
+import '.'
 
 
 test.todo('featureReadonlyMode')
