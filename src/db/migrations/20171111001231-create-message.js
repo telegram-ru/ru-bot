@@ -7,10 +7,10 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    chatId: {
+    authorId: {
       type: Sequelize.STRING,
     },
-    authorId: {
+    chatId: {
       type: Sequelize.STRING,
     },
     messageId: {

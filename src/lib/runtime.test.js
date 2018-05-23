@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import runtime from './runtime'
+import './runtime'
 
 
 test.todo('runtime')

@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import featureBotParticipation from './'
+import '.'
 
 
 test.todo('featureBotParcipation')

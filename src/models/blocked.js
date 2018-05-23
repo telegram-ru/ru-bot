@@ -1,6 +1,5 @@
-
-module.exports = (sequelize, DataTypes) => {
-  const blocked = sequelize.define('blocked', {
+function blocked(sequelize, DataTypes) {
+  return sequelize.define('blocked', {
     targetId: DataTypes.STRING,
     type: DataTypes.STRING,
   }, {
@@ -10,6 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   })
-
-  return blocked
 }
+
+module.exports = blocked

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run test:lint && npm run test:code",
     "test:code": "nyc ava",
-    "test:lint": "eslint .",
+    "test:lint": "eslint src",
     "coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "dev": "cross-env DEBUG=rubot:*,telegraf:* nodemon -e yaml,js,json -w locales -w src ./src",
     "start": "NODE_ENV=production node src",

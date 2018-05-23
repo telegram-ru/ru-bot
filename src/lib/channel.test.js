@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import channel from './channel'
+import './channel'
 
 
 test.todo('channel')

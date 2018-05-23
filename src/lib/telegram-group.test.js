@@ -1,6 +1,5 @@
 import test from 'ava'
-
-import telegramGroup from './telegram-group'
+import './telegram-group'
 
 
 test.todo('telegramGroup')

@@ -5,6 +5,9 @@ const { environment } = require('../config')
 const extendedContext = require('./extended-context')
 const { push } = require('./elastic')
 
+
+const SECOND = 1000
+
 /**
  *
  * @param {Telegraf} bot
@@ -41,7 +44,7 @@ function createBot(token, features, telegrafConfig = {}) {
           type: 'message',
           id: `M${ctx.update.message.message_id}C${ctx.update.message.chat.id}F${ctx.update.message.from.id}`,
           body: Object.assign({
-            timestamp: new Date(ctx.update.message.date * 1000).toISOString(),
+            timestamp: new Date(ctx.update.message.date * SECOND).toISOString(),
           }, ctx.update.message),
         }).catch((error) => {
           console.error('Cant push to elastic', error) // eslint-disable-line no-console
