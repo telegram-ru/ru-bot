@@ -12,19 +12,29 @@ services:
       - ./data/pgsql:/var/lib/postgresql
     ports:
       - 5432:5432
+    env_file:
+     - ./.env
   admin:
     image: sosedoff/pgweb
     restart: always
     ports:
       - 10000:8081
+    env_file:
+     - ./.env
   elasticsearch:
     image: elastic/elasticsearch:6.2.4
     restart: always
     volumes:
       - ./data/elastic
+    env_file:
+     - ./.env
   kibana:
     image: docker.elastic.co/kibana/kibana:6.2.4
     ports:
       - 10001:5601
     links:
       - elasticsearch
+    env_file:
+     - ./.env
+
+
