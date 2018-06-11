@@ -5,7 +5,7 @@
         ".chatlist.json",
         ".chatlist.example.json"
       ],
-      "url": "./chatlist.schema.json"
+      "url": "./src/chatlist.schema.json"
     }
   ]
 }
