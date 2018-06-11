@@ -19,11 +19,9 @@ module.exports = {
     date: {
       type: Sequelize.INTEGER,
     },
-  }).then(() => {
-    queryInterface.addIndex('messages', {
-      fields: ['chatId', 'authorId', 'messageId'],
-      unique: true,
-    })
-  }),
+  }).then(() => queryInterface.addIndex('messages', {
+    fields: ['chatId', 'authorId', 'messageId'],
+    unique: true,
+  })),
   down: (queryInterface) => queryInterface.dropTable('messages'),
 }
