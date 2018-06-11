@@ -2,9 +2,15 @@ const debug = require('debug')('rubot:features:get-id:index')
 const { Extra } = require('telegraf')
 
 
-function onIdCommand({ reply, chat, from, message }) {
+async function onIdCommand({ reply, chat, from, message }) {
   debug('on !id', chat)
-  reply(`Chat: ${chat.id}\nUser: ${from.id}`, Extra.inReplyTo(message.message_id))
+  try {
+    return await reply(`Chat: ${chat.id}\nUser: ${from.id}`, Extra.inReplyTo(message.message_id))
+  }
+  catch (error) {
+    // Message dropped?
+    return undefined
+  }
 }
 
 
