@@ -43,12 +43,19 @@ const text = {
   },
 
   spamHammer: {
-    userBannedWithReason: ({ banned, chats, originChat, moder, reason }) => (
-      `${fullNameId(banned)} забанен ${reason && `за ${reason} `}${fullName(moder)}`
-      + ` в ${chatTitle(originChat)}\n ${chats.map(chatTitle).join(`\n`)}`
+    userBannedWithReason: ({ banned, chats, originChat, moder, reason }) => [
+      `#бан #ban`,
+      `Юзер:     ${fullNameId(banned)}`,
+      `Причина:     ${reason}`,
+      `Админ:     ${fullName(moder)}`,
+      `Чат:     ${chatTitle(originChat)}`,
+      `Чаты:\n${chats.map(chatTitle).join(`\n  `)}`,
+    ].filter(Boolean).join(`\n`),
+    userBanInProgressWithReason: ({ reason, banned }) => (
+      `Бан юзера ${fullNameId(banned)} ${reason && `за ${reason} `} в процессе…`
     ),
     userUnspammed: ({ moder, spammer }) => (
-      `${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
+      `\n#unban\n${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
     ),
     shortSpamReason: () => `спам`,
     spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,
@@ -56,17 +63,23 @@ const text = {
   },
 
   readonlyMode: {
-    fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => (
-      `${fullName(fluder)} #${fluder.id} получил #ReadOnly от ${fullName(moder)}`
-      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
-    ),
+    fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => [
+      `#ro #ро #readonly #ридонли`,
+      `Юзер:     ${fullNameId(fluder)}`,
+      `Причина:     ${reason}`,
+      `Админ:     ${fullName(moder)}`,
+      `Чат:     ${chatTitle(chat)}`,
+    ].filter(Boolean).join(`\n`),
   },
 
   banHammer: {
-    fluderBannedIn: ({ fluder, chat, moder, reason }) => (
-      `${fullName(fluder)} #${fluder.id} получил #BAN от ${fullName(moder)}`
-      + ` в ${chatTitle(chat)}${reason && ` за ${reason}`}`
-    ),
+    fluderBannedIn: ({ fluder, moder, chat, reason = `` }) => [
+      `#ban #бан`,
+      `Юзер:     ${fullNameId(fluder)}`,
+      `Причина:     ${reason}`,
+      `Админ:     ${fullName(moder)}`,
+      `Чат:     ${chatTitle(chat)}`,
+    ].filter(Boolean).join(`\n`),
   },
 
   status: {
