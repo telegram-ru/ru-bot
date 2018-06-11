@@ -24,9 +24,9 @@ function random(variants) {
  */
 function fullName({ first_name: first, last_name: last, username }) {
   return [
-    first,
-    last,
-    username && `(@${username})`,
+    first && first.trim(),
+    last && last.trim(),
+    username && `(@${username.trim()})`,
   ]
     .filter(Boolean)
     .join(' ')
@@ -43,8 +43,8 @@ function fullNameId(user) {
  */
 function chatTitle({ title, username, id, type }) {
   const parts = [
-    title,
-    username && `(@${username})`,
+    title && title.trim(),
+    username && `(@${username.trim()})`,
   ].filter(Boolean)
 
   if (parts.length === 0) {

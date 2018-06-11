@@ -45,10 +45,11 @@ async function handleEachMessage({
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
 async function handleSpamCommand({
-  message, from, update, chat, match, reply, privateChannel, getHammer, deleteMessage,
+  message, from, update, chat, match, reply, privateChannel, getHammer, deleteMessage, getChat,
 }) {
   debug('handleSpamCommand')
-  const [, reason] = match
+  const [, rawReason] = match
+  const reason = `${text.spamHammer.shortSpamReason()} ${rawReason || ''}`
 
   if (update.message.reply_to_message) {
     const replyMessage = update.message.reply_to_message
@@ -56,31 +57,48 @@ async function handleSpamCommand({
 
     try {
       const hammer = getHammer()
+      const currentChat = getChat(chat.id)
 
-      const blacklistedList = await hammer.blacklistUser(spammer)
-
+      // Ban in current chat #66.2
+      await currentChat.kickMember(spammer)
       try {
+        // Forward spam message #66.3
         await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       }
       catch (error) {
         debug('handleSpamCommand: cant forward message', message.reply_to_message)
       }
-      await privateChannel.notifyBan({
-        originChat: chat,
+      // Delete spam message from current chat #66.4
+      await hammer.dropMessagesOf(spammer, { chat })
+
+      // Send "progress" to log channel #66.5
+      const logMessage = await privateChannel.notifyBanInProgress({
+        reason,
         banned: spammer,
-        chats: blacklistedList.filter((blacklisted) => blacklisted.id !== chat.id),
-        moder: from,
-        reason: `${text.spamHammer.shortSpamReason()} ${reason || ''}`,
-      }, keyboardUnspamUser({ banned: spammer }).extra())
-      /** @see https://core.telegram.org/bots/api#forwardmessage */
+      })
+
+      // Delete !spam message #66.6
+      await deleteMessage()
+
+      // Ban user in another controlled chats #66.7
+      const blacklistedList = await hammer.blacklistUser(spammer, [chat.id])
 
       try {
-        await hammer.dropMessagesOf(spammer)
+        // Delete messages in all another chats #66.8
+        await hammer.dropMessagesOf(spammer, { limit: 100 })
       }
       catch (error) {
         debug('handleSpamCommand dropMessagesOfSpammer failed', error)
       }
-      await deleteMessage()
+
+      await privateChannel.editBanMessage(logMessage.message_id, {
+        originChat: chat,
+        banned: spammer,
+        chats: blacklistedList.filter((blacklisted) => blacklisted.id !== chat.id),
+        moder: from,
+        reason,
+      }, keyboardUnspamUser({ banned: spammer }).extra())
+      /** @see https://core.telegram.org/bots/api#forwardmessage */
 
       // TODO: search all entities in message (urls)
     }
