@@ -15,7 +15,9 @@ let db
 
 if (environment.DATABASE_URL) {
   const { auth, pathname, protocol, host } = url.parse(environment.DATABASE_URL)
-  const [username, password] = auth.split(':')
+
+
+  const [username, password] = (auth || '').split(':')
   const database = pathname.slice(1)
   const dialect = protocol.slice(0, -1)
 
