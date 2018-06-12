@@ -13,18 +13,21 @@ class Hammer {
    * Add user by id to blacklist
    * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
+   * @param {number[]} exceptChatIds
    */
-  async blacklistUser(user) {
+  async blacklistUser(user, exceptChatIds = []) {
     debug('blacklistUser', user.id)
     const blacklistedIn = []
 
     for (const chat of this.ctx.ownedChats) {
-      try {
-        await chat.kickMember(user)
-        blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
-      }
-      catch (error) {
-        debug('blacklistUser:kickMember', error)
+      if (!exceptChatIds.includes(chat.id)) {
+        try {
+          await chat.kickMember(user)
+          blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
+        }
+        catch (error) {
+          debug('blacklistUser:kickMember', error)
+        }
       }
     }
 
@@ -99,13 +102,14 @@ class Hammer {
    * Delete messages of user in all owned chats
    * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
+   * @param {{ chat: Chat, limit: number }} $param1
    */
-  async dropMessagesOf(user, limit = 10) { // eslint-disable-line no-magic-numbers
+  async dropMessagesOf(user, { chat, limit = 10 } = {}) { // eslint-disable-line no-magic-numbers
     debug('dropMessagesOf', user.id)
-    const allMessages = await Message.findAll({
-      where: { authorId: String(user.id)},
-      limit,
-    })
+    const where = chat
+      ? { authorId: String(user.id), chatId: String(chat.id) }
+      : { authorId: String(user.id) }
+    const allMessages = await Message.findAll({ where, limit })
 
     if (allMessages.length !== 0) {
       for (const { authorId, chatId, messageId } of allMessages) {
@@ -118,9 +122,8 @@ class Hammer {
       }
     }
 
-    Message.destroy({
-      where: { authorId: String(user.id) },
-    }).catch((error) => debug('dropMessagesOf::Message.destroy', { authorId: user.id }, error))
+    Message.destroy({ where })
+      .catch((error) => debug('dropMessagesOf::Message.destroy', where, error))
   }
 }
 

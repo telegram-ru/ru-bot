@@ -4,6 +4,27 @@ const { TelegramGroup } = require('./telegram-group')
 
 
 class Channel extends TelegramGroup {
+  notifyBanInProgress({ reason, banned }, extra) {
+    debug('notifyBanInProgress', { reason, banned })
+    return this.sendMessage(
+      text.spamHammer.userBanInProgressWithReason({
+        reason, banned,
+      }),
+      extra,
+    )
+  }
+
+  editBanMessage(messageId, { reason, originChat, chats, moder, banned }, extra) {
+    debug('editBanMessage', reason, chats, originChat, moder.id, banned.id)
+    return this.editMessageText(
+      messageId,
+      text.spamHammer.userBannedWithReason({
+        reason, chats, moder, banned, originChat,
+      }),
+      extra,
+    )
+  }
+
   /**
    * User banned with message
    */

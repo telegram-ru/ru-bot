@@ -153,6 +153,17 @@ class TelegramGroup {
   }
 
   /**
+   * @param {number} messageId
+   * @param {string} message
+   * @param {object} extra
+   * @return {Promise}
+   */
+  editMessageText(messageId, message, extra) {
+    this.debug('editMessage(', { messageId, message, extra }, ')')
+    return this.telegram.editMessageText(this.id, messageId, undefined, message, extra)
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#restrictchatmember
    * @see https://core.telegram.org/bots/api#user
    * @param {TelegramUser} user
