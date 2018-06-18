@@ -1,6 +1,7 @@
 const debug = require('debug')('rubot:features:spam-hammer:keyboards')
 const Markup = require('telegraf/markup')
 const text = require('../../text')
+const { reconstructMarkdown } = require('../../lib/entities')
 const { adminRequiredSilenced } = require('../../middlewares/admin-required')
 
 
@@ -53,7 +54,12 @@ async function handleUnspamUserOk({
 
   debug('handleUnspamUserOk', targetId, { from, message })
   try {
-    editMessageText(`${message.text}\n${text.spamHammer.userUnspammed({ moder: from, spammer: { id: targetId } })}`)
+    const originalMessage = reconstructMarkdown(message)
+
+    editMessageText(
+      `${originalMessage}\n${text.spamHammer.userUnspammed({ moder: from, spammer: { id: targetId } })}`,
+      { parse_mode: 'Markdown' },
+    )
     await hammer.whitelistUser({ id: targetId })
   }
   catch (error) {

@@ -1,5 +1,13 @@
 const {
-  random, fullName, fullNameId, select, column, chatTitle,
+  random,
+  fullName,
+  fullNameId,
+  fullNameLink,
+  fullNameIdLink,
+  select,
+  column,
+  chatLink,
+  russianSpeaking,
 } = require(`../lib/text`)
 
 
@@ -45,40 +53,37 @@ const text = {
   spamHammer: {
     userBannedWithReason: ({ banned, chats, originChat, moder, reason }) => [
       `#бан #ban`,
-      `\`Юзер:     \`${fullNameId(banned)}`,
-      `\`Причина:  \`${reason}`,
-      `\`Админ:    \`${fullName(moder)}`,
-      `\`Чат:      \`${chatTitle(originChat)}`,
-      `\`Чаты:\`\n${chats.map(chatTitle).join(`\n  `)}`,
+      `*Юзер:* ${fullNameIdLink(banned)}`,
+      `*Причина:* ${reason}`,
+      `*От* ${fullNameLink(moder)} *в* ${chatLink(russianSpeaking(originChat))}`,
+      chats.length && `*Чаты:*\n${chats.map(russianSpeaking).map(chatLink).join(`\n  `)}`,
     ].filter(Boolean).join(`\n`),
     userBanInProgressWithReason: ({ reason, banned }) => (
-      `Бан юзера ${fullNameId(banned)} ${reason && `за ${reason} `} в процессе…`
+      `*Бан юзера* ${fullNameId(banned)} ${reason && `за ${reason} `}в процессе…`
     ),
     userUnspammed: ({ moder, spammer }) => (
-      `\n#unban\n${fullName(moder)} разбанил юзера ${fullNameId(spammer)}`
+      `\n#unban\n${fullNameLink(moder)} *разбанил* юзера ${fullNameIdLink(spammer)}`
     ),
     shortSpamReason: () => `спам`,
-    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatTitle(chat)}`,
+    spammerAutobanned: ({ chat, banned }) => `Спамер ${fullNameId(banned)} автоматически забанен в ${chatLink(chat)}`,
     actionUnspam: () => `Разбанить`,
   },
 
   readonlyMode: {
     fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => [
       `#ro #ро #readonly #ридонли`,
-      `\`Юзер:     \`${fullNameId(fluder)}`,
-      `\`Причина:  \`${reason}`,
-      `\`Админ:    \`${fullName(moder)}`,
-      `\`Чат:      \`${chatTitle(chat)}`,
+      `*Юзер:* ${fullNameIdLink(fluder)}`,
+      `*Причина:* ${reason}`,
+      `*От* ${fullNameLink(moder)} *в* ${chatLink(russianSpeaking(chat))}`,
     ].filter(Boolean).join(`\n`),
   },
 
   banHammer: {
     fluderBannedIn: ({ fluder, moder, chat, reason = `` }) => [
       `#ban #бан`,
-      `\`Юзер:      \`${fullNameId(fluder)}`,
-      `\`Причина:   \`${reason}`,
-      `\`Админ:     \`${fullName(moder)}`,
-      `\`Чат:       \`${chatTitle(chat)}`,
+      `*Юзер:* ${fullNameIdLink(fluder)}`,
+      `*Причина:* ${reason}`,
+      `*От* ${fullNameLink(moder)} *в* ${chatLink(russianSpeaking(chat))}`,
     ].filter(Boolean).join(`\n`),
   },
 
