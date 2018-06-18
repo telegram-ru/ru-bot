@@ -10,7 +10,7 @@ class Channel extends TelegramGroup {
       text.spamHammer.userBanInProgressWithReason({
         reason, banned,
       }),
-      extra,
+      { ...extra, parse_mode: 'Markdown' },
     )
   }
 
@@ -21,7 +21,7 @@ class Channel extends TelegramGroup {
       text.spamHammer.userBannedWithReason({
         reason, chats, moder, banned, originChat,
       }),
-      extra,
+      { ...extra, parse_mode: 'Markdown' },
     )
   }
 
@@ -34,7 +34,7 @@ class Channel extends TelegramGroup {
       text.spamHammer.userBannedWithReason({
         reason, chats, moder, banned, originChat,
       }),
-      extra,
+      { ...extra, parse_mode: 'Markdown' },
     )
   }
 
@@ -55,7 +55,7 @@ class Channel extends TelegramGroup {
     debug('notifySpammerAutoban', chat.id, banned.id)
     return this.sendMessage(
       text.spamHammer.spammerAutobanned({ chat, banned }),
-      extra,
+      { ...extra, parse_mode: 'Markdown' },
     )
   }
 
@@ -68,14 +68,14 @@ class Channel extends TelegramGroup {
     debug('notifyReadonly', fluder.id, chat.id)
     return this.sendMessage(text.readonlyMode.fluderReadonlyIn({
       fluder, chat, moder, reason,
-    }), extra)
+    }), { ...extra, parse_mode: 'Markdown' })
   }
 
   notifyKickBan({ fluder, chat, moder, reason }, extra) {
     debug('notifyKickBan', fluder.id, chat.id)
     return this.sendMessage(text.banHammer.fluderBannedIn({
       fluder, chat, moder, reason,
-    }), extra)
+    }), { ...extra, parse_mode: 'Markdown' })
   }
 }
 
