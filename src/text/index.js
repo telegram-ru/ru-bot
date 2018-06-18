@@ -45,11 +45,11 @@ const text = {
   spamHammer: {
     userBannedWithReason: ({ banned, chats, originChat, moder, reason }) => [
       `#бан #ban`,
-      `Юзер:     ${fullNameId(banned)}`,
-      `Причина:     ${reason}`,
-      `Админ:     ${fullName(moder)}`,
-      `Чат:     ${chatTitle(originChat)}`,
-      `Чаты:\n${chats.map(chatTitle).join(`\n  `)}`,
+      `\`Юзер:     \`${fullNameId(banned)}`,
+      `\`Причина:  \`${reason}`,
+      `\`Админ:    \`${fullName(moder)}`,
+      `\`Чат:      \`${chatTitle(originChat)}`,
+      `\`Чаты:\`\n${chats.map(chatTitle).join(`\n  `)}`,
     ].filter(Boolean).join(`\n`),
     userBanInProgressWithReason: ({ reason, banned }) => (
       `Бан юзера ${fullNameId(banned)} ${reason && `за ${reason} `} в процессе…`
@@ -65,20 +65,20 @@ const text = {
   readonlyMode: {
     fluderReadonlyIn: ({ fluder, moder, chat, reason = `` }) => [
       `#ro #ро #readonly #ридонли`,
-      `Юзер:     ${fullNameId(fluder)}`,
-      `Причина:     ${reason}`,
-      `Админ:     ${fullName(moder)}`,
-      `Чат:     ${chatTitle(chat)}`,
+      `\`Юзер:     \`${fullNameId(fluder)}`,
+      `\`Причина:  \`${reason}`,
+      `\`Админ:    \`${fullName(moder)}`,
+      `\`Чат:      \`${chatTitle(chat)}`,
     ].filter(Boolean).join(`\n`),
   },
 
   banHammer: {
     fluderBannedIn: ({ fluder, moder, chat, reason = `` }) => [
       `#ban #бан`,
-      `Юзер:     ${fullNameId(fluder)}`,
-      `Причина:     ${reason}`,
-      `Админ:     ${fullName(moder)}`,
-      `Чат:     ${chatTitle(chat)}`,
+      `\`Юзер:      \`${fullNameId(fluder)}`,
+      `\`Причина:   \`${reason}`,
+      `\`Админ:     \`${fullName(moder)}`,
+      `\`Чат:       \`${chatTitle(chat)}`,
     ].filter(Boolean).join(`\n`),
   },
 
