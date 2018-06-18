@@ -41,11 +41,12 @@ class Channel extends TelegramGroup {
   /**
    * User unspammed
    */
-  notifyUnspam({ chats, moder, spammer }) {
+  notifyUnspam({ chats, moder, spammer }, extra) {
     debug('notifyUnspam', chats, moder.id, spammer.id)
-    return this.sendMessage(text.spamHammer.userUnspammed({
-      chats, moder, spammer,
-    }))
+    return this.sendMessage(
+      text.spamHammer.userUnspammed({ chats, moder, spammer }),
+      { ...extra, parse_mode: 'Markdown' },
+    )
   }
 
   /**

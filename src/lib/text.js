@@ -36,6 +36,25 @@ function fullNameId(user) {
   return `${fullName(user)} #${user.id}`
 }
 
+function fullNameIdLink(user) {
+  const name = [
+    user.first_name && user.first_name.trim(),
+    user.last_name && user.last_name.trim(),
+    user.id && `#${user.id}`,
+  ].filter(Boolean).join(' ')
+
+  return `[${name}](tg://user?id=${user.id})`
+}
+
+function fullNameLink(user) {
+  const name = [
+    user.first_name && user.first_name.trim(),
+    user.last_name && user.last_name.trim(),
+  ].filter(Boolean).join(' ')
+
+  return `[${name}](tg://user?id=${user.id})`
+}
+
 /**
  *
  * @param {Chat} param0
@@ -52,6 +71,26 @@ function chatTitle({ title, username, id, type }) {
   }
 
   return parts.join(' ')
+}
+
+function chatLink({ title: titleRaw, username, id, type }) {
+  const title = titleRaw.trim() || '<[unnamed]>'
+
+  if (username) {
+    return `[${title}](https://t.me/@${username})`
+  }
+
+  return `_private_ ${title}`
+}
+
+function russianSpeaking(group) {
+  if (group.title.includes('—')) {
+    return {
+      ...group,
+      title: group.title.split('—')[0].trim(),
+    }
+  }
+  return group
 }
 
 /**
@@ -79,7 +118,11 @@ module.exports = {
   random,
   fullName,
   fullNameId,
+  fullNameIdLink,
+  fullNameLink,
   chatTitle,
+  chatLink,
   select,
   column,
+  russianSpeaking,
 }
