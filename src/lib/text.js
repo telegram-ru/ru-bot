@@ -77,7 +77,7 @@ function chatLink({ title: titleRaw, username, id, type }) {
   const title = titleRaw.trim() || '<[unnamed]>'
 
   if (username) {
-    return `[${title}](https://t.me/@${username})`
+    return `[${title}](https://t.me/${username})`
   }
 
   return `_private_ ${title}`
