@@ -73,6 +73,7 @@ function chatTitle({ title, username, id, type }) {
   return parts.join(' ')
 }
 
+// eslint-disable-next-line no-unused-vars
 function chatLink({ title: titleRaw, username, id, type }) {
   const title = titleRaw.trim() || '<[unnamed]>'
 
