@@ -10,26 +10,25 @@ const RO_TIME = 86400
 const SECOND = 1000
 
 async function handleReadonlyCommand({
-  from, privateChannel, deleteMessage, message, match, reply, getChat, chat,
+  from, privateChannel, message, match, reply, getChat, chat,
 }) {
   debug('handleReadonlyCommand', message, match)
   const [,, reason] = match
 
   if (message.reply_to_message) {
     const replyMessage = message.reply_to_message
-    const fluder = replyMessage.from
+    const flooder = replyMessage.from
     const chatInstance = getChat(chat.id)
 
-    await chatInstance.restrictMember(fluder, {
+    await chatInstance.restrictMember(flooder, {
       until_date: Math.floor((Date.now() / SECOND) + RO_TIME),
     })
     await privateChannel.notifyReadonly({
-      fluder,
+      fluder: flooder,
       chat,
       reason: reason && reason.trim(),
       moder: from,
     })
-    await deleteMessage()
   }
   else {
     reply(
