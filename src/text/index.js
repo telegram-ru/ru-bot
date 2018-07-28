@@ -56,7 +56,6 @@ const text = {
       `*Юзер:* ${fullNameIdLink(banned)}`,
       `*Причина:* ${reason}`,
       `*От* ${fullNameLink(moder)} *в* ${chatLink(russianSpeaking(originChat))}`,
-      chats.length && `*Чаты:*\n${chats.map(russianSpeaking).map(chatLink).join(`\n  `)}`,
     ].filter(Boolean).join(`\n`),
     userBanInProgressWithReason: ({ reason, banned }) => (
       `*Бан юзера* ${fullNameId(banned)} ${reason && `за ${reason} `}в процессе…`
