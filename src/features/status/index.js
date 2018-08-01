@@ -17,7 +17,7 @@ async function checkStatus({
   }
 }
 
-module.exports = function statusFeature(bot) {
+module.exports = function status(bot) {
   bot.hears(
     new RegExp(`^(${text.commands.status()}|!status)( .*)?`),
     allowWhiteListChat, adminRequired, checkStatus,
