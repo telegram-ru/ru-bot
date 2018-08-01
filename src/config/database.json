@@ -3,21 +3,21 @@
     "username": "rubot",
     "password": "rubot",
     "database": "rubot",
-    "host": "db",
+    "host": "postgres",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
     "password": "rubot",
     "database": "rubot",
-    "host": "db",
+    "host": "postgres",
     "dialect": "postgres"
   },
   "production": {
     "username": "rubot",
     "password": "rubot",
     "database": "rubot",
-    "host": "db",
+    "host": "postgres",
     "dialect": "postgres"
   }
 }

@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-development
+    volumes:
+      - ./src:/root/app/src
+    command: dev
+  admin:
+    image: sosedoff/pgweb
+    restart: always
+    ports:
+    - 10000:8081
+  elasticsearch:
+    image: elastic/elasticsearch:6.2.4
+    restart: always
+    env_file:
+    - ./.env
+    volumes:
+    - ./data/elastic:/usr/share/elasticsearch/data
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.2.4
+    env_file:
+    - ./.env
+    ports:
+    - 10001:5601
+    links:
+    - elasticsearch
+
