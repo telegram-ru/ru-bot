@@ -129,3 +129,4 @@ $RECYCLE.BIN/
 .chatlist.json
 .idea
 data
+/src/.chatlist.json
