@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:lib:runtime')
+const Sentry = require('@sentry/node')
 const Telegraf = require('telegraf')
 
 const { environment } = require('../config')
@@ -51,6 +52,12 @@ function createBot(token, features, telegrafConfig = {}) {
         })
       }
       next()
+    })
+  }
+
+  if (environment.SENTRY_URL) {
+    instance.catch((error) => {
+      Sentry.captureException(error)
     })
   }
 

@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:index')
+const Sentry = require('@sentry/node')
 
 const { bot: botConfig, environment } = require('./config')
 const { sequelize } = require('./models')
@@ -8,6 +9,9 @@ const { InvalidChatlistError, validateChatList, normalizeChatList } = require('.
 const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
+Sentry.init({
+  dsn: environment.SENTRY_URL,
+})
 
 let CHAT_LIST
 /* eslint-disable unicorn/no-process-exit, no-console */
@@ -75,5 +79,24 @@ async function main() {
 
 
 main().catch((error) => {
+  Sentry.captureException(error)
   console.log(error) // eslint-disable-line no-console
+})
+
+process.on('uncaughtException', (error) => {
+  Sentry.captureException(error, {
+    tags: {
+      type: 'process',
+    },
+  })
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (error) => {
+  Sentry.captureException(error, {
+    tags: {
+      type: 'process',
+    },
+  })
+  process.exit(1)
 })
