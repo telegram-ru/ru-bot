@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:lib:hammer')
+const Sentry = require('@sentry/node')
 const { Blocked, Message } = require('../models')
 
 /* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
@@ -26,6 +27,7 @@ class Hammer {
           blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
         }
         catch (error) {
+          Sentry.captureException(error)
           debug('blacklistUser:kickMember', error)
         }
       }
@@ -51,6 +53,7 @@ class Hammer {
         await chat.unbanMember(user)
       }
       catch (error) {
+        Sentry.captureException(error)
         debug('whitelistUser:unbanMember', { user }, error)
       }
     }
@@ -94,6 +97,7 @@ class Hammer {
       return !!result
     }
     catch (error) {
+      Sentry.captureException(error)
       return false
     }
   }
@@ -117,6 +121,7 @@ class Hammer {
           await this.bot.telegram.deleteMessage(chatId, messageId)
         }
         catch (error) {
+          Sentry.captureException(error)
           debug('dropMessagesOf::telegram.deleteMessage', { authorId, chatId, messageId }, 'failed', error)
         }
       }

@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:spam-hammer:index')
+const Sentry = require('@sentry/node')
 const { Extra } = require('telegraf')
 const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
@@ -66,6 +67,7 @@ async function handleSpamCommand({
         await privateChannel.forwardMessage({ chat, message: message.reply_to_message })
       }
       catch (error) {
+        Sentry.captureException(error)
         debug('handleSpamCommand: cant forward message', message.reply_to_message)
       }
       // Delete spam message from current chat #66.4
@@ -88,6 +90,7 @@ async function handleSpamCommand({
         await hammer.dropMessagesOf(spammer, { limit: 100 })
       }
       catch (error) {
+        Sentry.captureException(error)
         debug('handleSpamCommand dropMessagesOfSpammer failed', error)
       }
 
@@ -103,6 +106,7 @@ async function handleSpamCommand({
       // TODO: search all entities in message (urls)
     }
     catch (error) {
+      Sentry.captureException(error);
       debug('handleSpamCommand ERROR', error)
     }
   }

@@ -1,4 +1,5 @@
 const Debug = require('debug')
+const Sentry = require('@sentry/node')
 const { makeName } = require('./string')
 
 
@@ -100,6 +101,7 @@ class TelegramGroup {
       return this.admins.list
     }
     catch (error) {
+      Sentry.captureException(error)
       this.debug('getAdmins() failed', error)
       return []
     }
@@ -137,6 +139,7 @@ class TelegramGroup {
       this.telegram.deleteMessage(this.id, messageId)
     }
     catch (error) {
+      Sentry.captureException(error)
       this.debug(`deleteMessage(${messageId}) failed`, error)
       // maybe already deleted or older that 48 hours
     }

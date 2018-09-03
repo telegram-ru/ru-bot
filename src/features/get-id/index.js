@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:get-id:index')
+const Sentry = require('@sentry/node')
 const { Extra } = require('telegraf')
 
 
@@ -9,6 +10,7 @@ async function onIdCommand({ reply, chat, from, message }) {
   }
   catch (error) {
     // Message dropped?
+    Sentry.captureException(error)
     return undefined
   }
 }

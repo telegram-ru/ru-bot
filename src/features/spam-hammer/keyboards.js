@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:spam-hammer:keyboards')
+const Sentry = require('@sentry/node')
 const Markup = require('telegraf/markup')
 const text = require('../../text')
 const { reconstructMarkdown } = require('../../lib/entities')
@@ -63,6 +64,7 @@ async function handleUnspamUserOk({
     await hammer.whitelistUser({ id: targetId })
   }
   catch (error) {
+    Sentry.captureException(error)
     debug('handleUnspamUserOk ERROR', error)
   }
 }

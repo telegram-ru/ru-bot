@@ -1,4 +1,5 @@
 const debug = require('debug')('rubot:features:status:index')
+const Sentry = require('@sentry/node')
 const text = require('../../text')
 const { allowWhiteListChat } = require('../../middlewares/allowed-chat')
 const { adminRequired } = require('../../middlewares/admin-required')
@@ -13,6 +14,7 @@ async function checkStatus({
     reply(text.status.check(options.username))
   }
   catch (error) {
+    Sentry.captureException(error)
     debug('checkStatus ERROR', error)
   }
 }
