@@ -1,3 +1,35 @@
+const glob = require('glob');
+const pipe = require('ramda.pipe')
+
+
+const replace = (from, to = '') => (path) => path.replace(from, to)
+const prefix = (vl) => (path) => vl + path
+const firstup = () => (path) => path.charAt(0).toUpperCase() + path.slice(1)
+
+/**
+ * @param {string} pattern
+ * @param {(path: string) => string} fn
+ */
+const find = (pattern, ...fns) => glob.sync(pattern)
+  .map(pipe(...fns))
+  .filter(Boolean)
+
+/**
+ * Check `path` to not include substring in `variants`
+ * @param {string[]} variants
+ * @return {(path: string) => boolean}
+ */
+const exclude = (...variants) => (path) =>
+  variants.every((variant) => !path.includes(variant))
+
+/**
+ * Check `path` to include substring of one of `variants`
+ * @param {string[]} variants
+ * @return {(path: string) => boolean}
+ */
+const include = (...variants) => (path) =>
+  variants.some((variant) => path.includes(variant))
+
 module.exports = {
   types: [
     { value: 'feat', name: 'feat:     A new feature' },
@@ -15,6 +47,8 @@ module.exports = {
   scopes: [
     { name: 'index' },
     { name: 'lib' },
+    ...find('src/models/*.*', replace('src/models/'), replace('.mjs'), firstup()).filter(exclude('Index')),
+
   ],
   allowCustomScopes: true,
   allowBreakingChanges: ['feat', 'fix', 'revert'],
