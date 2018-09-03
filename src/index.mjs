@@ -1,19 +1,55 @@
-import DotEnv from 'dotenv'
+import process from 'process'
 import Telegraf from 'telegraf'
 import Debug from 'debug'
+import Sentry from '@sentry/node'
 
 import * as config from './config'
-import './models'
+import { sequelize } from './models'
 
-// DotEnv.config()
-// Debug('rubot:index')
 
-// void (function main() {
-//   const bot = new Telegraf(config.bot.token)
+Sentry.init({ dsn: process.env.SENTRY_URL })
 
-//   bot.command('start', (ctx) => {
-//     ctx.reply('Hello!')
-//   })
+const debug = Debug('rubot:index')
 
-//   bot.startPolling()
-// }())
+async function main() {
+  await sequelize.authenticate()
+
+  const bot = new Telegraf(config.bot.token)
+  const botInfo = await bot.telegram.getMe()
+
+  bot.options.username = botInfo.username
+  bot.context.botInfo = botInfo
+
+  bot.startPolling()
+  debug('Polling started')
+
+  bot.catch((error) => {
+    Sentry.captureException(error)
+    console.error('Exception in bot reported', error) // eslint-disable-line no-console
+  })
+}
+
+// Report errors
+
+main().catch((error) => {
+  Sentry.captureException(error)
+  console.error('Exception in main() reported', error) // eslint-disable-line no-console
+})
+
+process.on('uncaughtException', (error) => {
+  Sentry.captureException(error, {
+    tags: {
+      type: 'process',
+    },
+  })
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (error) => {
+  Sentry.captureException(error, {
+    tags: {
+      type: 'process',
+    },
+  })
+  process.exit(1)
+})

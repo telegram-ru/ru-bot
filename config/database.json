@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
+    "username": "rubot",
+    "password": "rubot",
     "database": "rubot_development",
     "host": "127.0.0.1",
     "dialect": "postgres"
