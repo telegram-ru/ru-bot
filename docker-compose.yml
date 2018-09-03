@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    build: .
+    restart: on-failure
+    env_file:
+     - ./.env
+  postgres:
+    image: postgres:9-alpine
+    restart: always
+    env_file:
+     - ./.env
+    volumes:
+      - ./data/pgsql/data:/var/lib/postgresql/data
+      - ./data/pgsql/config:/etc/postgresql
+      - ./data/pgsql/logs:/var/log/postgresql/
+    ports:
+      - 5432:5432

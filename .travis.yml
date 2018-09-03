@@ -1,0 +1,6 @@
+language: node_js
+sudo: off
+node_js:
+  - 10.9
+
+after_success: npm run coverage

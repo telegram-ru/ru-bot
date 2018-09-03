@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'RuBot',
+      name: 'ru_bot',
       script: './src/index.js',
       exec_mode: 'fork',
       instances: 1,

@@ -1,0 +1,18 @@
+{
+  "ignore": [
+    ".git",
+    "node_modules/**",
+    "db"
+  ],
+  "verbose": true,
+  "execMap": {
+    "js": "node --experimental-modules ./src/index"
+  },
+  "env":  {
+    "DEBUG": "rubot:*,telegraf:*"
+  },
+  "watch": [
+    "src"
+  ],
+  "ext": "js,json,mjs,yaml"
+}

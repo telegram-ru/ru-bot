@@ -4,41 +4,57 @@
   "description": "Telegram bot to manage spam and rules for @_ru community",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint .",
-    "dev": "DEBUG=rubot:* nodemon -w src ./src",
-    "start": "pm2 startOrRestart ./process.config.js"
+    "test": "npm run test:lint",
+    "test:lint": "eslint src",
+    "dev": "nodemon --config ./nodemon.json",
+    "start": "NODE_ENV=production node --experimental-modules ./src/index.mjs",
+    "migrate": "sequelize db:migrate",
+    "rollback": "sequelize db:migrate:undo",
+    "prepush": "npm run test:lint"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LestaD/ru_bot.git"
+    "url": "git+https://github.com/telegram-ru/ru_bot.git"
   },
   "keywords": [
     "telegram",
     "bot"
   ],
   "engines": {
-    "node": ">=8.5.0"
+    "node": ">=10.9.0"
   },
-  "author": "Sergey Sova <i.am@lestad.net> (https://lestad.top)",
+  "author": "Sergey Sova <mail@sergeysova.com> (https://sergeysova.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/LestaD/ru_bot/issues"
+    "url": "https://github.com/telegram-ru/ru_bot/issues"
   },
-  "homepage": "https://github.com/LestaD/ru_bot#readme",
+  "homepage": "https://github.com/telegram-ru/ru_bot#readme",
   "devDependencies": {
-    "eslint": "^4.9.0",
-    "eslint-config-atomix-base": "^4.3.2",
+    "@atomix/eslint-config": "^6.4.0",
+    "codecov": "^3.0.4",
+    "cz-customizable": "^5.2.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-unicorn": "^6.0.1",
+    "faker": "^4.1.0",
     "husky": "^0.14.3",
-    "nodemon": "^1.12.1",
-    "pm2": "^2.7.1",
-    "sequelize-cli": "^3.0.0"
+    "nodemon": "^1.18.4",
+    "sequelize-cli": "^4.1.1",
+    "sinon": "^6.1.5",
+    "supports-color": "^5.5.0"
   },
   "dependencies": {
+    "@sentry/node": "^4.0.0-beta.12",
     "debug": "^3.1.0",
-    "dotenv": "^4.0.0",
-    "pg": "^7.3.0",
+    "dotenv": "^6.0.0",
+    "elasticsearch": "^15.1.1",
+    "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.14.0",
-    "telegraf": "^3.14.0"
+    "sequelize": "^4.38.0",
+    "telegraf": "^3.23.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    }
   }
 }
