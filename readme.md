@@ -3,7 +3,7 @@
 
 ## Installation
 
-For more better development conditions, you need to install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/)
+For better development conditions, you need to install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/)
 
 Also, we advise you to install all devdependencies locally (linters, etc):
 
