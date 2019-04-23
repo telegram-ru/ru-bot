@@ -106,7 +106,7 @@ async function handleSpamCommand({
       // TODO: search all entities in message (urls)
     }
     catch (error) {
-      Sentry.captureException(error);
+      Sentry.captureException(error)
       debug('handleSpamCommand ERROR', error)
     }
   }
