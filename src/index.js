@@ -9,6 +9,7 @@ const { InvalidChatlistError, validateChatList, normalizeChatList } = require('.
 const { elasticPing } = require('./lib/elastic')
 const features = require('./features')
 
+
 Sentry.init({
   dsn: environment.SENTRY_URL,
 })
