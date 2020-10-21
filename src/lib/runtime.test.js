@@ -1,5 +1,4 @@
-import test from 'ava'
-import './runtime'
+import test from 'ava';
+import './runtime';
 
-
-test.todo('runtime')
+test.todo('runtime');

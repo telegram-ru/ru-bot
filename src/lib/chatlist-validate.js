@@ -1,24 +1,26 @@
-const Ajv = require('ajv')
-const schema = require('../chatlist.schema')
+const Ajv = require('ajv');
+const schema = require('../chatlist.schema');
 
-
-const ajv = new Ajv()
-const validate = ajv.compile(schema)
+const ajv = new Ajv();
+const validate = ajv.compile(schema);
 
 class InvalidChatlistError extends TypeError {
   constructor(message, errors) {
-    super(message)
-    this.name = 'InvalidChatlistError'
-    this.stack = errors.reverse()
+    super(message);
+    this.name = 'InvalidChatlistError';
+    this.stack = errors
+      .reverse()
       .map((error) => `${error.dataPath} ${error.message}`)
-      .join('\n')
+      .join('\n');
   }
 }
 
-
 function validateChatList(list) {
   if (!validate(list)) {
-    throw new InvalidChatlistError('Invalid .chatlist.json file', validate.errors)
+    throw new InvalidChatlistError(
+      'Invalid .chatlist.json file',
+      validate.errors,
+    );
   }
 }
 
@@ -39,17 +41,16 @@ function normalizeChatList(list) {
           remove: false,
           restrict: false,
         },
-      }
+      };
+    } else {
+      acc[name] = list[name];
     }
-    else {
-      acc[name] = list[name]
-    }
-    return acc
-  }, {})
+    return acc;
+  }, {});
 }
 
 module.exports = {
   validateChatList,
   normalizeChatList,
   InvalidChatlistError,
-}
+};

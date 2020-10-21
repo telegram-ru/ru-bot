@@ -11,9 +11,9 @@
  * }
  */
 function random(variants) {
-  const count = variants.length
+  const count = variants.length;
 
-  return (object) => variants[Math.floor(Math.random() * count)](object)
+  return (object) => variants[Math.floor(Math.random() * count)](object);
 }
 
 /**
@@ -29,11 +29,11 @@ function fullName({ first_name: first, last_name: last, username }) {
     username && `(@${username.trim()})`,
   ]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 }
 
 function fullNameId(user) {
-  return `${fullName(user)} #${user.id}`
+  return `${fullName(user)} #${user.id}`;
 }
 
 function fullNameIdLink(user) {
@@ -41,18 +41,22 @@ function fullNameIdLink(user) {
     user.first_name && user.first_name.trim(),
     user.last_name && user.last_name.trim(),
     user.id && `#${user.id}`,
-  ].filter(Boolean).join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  return `[${name}](tg://user?id=${user.id})`
+  return `[${name}](tg://user?id=${user.id})`;
 }
 
 function fullNameLink(user) {
   const name = [
     user.first_name && user.first_name.trim(),
     user.last_name && user.last_name.trim(),
-  ].filter(Boolean).join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  return `[${name}](tg://user?id=${user.id})`
+  return `[${name}](tg://user?id=${user.id})`;
 }
 
 /**
@@ -64,24 +68,24 @@ function chatTitle({ title, username, id, type }) {
   const parts = [
     title && title.trim(),
     username && `(@${username.trim()})`,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   if (parts.length === 0) {
-    parts.push(`${type}:${id}`)
+    parts.push(`${type}:${id}`);
   }
 
-  return parts.join(' ')
+  return parts.join(' ');
 }
 
 // eslint-disable-next-line no-unused-vars
 function chatLink({ title: titleRaw, username, id, type }) {
-  const title = titleRaw.trim() || '<[unnamed]>'
+  const title = titleRaw.trim() || '<[unnamed]>';
 
   if (username) {
-    return `[${title}](https://t.me/${username})`
+    return `[${title}](https://t.me/${username})`;
   }
 
-  return `_private_ ${title}`
+  return `_private_ ${title}`;
 }
 
 function russianSpeaking(group) {
@@ -89,9 +93,9 @@ function russianSpeaking(group) {
     return {
       ...group,
       title: group.title.split('—')[0].trim(),
-    }
+    };
   }
-  return group
+  return group;
 }
 
 /**
@@ -103,7 +107,7 @@ function russianSpeaking(group) {
  * @param {any} defaultCase
  */
 function select(value, cases, defaultCase) {
-  return cases[value] || defaultCase
+  return cases[value] || defaultCase;
 }
 
 /**
@@ -112,7 +116,7 @@ function select(value, cases, defaultCase) {
  * @return {string}
  */
 function column(...list) {
-  return list.join('\n')
+  return list.join('\n');
 }
 
 module.exports = {
@@ -126,4 +130,4 @@ module.exports = {
   select,
   column,
   russianSpeaking,
-}
+};

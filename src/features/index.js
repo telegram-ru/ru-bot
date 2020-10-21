@@ -9,4 +9,4 @@ module.exports = [
   require('./readonly-mode'),
   require('./private-greetings'),
   require('./status'),
-]
+];

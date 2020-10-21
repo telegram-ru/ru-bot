@@ -1,8 +1,7 @@
-const Telegraf = require('telegraf') // eslint-disable-line no-unused-vars
-const debug = require('debug')('rubot:context-methods')
-const { Chat } = require('./chat')
-const { Hammer } = require('./hammer')
-
+const Telegraf = require('telegraf'); // eslint-disable-line no-unused-vars
+const debug = require('debug')('rubot:context-methods');
+const { Chat } = require('./chat');
+const { Hammer } = require('./hammer');
 
 /* eslint-disable no-param-reassign */
 
@@ -13,11 +12,12 @@ const { Hammer } = require('./hammer')
  */
 function optionalCallbackQuery(...args) {
   if (this.callbackQuery) {
-    return this.answerCallbackQuery(...args)
-      .catch((error) => debug(`Can't answer callback query #${this.callbackQuery.id}`, error))
+    return this.answerCallbackQuery(...args).catch((error) =>
+      debug(`Can't answer callback query #${this.callbackQuery.id}`, error),
+    );
   }
 
-  return Promise.resolve()
+  return Promise.resolve();
 }
 
 /**
@@ -28,14 +28,14 @@ function optionalCallbackQuery(...args) {
  */
 function getChat(chatId) {
   if (!this.chats.has(chatId)) {
-    this.chats.set(chatId, new Chat(chatId, this.rootInstance))
+    this.chats.set(chatId, new Chat(chatId, this.rootInstance));
   }
 
-  return this.chats.get(chatId)
+  return this.chats.get(chatId);
 }
 
 function getHammer() {
-  return new Hammer(this)
+  return new Hammer(this);
 }
 
 /**
@@ -44,7 +44,7 @@ function getHammer() {
  * @return {boolean}
  */
 function isChatInWhiteList(chat) {
-  return this.chats.has(chat.id)
+  return this.chats.has(chat.id);
 }
 
 const bindedContextMethods = {
@@ -52,19 +52,19 @@ const bindedContextMethods = {
   getHammer,
   isChatInWhiteList,
   optionalCallbackQuery,
-}
+};
 
 /**
  * Install context methods to bot
  * @param {Telegraf} bot
  */
 function extendedContext(bot) {
-  bot.context.rootInstance = bot
-  bot.context.chats = new Map()
+  bot.context.rootInstance = bot;
+  bot.context.chats = new Map();
 
   Object.keys(bindedContextMethods).forEach((name) => {
-    bot.context[name] = bindedContextMethods[name].bind(bot.context)
-  })
+    bot.context[name] = bindedContextMethods[name].bind(bot.context);
+  });
 }
 
-module.exports = extendedContext
+module.exports = extendedContext;

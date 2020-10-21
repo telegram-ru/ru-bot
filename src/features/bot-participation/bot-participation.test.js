@@ -1,5 +1,4 @@
-import test from 'ava'
-import '.'
+import test from 'ava';
+import '.';
 
-
-test.todo('featureBotParcipation')
+test.todo('featureBotParcipation');

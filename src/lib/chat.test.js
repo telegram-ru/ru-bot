@@ -1,5 +1,4 @@
-import test from 'ava'
-import './chat'
+import test from 'ava';
+import './chat';
 
-
-test.todo('chat')
+test.todo('chat');

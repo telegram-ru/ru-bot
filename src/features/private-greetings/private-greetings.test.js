@@ -1,85 +1,88 @@
-import test from 'ava'
+import test from 'ava';
 
-import { Context } from '../../tests/telegraf'
-import installFeature from './index'
+import { Context } from '../../tests/telegraf';
+import installFeature from './index';
 
 /* eslint-disable no-magic-numbers */
 
 test('/start reply with greet in private', async (t) => {
-  let testFn = null
+  let testFn = null;
   const bot = {
     command(cmd, fn) {
-      t.is(cmd, 'start', 'command is start')
-      t.true(typeof fn === 'function', 'callback is function')
-      testFn = fn
+      t.is(cmd, 'start', 'command is start');
+      t.true(typeof fn === 'function', 'callback is function');
+      testFn = fn;
     },
-  }
-  const context = Context.create()
+  };
+  const context = Context.create();
 
-  context.message.$from()
+  context.message.$from();
 
-  installFeature(bot)
+  installFeature(bot);
 
-  testFn(context)
-  t.regex(context.reply.getCall(0).args[0], new RegExp(`${context.message.from.first_name}`))
-})
+  testFn(context);
+  t.regex(
+    context.reply.getCall(0).args[0],
+    new RegExp(`${context.message.from.first_name}`),
+  );
+});
 
 test('/start not reply in supergroup', async (t) => {
-  let testFn = null
+  let testFn = null;
   const bot = {
     command(cmd, fn) {
-      t.is(cmd, 'start', 'command is start')
-      t.true(typeof fn === 'function', 'callback is function')
-      testFn = fn
+      t.is(cmd, 'start', 'command is start');
+      t.true(typeof fn === 'function', 'callback is function');
+      testFn = fn;
     },
-  }
-  const context = Context.create()
+  };
+  const context = Context.create();
 
-  context.message.$from()
-  context.chat.$type('supergroup')
+  context.message.$from();
+  context.chat.$type('supergroup');
 
-  installFeature(bot)
+  installFeature(bot);
 
-  testFn(context)
-  t.true(context.reply.notCalled)
-})
+  testFn(context);
+  t.true(context.reply.notCalled);
+});
 
 test('/start not reply in group', async (t) => {
-  let testFn = null
+  let testFn = null;
   const bot = {
     command(cmd, fn) {
-      t.is(cmd, 'start', 'command is start')
-      t.true(typeof fn === 'function', 'callback is function')
-      testFn = fn
+      t.is(cmd, 'start', 'command is start');
+      t.true(typeof fn === 'function', 'callback is function');
+      testFn = fn;
     },
-  }
-  const context = Context.create()
+  };
+  const context = Context.create();
 
-  context.message.$from()
-  context.chat.$type('group')
+  context.message.$from();
+  context.chat.$type('group');
 
-  installFeature(bot)
+  installFeature(bot);
 
-  testFn(context)
-  t.true(context.reply.notCalled)
-})
+  testFn(context);
+  t.true(context.reply.notCalled);
+});
 
 test('/start not reply in channel', async (t) => {
-  let testFn = null
+  let testFn = null;
   const bot = {
     command(cmd, fn) {
-      t.is(cmd, 'start', 'command is start')
-      t.true(typeof fn === 'function', 'callback is function')
-      testFn = fn
+      t.is(cmd, 'start', 'command is start');
+      t.true(typeof fn === 'function', 'callback is function');
+      testFn = fn;
     },
-  }
-  const context = Context.create()
+  };
+  const context = Context.create();
 
-  context.message.$from()
-  context.chat.$type('channel')
+  context.message.$from();
+  context.chat.$type('channel');
 
-  installFeature(bot)
+  installFeature(bot);
 
-  testFn(context)
-  t.true(context.reply.notCalled)
-})
+  testFn(context);
+  t.true(context.reply.notCalled);
+});

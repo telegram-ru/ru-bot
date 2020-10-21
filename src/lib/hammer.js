@@ -1,13 +1,13 @@
-const debug = require('debug')('rubot:lib:hammer')
-const Sentry = require('@sentry/node')
-const { Blocked, Message } = require('../models')
+const debug = require('debug')('rubot:lib:hammer');
+const Sentry = require('@sentry/node');
+const { Blocked, Message } = require('../models');
 
 /* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
 
 class Hammer {
   constructor(context) {
-    this.bot = context.rootInstance
-    this.ctx = context
+    this.bot = context.rootInstance;
+    this.ctx = context;
   }
 
   /**
@@ -17,18 +17,17 @@ class Hammer {
    * @param {number[]} exceptChatIds
    */
   async blacklistUser(user, exceptChatIds = []) {
-    debug('blacklistUser', user.id)
-    const blacklistedIn = []
+    debug('blacklistUser', user.id);
+    const blacklistedIn = [];
 
     for (const chat of this.ctx.ownedChats) {
       if (!exceptChatIds.includes(chat.id)) {
         try {
-          await chat.kickMember(user)
-          blacklistedIn.push(await this.bot.telegram.getChat(chat.id))
-        }
-        catch (error) {
-          Sentry.captureException(error)
-          debug('blacklistUser:kickMember', error)
+          await chat.kickMember(user);
+          blacklistedIn.push(await this.bot.telegram.getChat(chat.id));
+        } catch (error) {
+          Sentry.captureException(error);
+          debug('blacklistUser:kickMember', error);
         }
       }
     }
@@ -36,9 +35,9 @@ class Hammer {
     await Blocked.create({
       targetId: String(user.id),
       type: 'user',
-    })
+    });
 
-    return blacklistedIn
+    return blacklistedIn;
   }
 
   /**
@@ -46,15 +45,14 @@ class Hammer {
    * @param {TelegramUser} user
    */
   async whitelistUser(user) {
-    debug('whitelistUser', user.id)
+    debug('whitelistUser', user.id);
 
     for (const chat of this.ctx.ownedChats) {
       try {
-        await chat.unbanMember(user)
-      }
-      catch (error) {
-        Sentry.captureException(error)
-        debug('whitelistUser:unbanMember', { user }, error)
+        await chat.unbanMember(user);
+      } catch (error) {
+        Sentry.captureException(error);
+        debug('whitelistUser:unbanMember', { user }, error);
       }
     }
 
@@ -63,7 +61,7 @@ class Hammer {
         targetId: String(user.id),
         type: 'user',
       },
-    })
+    });
   }
 
   /**
@@ -76,11 +74,11 @@ class Hammer {
       return Blocked.create({
         targetId: entity.url,
         type: 'url',
-      })
+      });
     }
 
     // TODO: return undefined?
-    return undefined
+    return undefined;
   }
 
   /**
@@ -92,13 +90,12 @@ class Hammer {
     try {
       const result = await Blocked.findOne({
         where: { type, targetId: String(targetId) },
-      })
+      });
 
-      return !!result
-    }
-    catch (error) {
-      Sentry.captureException(error)
-      return false
+      return !!result;
+    } catch (error) {
+      Sentry.captureException(error);
+      return false;
     }
   }
 
@@ -108,30 +105,36 @@ class Hammer {
    * @param {TelegramUser} user
    * @param {{ chat: Chat, limit: number }} $param1
    */
-  async dropMessagesOf(user, { chat, limit = 10 } = {}) { // eslint-disable-line no-magic-numbers
-    debug('dropMessagesOf', user.id)
+  async dropMessagesOf(user, { chat, limit = 10 } = {}) {
+    // eslint-disable-line no-magic-numbers
+    debug('dropMessagesOf', user.id);
     const where = chat
       ? { authorId: String(user.id), chatId: String(chat.id) }
-      : { authorId: String(user.id) }
-    const allMessages = await Message.findAll({ where, limit })
+      : { authorId: String(user.id) };
+    const allMessages = await Message.findAll({ where, limit });
 
     if (allMessages.length !== 0) {
       for (const { authorId, chatId, messageId } of allMessages) {
         try {
-          await this.bot.telegram.deleteMessage(chatId, messageId)
-        }
-        catch (error) {
-          Sentry.captureException(error)
-          debug('dropMessagesOf::telegram.deleteMessage', { authorId, chatId, messageId }, 'failed', error)
+          await this.bot.telegram.deleteMessage(chatId, messageId);
+        } catch (error) {
+          Sentry.captureException(error);
+          debug(
+            'dropMessagesOf::telegram.deleteMessage',
+            { authorId, chatId, messageId },
+            'failed',
+            error,
+          );
         }
       }
     }
 
-    Message.destroy({ where })
-      .catch((error) => debug('dropMessagesOf::Message.destroy', where, error))
+    Message.destroy({ where }).catch((error) =>
+      debug('dropMessagesOf::Message.destroy', where, error),
+    );
   }
 }
 
 module.exports = {
   Hammer,
-}
+};

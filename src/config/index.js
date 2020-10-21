@@ -1,25 +1,25 @@
-require('dotenv').config()
-const url = require('url')
-const dbConfig = require('./database.json')
+require('dotenv').config();
+const url = require('url');
+const dbConfig = require('./database.json');
 
-
-const environment = process.env
+const environment = process.env;
 const {
   BOT_TOKEN,
   PRIVATE_CHANNEL_ID,
   BOT_USERNAME = 'ru_community_bot',
   NODE_ENV = 'development',
-} = environment
+} = environment;
 
-let db
+let db;
 
 if (environment.DATABASE_URL) {
-  const { auth, pathname, protocol, host } = url.parse(environment.DATABASE_URL)
+  const { auth, pathname, protocol, host } = url.parse(
+    environment.DATABASE_URL,
+  );
 
-
-  const [username, password] = (auth || '').split(':')
-  const database = pathname.slice(1)
-  const dialect = protocol.slice(0, -1)
+  const [username, password] = (auth || '').split(':');
+  const database = pathname.slice(1);
+  const dialect = protocol.slice(0, -1);
 
   db = {
     username,
@@ -27,10 +27,9 @@ if (environment.DATABASE_URL) {
     database,
     host,
     dialect,
-  }
-}
-else {
-  db = dbConfig[NODE_ENV]
+  };
+} else {
+  db = dbConfig[NODE_ENV];
 }
 
 module.exports = {
@@ -43,4 +42,4 @@ module.exports = {
   },
   dev: NODE_ENV === 'development',
   prod: NODE_ENV !== 'development',
-}
+};

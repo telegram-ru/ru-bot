@@ -1,5 +1,4 @@
-import test from 'ava'
-import './extended-context'
+import test from 'ava';
+import './extended-context';
 
-
-test.todo('extendedContext')
+test.todo('extendedContext');

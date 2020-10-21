@@ -1,5 +1,4 @@
-import test from 'ava'
-import './telegram-group'
+import test from 'ava';
+import './telegram-group';
 
-
-test.todo('telegramGroup')
+test.todo('telegramGroup');

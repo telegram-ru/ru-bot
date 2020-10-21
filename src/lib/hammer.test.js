@@ -1,5 +1,4 @@
-import test from 'ava'
-import './hammer'
+import test from 'ava';
+import './hammer';
 
-
-test.todo('hammer')
+test.todo('hammer');

@@ -1,103 +1,106 @@
-const debug = require('debug')('rubot:index')
-const Sentry = require('@sentry/node')
+const debug = require('debug')('rubot:index');
+const Sentry = require('@sentry/node');
 
-const { bot: botConfig, environment } = require('./config')
-const { sequelize } = require('./models')
-const { createBot } = require('./lib/runtime')
-const { Channel } = require('./lib/channel')
-const { InvalidChatlistError, validateChatList, normalizeChatList } = require('./lib/chatlist-validate')
-const { elasticPing } = require('./lib/elastic')
-const features = require('./features')
-
+const { bot: botConfig, environment } = require('./config');
+const { sequelize } = require('./models');
+const { createBot } = require('./lib/runtime');
+const { Channel } = require('./lib/channel');
+const {
+  InvalidChatlistError,
+  validateChatList,
+  normalizeChatList,
+} = require('./lib/chatlist-validate');
+const { elasticPing } = require('./lib/elastic');
+const features = require('./features');
 
 Sentry.init({
   dsn: environment.SENTRY_URL,
-})
+});
 
-let CHAT_LIST
+let CHAT_LIST;
 /* eslint-disable unicorn/no-process-exit, no-console */
 
 if (!environment.BOT_TOKEN) {
-  throw new Error('No telegram bot token provided')
+  throw new Error('No telegram bot token provided');
 }
 
 try {
-  const chatlistConfig = require('./.chatlist.json') // eslint-disable-line global-require
+  const chatlistConfig = require('./.chatlist.json'); // eslint-disable-line global-require
 
-  validateChatList(chatlistConfig)
-  CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))]
-}
-catch (error) {
+  validateChatList(chatlistConfig);
+  CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))];
+} catch (error) {
   if (error.code === 'MODULE_NOT_FOUND') {
-    console.log('ERROR: Maybe you forget create .chatlist.json ?')
-    process.exit(-1)
+    console.log('ERROR: Maybe you forget create .chatlist.json ?');
+    process.exit(-1);
   }
 
   if (error instanceof InvalidChatlistError) {
-    console.error(error.message)
-    console.error(error.stack)
-    process.exit(-1)
+    console.error(error.message);
+    console.error(error.stack);
+    process.exit(-1);
   }
 
-  throw error
+  throw error;
 }
 
-const bot = createBot(
-  botConfig.token,
-  features,
-  { username: botConfig.username }
-)
+const bot = createBot(botConfig.token, features, {
+  username: botConfig.username,
+});
 
 async function main() {
-  debug('main()')
-  await sequelize.authenticate()
+  debug('main()');
+  await sequelize.authenticate();
 
   if (environment.ELASTICSEARCH_URL) {
-    await elasticPing()
+    await elasticPing();
   }
 
-  bot.context.botInfo = await bot.telegram.getMe()
-  bot.context.privateChannel = new Channel(botConfig.privateChannelId, bot)
+  bot.context.botInfo = await bot.telegram.getMe();
+  bot.context.privateChannel = new Channel(botConfig.privateChannelId, bot);
   // TODO: hardcoded chatlist
-  bot.context.ownedChats = []
+  bot.context.ownedChats = [];
 
-  if (!await bot.context.privateChannel.canPostMessages()) {
-    throw new Error('Bot should be admin and can post messages to private channel')
+  if (!(await bot.context.privateChannel.canPostMessages())) {
+    throw new Error(
+      'Bot should be admin and can post messages to private channel',
+    );
   }
 
-  await Promise.all(CHAT_LIST.map((options) => {
-    debug(`Create chat instance for id:${options.id}`)
-    const chat = bot.context.getChat(options.id)
+  await Promise.all(
+    CHAT_LIST.map((options) => {
+      debug(`Create chat instance for id:${options.id}`);
+      const chat = bot.context.getChat(options.id);
 
-    chat.setOptions(options)
-    bot.context.ownedChats.push(chat)
-    return chat.getAdmins()
-  }))
+      chat.setOptions(options);
+      bot.context.ownedChats.push(chat);
+      return chat.getAdmins();
+    }),
+  );
 
-  bot.startPolling()
-  console.log('Start polling...') // eslint-disable-line no-console
+  bot.startPolling();
+  console.log('Start polling...'); // eslint-disable-line no-console
 }
 
-
 main().catch((error) => {
-  Sentry.captureException(error)
-  console.log(error) // eslint-disable-line no-console
-})
+  Sentry.captureException(error);
+  console.log(error); // eslint-disable-line no-console
+});
 
 process.on('uncaughtException', (error) => {
   Sentry.captureException(error, {
     tags: {
       type: 'process',
     },
-  })
-  process.exit(1)
-})
+  });
+  process.exit(1);
+});
 
 process.on('unhandledRejection', (error) => {
   Sentry.captureException(error, {
     tags: {
       type: 'process',
     },
-  })
-  process.exit(1)
-})
+  });
+  process.exit(1);
+});
