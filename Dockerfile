@@ -1,5 +1,5 @@
 # ---- Base Node ----
-FROM node:carbon-alpine as base
+FROM node:erbium-alpine as base
 # set working directory
 WORKDIR /root/app
 # Set entrypoint
@@ -11,8 +11,7 @@ COPY package.json package-lock.json .sequelizerc ./
 # ---- Dependencies ----
 FROM base AS dependencies
 # install node packages
-RUN npm set progress=false && npm config set depth 0
-RUN npm install --only=production
+RUN npm set progress=false && npm config set depth 0 && npm install --only=production
 
 #
 # ---- Release ----
