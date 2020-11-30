@@ -1,6 +1,6 @@
-import * as Ajv from 'ajv';
+import Ajv from 'ajv';
 
-const schema = require('../chatlist.schema');
+import schema from '../chatlist.schema.json';
 
 const ajv = new Ajv();
 const validate = ajv.compile(schema);

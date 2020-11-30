@@ -2,7 +2,7 @@ import { parse } from 'url';
 import { config } from 'dotenv';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const dbConfig = require('./database.json');
+import dbConfig from './database.json';
 
 config();
 

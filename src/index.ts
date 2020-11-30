@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/node';
-
+import { resolve } from 'path';
+import { readFileSync } from 'fs';
 import { bot as botConfig, environment } from './config';
 
 import { applyBot } from './features';
@@ -25,7 +26,9 @@ if (!environment.BOT_TOKEN) {
 
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const chatlistConfig = require('./.chatlist.json'); // eslint-disable-line global-require
+  const chatlistConfig = JSON.parse(
+    readFileSync(resolve(__dirname, '../.chatlist.json')).toString(),
+  ); // eslint-disable-line global-require
 
   validateChatList(chatlistConfig);
   CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))];

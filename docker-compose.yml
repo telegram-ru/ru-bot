@@ -4,15 +4,35 @@ services:
     build: .
     restart: on-failure
     env_file:
-     - ./.env
+      - ./.env
   postgres:
     image: postgres:9-alpine
     restart: always
     env_file:
-     - ./.env
+      - ./.env
     volumes:
       - ./data/pgsql/data:/var/lib/postgresql/data
       - ./data/pgsql/config:/etc/postgresql
       - ./data/pgsql/logs:/var/log/postgresql/
+  admin:
+    image: sosedoff/pgweb
+    restart: always
     ports:
-      - 5433:5432
+      - 10000:8081
+  elasticsearch:
+    image: elasticsearch:7.9.2
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./data/elastic:/usr/share/elasticsearch/data
+  kibana:
+    image: kibana:7.9.2
+    env_file:
+      - ./.env
+    ports:
+      - 10001:5601
+    links:
+      - elasticsearch
