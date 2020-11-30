@@ -1,7 +1,8 @@
 import { Extra } from 'telegraf';
 import * as text from '../text';
 
-const adminRequired = async ({ message, reply, chat, getChat, from }, next) => {
+async function adminRequired(ctx, next) {
+  const { message, reply, chat, getChat, from } = ctx;
   if (chat && chat.type !== 'private') {
     const chatApi = getChat(chat.id);
 
@@ -14,9 +15,10 @@ const adminRequired = async ({ message, reply, chat, getChat, from }, next) => {
   }
 
   return reply(text.notif.groupOnly(), Extra.inReplyTo(message.message_id));
-};
+}
 
-const adminRequiredSilenced = async ({ chat, getChat, from }, next) => {
+async function adminRequiredSilenced(ctx, next) {
+  const { chat, getChat, from } = ctx;
   if (chat && chat.type !== 'private') {
     const chatApi = getChat(chat.id);
 
@@ -27,6 +29,6 @@ const adminRequiredSilenced = async ({ chat, getChat, from }, next) => {
   }
   console.log('adminRequiredSilenced', chat.id, from.id, false);
   return null;
-};
+}
 
 export { adminRequired, adminRequiredSilenced };

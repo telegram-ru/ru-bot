@@ -1,16 +1,13 @@
-import * as Sentry from '@sentry/node';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
-import { bot as botConfig, environment } from './config';
 
+import * as Sentry from '@sentry/node';
+
+import { bot as botConfig, environment } from './config';
 import { applyBot } from './features';
-import { createBot } from './lib/runtime';
 import { Channel } from './lib/channel';
-import {
-  InvalidChatlistError,
-  normalizeChatList,
-  validateChatList,
-} from './lib/chatlist-validate';
+import { InvalidChatlistError } from './lib/chatlist-validate';
+import { createBot } from './lib/runtime';
 import { elasticPing } from './lib/elastic';
 import { sequelize } from './models';
 
@@ -26,12 +23,9 @@ if (!environment.BOT_TOKEN) {
 
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const chatlistConfig = JSON.parse(
+  CHAT_LIST = JSON.parse(
     readFileSync(resolve(__dirname, '../.chatlist.json')).toString(),
   ); // eslint-disable-line global-require
-
-  validateChatList(chatlistConfig);
-  CHAT_LIST = [...Object.values(normalizeChatList(chatlistConfig))];
 } catch (error) {
   if (error.code === 'MODULE_NOT_FOUND') {
     console.log('ERROR: Maybe you forget create .chatlist.json ?');
@@ -47,11 +41,10 @@ try {
   throw error;
 }
 
-const bot = createBot(botConfig.token, applyBot, {
-  username: botConfig.username,
-});
-
 async function main() {
+  const bot = createBot(botConfig.token, applyBot, {
+    username: botConfig.username,
+  });
   console.log('main()');
   await sequelize.authenticate();
 

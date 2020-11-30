@@ -6,19 +6,24 @@ import { adminRequiredSilenced } from '../../middlewares/admin-required';
 import { Message } from '../../models';
 import { installKeyboardActions, keyboardUnspamUser } from './keyboards';
 
-async function handleEachMessage(
-  { message, from, chat, getHammer, getChat, privateChannel },
-  next,
-) {
+async function handleEachMessage(ctx, next) {
+  const {
+    message,
+    from: userFrom,
+    chat,
+    getHammer,
+    getChat,
+    privateChannel,
+  } = ctx;
   console.log(
-    `handleEachMessage(messageId: ${message.message_id}, fromId: ${from.id}, chatId: ${chat.id}`,
+    `handleEachMessage(messageId: ${message.message_id}, fromId: ${userFrom.id}, chatId: ${chat.id}`,
   );
 
   if (chat.type !== 'private') {
     Message.create({
       messageId: message.message_id,
       chatId: chat.id,
-      authorId: from.id,
+      authorId: userFrom.id,
       date: message.date,
     }).catch((error) => {
       console.log('handleEachMessage:Message.create ERROR', error);
@@ -27,19 +32,19 @@ async function handleEachMessage(
     next();
 
     const hammer = getHammer();
-    const isSpammer = await hammer.hasInBlacklist('user', from.id);
+    const isSpammer = await hammer.hasInBlacklist('user', userFrom.id);
 
     if (isSpammer) {
       const chatInstance = getChat(chat.id);
 
-      await hammer.dropMessagesOf(from);
+      await hammer.dropMessagesOf(userFrom);
       await privateChannel.notifySpammerAutoban(
-        { chat, banned: from },
-        keyboardUnspamUser({ banned: from }).extra(),
+        { chat, banned: userFrom },
+        keyboardUnspamUser(userFrom).extra(),
       );
       console.log(
         'handleEachMessage():kickMember',
-        await chatInstance.kickMember(from),
+        await chatInstance.kickMember(userFrom),
       );
     }
   } else {
@@ -121,7 +126,7 @@ async function handleSpamCommand({
           moder: from,
           reason,
         },
-        keyboardUnspamUser({ banned: spammer }).extra(),
+        keyboardUnspamUser(spammer).extra(),
       );
       /** @see https://core.telegram.org/bots/api#forwardmessage */
 

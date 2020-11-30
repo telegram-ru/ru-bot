@@ -20,14 +20,13 @@
     "bot"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^5.27.6",
-    "ajv": "^6.12.6",
     "dotenv": "^8.2.0",
-    "elasticsearch": "^16.7.1",
+    "elasticsearch": "^16.7.2",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",
@@ -36,8 +35,8 @@
   },
   "devDependencies": {
     "@types/validator": "^13.1.0",
-    "@typescript-eslint/eslint-plugin": "^4.8.2",
-    "@typescript-eslint/parser": "^4.8.2",
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
     "cz-customizable": "^6.3.0",
     "eslint": "^7.14.0",
     "eslint-config-airbnb-base": "^14.2.1",

@@ -8,7 +8,7 @@ const actUnspamUser = 'unspam_user';
 const actUnspamUserOk = 'unspam_user_ok';
 const actUnspamUserNo = 'unspam_user_no';
 
-function keyboardUnspamUser({ banned }) {
+function keyboardUnspamUser(banned) {
   return Markup.inlineKeyboard([
     Markup.callbackButton(
       text.spamHammer.actionUnspam(),
@@ -49,7 +49,7 @@ function handleUnspamUserNo({ match, editMessageReplyMarkup }) {
   const [, targetId] = match;
 
   console.log('handleUnspamUserNo', targetId);
-  editMessageReplyMarkup(keyboardUnspamUser({ banned: { id: targetId } }));
+  editMessageReplyMarkup(keyboardUnspamUser({ id: targetId }));
 }
 
 /**

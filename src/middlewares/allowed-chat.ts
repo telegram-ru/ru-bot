@@ -1,4 +1,5 @@
-const allowWhiteListChat = async ({ chat, isChatInWhiteList }, next) => {
+async function allowWhiteListChat(ctx, next) {
+  const { chat, isChatInWhiteList } = ctx;
   console.log(
     'allowWhiteListChat',
     chat.id,
@@ -10,6 +11,6 @@ const allowWhiteListChat = async ({ chat, isChatInWhiteList }, next) => {
   }
 
   return null;
-};
+}
 
 export { allowWhiteListChat };

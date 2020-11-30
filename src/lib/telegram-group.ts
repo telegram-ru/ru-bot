@@ -58,13 +58,11 @@ class TelegramGroup {
    * @param {{ stickers: Object }} options
    */
   setOptions(options) {
+    console.log(options);
     this.options = options;
   }
 
-  /**
-   * @return {Promise<boolean>}
-   */
-  isBotAdmin() {
+  isBotAdmin(): Promise<boolean> {
     return this.isAdmin(this.bot.context.botInfo);
   }
 

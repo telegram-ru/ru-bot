@@ -1,22 +1,18 @@
 import * as Sentry from '@sentry/node';
 import Telegraf from 'telegraf';
 
+import { TelegrafOptions } from 'telegraf/typings/telegraf';
 import { environment } from '../config';
 import { extendedContext } from './extended-context';
 import { push } from './elastic';
 
 const SECOND = 1000;
 
-/**
- * Create new instance of Telegraf bot
- * extends it with features and context methods
- *
- * @param {string} token
- * @param {((bot: Telegraf) => void)[]} features
- * @param {{ username: string }} telegrafConfig
- * @return {Telegraf}
- */
-function createBot(token, applyBot, telegrafConfig = {}) {
+function createBot(
+  token: string,
+  applyBot: Function,
+  telegrafConfig: TelegrafOptions = {},
+): Telegraf<any> {
   console.log('createBot()', telegrafConfig);
   const instance = new Telegraf<any>(token, telegrafConfig);
 
@@ -51,7 +47,6 @@ function createBot(token, applyBot, telegrafConfig = {}) {
 
   // install context methods before features
   extendedContext(instance);
-
   applyBot(instance);
 
   return instance;
