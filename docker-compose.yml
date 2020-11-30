@@ -5,6 +5,8 @@ services:
     restart: on-failure
     env_file:
       - ./.env
+    environment:
+      - NODE_ENV=production
   postgres:
     image: postgres:9-alpine
     restart: always
