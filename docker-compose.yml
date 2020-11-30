@@ -15,4 +15,4 @@ services:
       - ./data/pgsql/config:/etc/postgresql
       - ./data/pgsql/logs:/var/log/postgresql/
     ports:
-      - 5432:5432
+      - 5433:5432
