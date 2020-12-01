@@ -1,4 +1,5 @@
-# ru_bot [![Build Status](https://travis-ci.org/telegram-ru/ru-bot.svg?branch=dev)](https://travis-ci.org/telegram-ru/ru-bot) [![codecov](https://codecov.io/gh/telegram-ru/ru-bot/branch/dev/graph/badge.svg)](https://codecov.io/gh/telegram-ru/ru-bot)
+# ru_bot 
+[![codecov](https://codecov.io/gh/telegram-ru/ru-bot/branch/dev/graph/badge.svg)](https://codecov.io/gh/telegram-ru/ru-bot)
 
 
 ## Installation

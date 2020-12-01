@@ -121,3 +121,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 data
+dist
+.vscode
+nodemon.json
+codecov.yml
+.travis.yml
+.env
+.env.example
