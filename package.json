@@ -34,6 +34,7 @@
     "telegraf": "^3.38.0"
   },
   "devDependencies": {
+    "@types/sequelize": "^4.28.9",
     "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^4.9.0",
     "@typescript-eslint/parser": "^4.9.0",

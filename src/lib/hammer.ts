@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as Sentry from '@sentry/node';
 import { Telegraf } from 'telegraf';
 import { TelegrafContext } from 'telegraf/typings/context';
@@ -124,7 +125,10 @@ class Hammer {
     if (allMessages.length !== 0) {
       for (const { authorId, chatId, messageId } of allMessages) {
         try {
-          await this.bot.telegram.deleteMessage(chatId, messageId);
+          await this.bot.telegram.deleteMessage(
+            chatId,
+            parseInt(messageId, 10),
+          );
         } catch (error) {
           Sentry.captureException(error);
           console.log(

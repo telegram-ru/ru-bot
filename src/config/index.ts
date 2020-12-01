@@ -6,7 +6,7 @@ import dbConfig from './database.json';
 
 config();
 
-const environment = process.env;
+export const environment = process.env;
 const {
   BOT_TOKEN,
   PRIVATE_CHANNEL_ID,
@@ -14,7 +14,7 @@ const {
   NODE_ENV = 'development',
 } = environment;
 
-function setupDbVar(): Record<string, unknown> {
+function setupDbVar(): Record<string, string> {
   if (environment.DATABASE_URL) {
     const { auth, pathname, protocol, host } = parse(environment.DATABASE_URL);
 
@@ -33,15 +33,13 @@ function setupDbVar(): Record<string, unknown> {
   return dbConfig[NODE_ENV];
 }
 
-const db = setupDbVar();
+export const db = setupDbVar();
 
-const bot = {
+export const bot = {
   token: BOT_TOKEN,
   username: BOT_USERNAME,
   privateChannelId: PRIVATE_CHANNEL_ID,
 };
 
-const dev = NODE_ENV === 'development';
-const prod = NODE_ENV !== 'development';
-
-export { db, environment, bot, dev, prod };
+export const dev = NODE_ENV === 'development';
+export const prod = NODE_ENV === 'production';

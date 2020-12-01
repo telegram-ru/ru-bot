@@ -1,64 +1,30 @@
-/* eslint-disable no-magic-numbers */
+/* eslint-disable no-magic-numbers, @typescript-eslint/no-explicit-any, import/no-cycle, import/first, */
 
-import { readdirSync } from 'fs';
-import { basename, join } from 'path';
-import { DataTypes, Sequelize } from 'sequelize';
-import * as config from '../config';
+import { Options, Sequelize } from 'sequelize';
+import { db, prod } from '../config';
 
-const db = {};
-let sequelizeOptions = {
+(Sequelize as any).postgres.DECIMAL.parse = parseFloat;
+
+export const sequelize = new Sequelize(db.database, db.user, db.password, {
+  logging: !prod,
+  host: db.host,
+  dialect: 'postgres',
   pool: {
     max: 5,
     min: 0,
     acquire: 30000,
     idle: 10000,
   },
+} as Options);
+
+import { Blocked } from './blocked';
+import { Message } from './message';
+
+const initAssociations = () => {
+  Blocked.associate();
+  Message.associate();
 };
 
-if (typeof config.db === 'string') {
-  // @ts-ignore
-  sequelizeOptions = [config.db, sequelizeOptions];
-} else {
-  // @ts-ignore
-  sequelizeOptions = [{ ...sequelizeOptions, ...config.db }];
-}
+initAssociations();
 
-// @ts-ignore
-const sequelize = new Sequelize(...sequelizeOptions);
-
-readdirSync(__dirname)
-  .filter(
-    (file) =>
-      file.indexOf('.') !== 0 &&
-      file !== basename(__filename) &&
-      file.slice(-3) === '.js',
-  )
-  .forEach((file) => {
-    // @ts-ignore
-    const model = require(join(__dirname, file))(sequelize, DataTypes);
-    const name = model.name.charAt(0).toUpperCase() + model.name.slice(1);
-
-    db[name] = model;
-  });
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-// @ts-ignore
-type Seq = {
-  create: (...any) => any;
-  destroy: Function;
-  findAll: Function;
-  findOne: Function;
-};
-
-// @ts-ignore
-const Message = db.Message as Seq;
-// @ts-ignore
-const Blocked = db.Blocked as Seq;
-
-export { Blocked, Message, sequelize };
-export default db;
+export { Blocked, Message };

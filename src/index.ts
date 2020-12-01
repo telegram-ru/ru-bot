@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 
