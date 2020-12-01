@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/node';
 
 import { Telegraf, Telegram } from 'telegraf';
 import { makeName } from './string';
-import { BotContext } from './extended-context';
 
 const TIMEOUT_ADMIN_UPDATE = 60000;
 
@@ -19,8 +18,8 @@ export interface AdminUser {
  * GroupBase is parent for Channel and Chat
  * with common methods to fetch admins and manage messages
  */
-class TelegramGroup {
-  bot: Telegraf<BotContext>;
+class TelegramGroup<Bot extends Telegraf<any>, BotContext> {
+  bot: Bot;
 
   id: string;
 
@@ -45,10 +44,6 @@ class TelegramGroup {
       list: [],
       nextUpdate: Date.now() - TIMEOUT_ADMIN_UPDATE,
     };
-  }
-
-  isBotAdmin(): Promise<boolean> {
-    return this.isAdmin(this.bot.context.botInfo);
   }
 
   /**
@@ -119,21 +114,6 @@ class TelegramGroup {
     }
 
     return false;
-  }
-
-  /**
-   * Delete message from current chat by message id
-   * @param {number} messageId
-   */
-  async deleteMessage(messageId: number) {
-    console.log(`deleteMessage(${messageId})`);
-    try {
-      this.telegram.deleteMessage(this.id, messageId);
-    } catch (error) {
-      Sentry.captureException(error);
-      console.log(`deleteMessage(${messageId}) failed`, error);
-      // maybe already deleted or older that 48 hours
-    }
   }
 
   /**

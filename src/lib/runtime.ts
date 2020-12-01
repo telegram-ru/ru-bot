@@ -3,7 +3,7 @@ import Telegraf from 'telegraf';
 
 import { TelegrafOptions } from 'telegraf/typings/telegraf';
 import { environment } from '../config';
-import { BotContext, extendedContext } from './extended-context';
+import { assignAdditionalContextProps } from './assign-additional-context-props';
 import { push } from './elastic';
 import { featureGetId } from '../features/get-id';
 import { featureSpamHammer } from '../features/spam-hammer';
@@ -11,14 +11,14 @@ import { featureBanHammer } from '../features/ban-hammer';
 import { featureBotParticipation } from '../features/bot-participation';
 import { featureReadonlyMode } from '../features/readonly-mode';
 import { featurePrivateGreetings } from '../features/private-greetings';
-import { status } from '../features/status';
+import { Bot, BotContext } from '../types';
 
 const SECOND = 1000;
 
 async function createBot(
   token: string,
   telegrafConfig: TelegrafOptions = {},
-): Promise<Telegraf<BotContext>> {
+): Promise<Bot> {
   console.log('createBot()', telegrafConfig);
   const bot = new Telegraf<BotContext>(token, telegrafConfig);
 
@@ -52,14 +52,13 @@ async function createBot(
   }
 
   // install context methods before features
-  Object.assign(bot.context, await extendedContext(bot));
+  await assignAdditionalContextProps(bot);
   featureGetId(bot);
   featureSpamHammer(bot);
   featureBanHammer(bot);
   featureBotParticipation(bot);
   featureReadonlyMode(bot);
   featurePrivateGreetings(bot);
-  status(bot);
 
   return bot;
 }

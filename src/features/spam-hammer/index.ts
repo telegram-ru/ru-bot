@@ -5,8 +5,9 @@ import { allowWhiteListChat } from '../../middlewares/allowed-chat';
 import { adminRequiredSilenced } from '../../middlewares/admin-required';
 import { Message } from '../../models';
 import { installKeyboardActions, keyboardUnspamUser } from './keyboards';
+import { Bot, BotContext } from '../../types';
 
-async function handleEachMessage(ctx, next) {
+async function handleEachMessage(ctx: BotContext, next) {
   const {
     message,
     from: userFrom,
@@ -53,18 +54,19 @@ async function handleEachMessage(ctx, next) {
 }
 
 /* eslint-disable no-restricted-syntax, no-await-in-loop */
-async function handleSpamCommand({
-  message,
-  from,
-  update,
-  chat,
-  match,
-  reply,
-  privateChannel,
-  getHammer,
-  deleteMessage,
-  getChat,
-}) {
+async function handleSpamCommand(ctx: BotContext) {
+  const {
+    message,
+    from,
+    update,
+    chat,
+    match,
+    reply,
+    privateChannel,
+    getHammer,
+    deleteMessage,
+    getChat,
+  } = ctx;
   console.log('handleSpamCommand');
   const [, rawReason] = match;
   const reason = `${text.spamHammer.shortSpamReason()} ${rawReason || ''}`;
@@ -105,7 +107,7 @@ async function handleSpamCommand({
       await deleteMessage();
 
       // Ban user in another controlled chats #66.7
-      const blacklistedList = await hammer.blacklistUser(spammer, [chat.id]);
+      await hammer.blacklistUser(spammer, [chat.id]);
 
       try {
         // Delete messages in all another chats #66.8
@@ -120,9 +122,6 @@ async function handleSpamCommand({
         {
           originChat: chat,
           banned: spammer,
-          chats: blacklistedList.filter(
-            (blacklisted) => blacklisted.id !== chat.id,
-          ),
           moder: from,
           reason,
         },
@@ -138,13 +137,14 @@ async function handleSpamCommand({
   } else {
     reply(
       text.common.commandShouldBeReplied(text.commands.spam()),
+      // @ts-ignore
       Extra.inReplyTo(message.message_id),
     );
   }
 }
 /* eslint-enable no-restricted-syntax */
 
-export function featureSpamHammer(bot) {
+export function featureSpamHammer(bot: Bot) {
   bot.on('message', allowWhiteListChat, handleEachMessage);
   bot.hears(
     new RegExp(`^${text.commands.spam()}( .*)?`),

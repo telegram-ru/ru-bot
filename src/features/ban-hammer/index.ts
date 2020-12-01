@@ -2,7 +2,7 @@ import Extra from 'telegraf/extra';
 import * as text from '../../text';
 import { allowWhiteListChat } from '../../middlewares/allowed-chat';
 import { adminRequiredSilenced } from '../../middlewares/admin-required';
-import { BotContext } from '../../lib/extended-context';
+import { BotContext } from '../../types';
 
 async function handleBanCommand(ctx: BotContext) {
   const {

@@ -81,10 +81,6 @@ const banHammer = {
       .join(`\n`),
 };
 
-const status = {
-  check: (botName) => `Чат обслуживается ботом ${botName}`,
-};
-
 const commands = {
   spam: () => `!спам`,
   readonly: () => `!ро`,
@@ -100,5 +96,4 @@ export {
   privateGreetings,
   readonlyMode,
   spamHammer,
-  status,
 };
