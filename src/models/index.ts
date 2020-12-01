@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, @typescript-eslint/no-explicit-any, import/no-cycle, import/first, */
+/* eslint-disable no-magic-numbers, @typescript-eslint/no-explicit-any, import/no-cycle, import/first, no-console */
 
 import { Options, Sequelize } from 'sequelize';
 import { db, prod } from '../config';
@@ -6,7 +6,7 @@ import { db, prod } from '../config';
 (Sequelize as any).postgres.DECIMAL.parse = parseFloat;
 
 export const sequelize = new Sequelize(db.database, db.user, db.password, {
-  logging: !prod,
+  logging: prod ? false : console.log,
   host: db.host,
   dialect: 'postgres',
   pool: {
