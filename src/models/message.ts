@@ -1,6 +1,6 @@
-/* eslint-disable class-methods-use-this, @typescript-eslint/explicit-module-boundary-types, import/no-cycle */
+/* eslint-disable class-methods-use-this, @typescript-eslint/explicit-module-boundary-types */
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from './index';
+import { sequelize } from '../lib/sequelize';
 
 export class Message extends Model {
   id!: number;
