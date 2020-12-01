@@ -1,7 +1,8 @@
-/* eslint-disable no-magic-numbers, @typescript-eslint/no-explicit-any, import/no-cycle, import/first, no-console */
+/* eslint-disable no-magic-numbers, @typescript-eslint/no-explicit-any, no-console */
 import { Options, Sequelize } from 'sequelize';
 import { db, prod } from '../config';
 
+//  deepcode ignore no-any: no typings for postgres
 (Sequelize as any).postgres.DECIMAL.parse = parseFloat;
 
 export const sequelize = new Sequelize(db.database, db.user, db.password, {
