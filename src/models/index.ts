@@ -17,6 +17,7 @@ export const sequelize = new Sequelize(db.database, db.user, db.password, {
   },
 } as Options);
 
+// to avoid dependency loop
 import { Blocked } from './blocked';
 import { Message } from './message';
 
