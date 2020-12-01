@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/node';
 
 import { Telegraf, Telegram } from 'telegraf';
 import { makeName } from './string';
+import { BotContext } from './extended-context';
 
 const TIMEOUT_ADMIN_UPDATE = 60000;
 
@@ -19,13 +20,11 @@ export interface AdminUser {
  * with common methods to fetch admins and manage messages
  */
 class TelegramGroup {
-  bot: Telegraf<any>;
+  bot: Telegraf<BotContext>;
 
   id: string;
 
   telegram: Telegram;
-
-  options: Record<string, unknown>;
 
   admins: {
     list: Array<AdminUser>;
@@ -39,11 +38,6 @@ class TelegramGroup {
    */
   constructor(chatId, botInstance) {
     this.id = chatId;
-    /**
-     * Options from .chatlist.json
-     * @type {{ stickers: { remove: boolean, restrict: boolean } }}
-     */
-    this.options = {};
     this.bot = botInstance;
     this.telegram = this.bot.telegram;
 
@@ -51,15 +45,6 @@ class TelegramGroup {
       list: [],
       nextUpdate: Date.now() - TIMEOUT_ADMIN_UPDATE,
     };
-  }
-
-  /**
-   * Options from .chatlist.json
-   * @param {{ stickers: Object }} options
-   */
-  setOptions(options) {
-    console.log(options);
-    this.options = options;
   }
 
   isBotAdmin(): Promise<boolean> {

@@ -1,18 +1,13 @@
-import elasticsearch from 'elasticsearch';
+import { Client } from '@elastic/elasticsearch';
 
-let client = null;
+let client: Client;
 
 function elasticPing() {
-  console.log('elasticPing()');
-
   if (!client) {
-    client = new elasticsearch.Client({
-      host: 'elasticsearch:9200',
-      log: 'trace',
-    });
+    client = new Client({ node: 'elasticsearch:9200' });
   }
 
-  return client.ping({ requestTimeout: 500 });
+  return client.ping({}, { requestTimeout: 500 });
 }
 
 function push({ index, type, id, body }) {

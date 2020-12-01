@@ -2,17 +2,19 @@ import Extra from 'telegraf/extra';
 import * as text from '../../text';
 import { allowWhiteListChat } from '../../middlewares/allowed-chat';
 import { adminRequiredSilenced } from '../../middlewares/admin-required';
+import { BotContext } from '../../lib/extended-context';
 
-async function handleBanCommand({
-  from,
-  privateChannel,
-  deleteMessage,
-  message,
-  match,
-  reply,
-  getChat,
-  chat,
-}) {
+async function handleBanCommand(ctx: BotContext) {
+  const {
+    from,
+    privateChannel,
+    deleteMessage,
+    message,
+    match,
+    reply,
+    getChat,
+    chat,
+  } = ctx;
   console.log('handleBanCommand', message, match);
   const [, , reason] = match;
   const replyMessage = message.reply_to_message;

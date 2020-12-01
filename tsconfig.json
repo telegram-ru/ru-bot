@@ -12,5 +12,6 @@
     "outDir": "dist",
     "incremental": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["src"]
 }

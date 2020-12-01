@@ -1,3 +1,4 @@
+import { Extra } from 'telegraf';
 import * as text from '../text';
 import { TelegramGroup } from './telegram-group';
 
@@ -96,7 +97,7 @@ class Channel extends TelegramGroup {
     );
   }
 
-  notifyKickBan({ fluder, chat, moder, reason }, extra) {
+  notifyKickBan({ fluder, chat, moder, reason }, extra?: Extra) {
     console.log('notifyKickBan', fluder.id, chat.id);
     return this.sendMessage(
       text.banHammer.fluderBannedIn({

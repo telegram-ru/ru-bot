@@ -24,9 +24,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.10.0",
     "@sentry/node": "^5.27.6",
     "dotenv": "^8.2.0",
-    "elasticsearch": "^16.7.2",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.5",

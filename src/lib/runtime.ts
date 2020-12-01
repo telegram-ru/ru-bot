@@ -3,25 +3,31 @@ import Telegraf from 'telegraf';
 
 import { TelegrafOptions } from 'telegraf/typings/telegraf';
 import { environment } from '../config';
-import { extendedContext } from './extended-context';
+import { BotContext, extendedContext } from './extended-context';
 import { push } from './elastic';
+import { featureGetId } from '../features/get-id';
+import { featureSpamHammer } from '../features/spam-hammer';
+import { featureBanHammer } from '../features/ban-hammer';
+import { featureBotParticipation } from '../features/bot-participation';
+import { featureReadonlyMode } from '../features/readonly-mode';
+import { featurePrivateGreetings } from '../features/private-greetings';
+import { status } from '../features/status';
 
 const SECOND = 1000;
 
-function createBot(
+async function createBot(
   token: string,
-  applyBot: Function,
   telegrafConfig: TelegrafOptions = {},
-): Telegraf<any> {
+): Promise<Telegraf<BotContext>> {
   console.log('createBot()', telegrafConfig);
-  const instance = new Telegraf<any>(token, telegrafConfig);
+  const bot = new Telegraf<BotContext>(token, telegrafConfig);
 
   if (environment.NODE_ENV === 'development') {
-    instance.use(Telegraf.log());
+    bot.use(Telegraf.log());
   }
 
   if (environment.ELASTICSEARCH_URL) {
-    instance.use((ctx, next) => {
+    bot.use((ctx, next) => {
       if (ctx.update.message) {
         push({
           index: `rubot-${environment.NODE_ENV || 'undefined'}`,
@@ -40,16 +46,22 @@ function createBot(
   }
 
   if (environment.SENTRY_URL) {
-    instance.catch((error) => {
+    bot.catch((error) => {
       Sentry.captureException(error);
     });
   }
 
   // install context methods before features
-  extendedContext(instance);
-  applyBot(instance);
+  Object.assign(bot.context, await extendedContext(bot));
+  featureGetId(bot);
+  featureSpamHammer(bot);
+  featureBanHammer(bot);
+  featureBotParticipation(bot);
+  featureReadonlyMode(bot);
+  featurePrivateGreetings(bot);
+  status(bot);
 
-  return instance;
+  return bot;
 }
 
 export { createBot };

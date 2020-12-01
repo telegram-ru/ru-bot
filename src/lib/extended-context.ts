@@ -1,6 +1,8 @@
-import Telegraf from 'telegraf'; // eslint-disable-line no-unused-vars
+import Telegraf, { Context } from 'telegraf'; // eslint-disable-line no-unused-vars
 import { Chat } from './chat';
 import { Hammer } from './hammer';
+import { Channel } from './channel';
+import { bot as botConfig } from '../config';
 
 /* eslint-disable no-param-reassign */
 
@@ -28,7 +30,7 @@ function optionalCallbackQuery(...args) {
  * @param {string|number} chatId
  * @return {Chat}
  */
-function getChat(chatId) {
+function getChat(chatId: string): Chat {
   if (!this.chats.has(chatId)) {
     this.chats.set(chatId, new Chat(chatId, this.rootInstance));
   }
@@ -45,28 +47,39 @@ function getHammer() {
  * @param {Chat} chat
  * @return {boolean}
  */
-function isChatInWhiteList(chat) {
+function isChatInWhiteList(chat: Chat): boolean {
   return this.chats.has(chat.id);
 }
 
-const bindedContextMethods = {
-  getChat,
-  getHammer,
-  isChatInWhiteList,
-  optionalCallbackQuery,
-};
+interface IBotContext {
+  rootInstance: Telegraf<any>;
+  chats: Map<string, Chat>;
+  privateChannel: Channel;
+  ownedChats: string[];
+  getChat;
+  getHammer;
+  isChatInWhiteList;
+  optionalCallbackQuery;
+}
 
-/**
- * Install context methods to bot
- * @param {Telegraf} bot
- */
-function extendedContext(bot) {
-  bot.context.rootInstance = bot;
-  bot.context.chats = new Map();
+export type BotContext = Context & IBotContext;
 
-  Object.keys(bindedContextMethods).forEach((name) => {
-    bot.context[name] = bindedContextMethods[name].bind(bot.context);
-  });
+async function extendedContext(
+  bot: Telegraf<BotContext>,
+): Promise<IBotContext> {
+  const context = {
+    rootInstance: bot,
+    chats: new Map(),
+    botInfo: await bot.telegram.getMe(),
+    privateChannel: new Channel(botConfig.privateChannelId, bot),
+    ownedChats: [],
+    getChat: getChat.bind(bot.context),
+    getHammer: getHammer.bind(bot.context),
+    isChatInWhiteList: isChatInWhiteList.bind(bot.context),
+    optionalCallbackQuery: optionalCallbackQuery.bind(bot.context),
+  };
+
+  return context;
 }
 
 export { extendedContext };
