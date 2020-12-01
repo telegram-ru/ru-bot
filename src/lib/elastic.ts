@@ -7,7 +7,7 @@ function elasticPing() {
 
   if (!client) {
     client = new elasticsearch.Client({
-      host: 'elasticsearchd:9200',
+      host: 'elasticsearch:9200',
       log: 'trace',
     });
   }

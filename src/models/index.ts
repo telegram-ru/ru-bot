@@ -35,7 +35,6 @@ readdirSync(__dirname)
   )
   .forEach((file) => {
     // @ts-ignore
-    console.log(require(join(__dirname, file)));
     const model = require(join(__dirname, file))(sequelize, DataTypes);
     const name = model.name.charAt(0).toUpperCase() + model.name.slice(1);
 
