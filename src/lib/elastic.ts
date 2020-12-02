@@ -10,9 +10,9 @@ function elasticPing() {
   return client.ping({}, { requestTimeout: 500 });
 }
 
-function push({ index, type, id, body }) {
-  console.log('push(', { index, type, id }, ')');
-  return client.create({ index, type, id, body });
+function push(index, id, body) {
+  console.log('push(', { index, id }, ')');
+  return client.create({ index, id, body });
 }
 
 export { client, push, elasticPing };
