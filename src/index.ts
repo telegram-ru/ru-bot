@@ -35,7 +35,6 @@ async function main() {
   const bot = await createBot(botConfig.token, {
     username: botConfig.username,
   });
-  console.log('main()');
   await sequelize.authenticate();
 
   if (environment.ELASTICSEARCH_URL) {

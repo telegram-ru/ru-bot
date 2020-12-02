@@ -16,8 +16,6 @@ import { Bot, BotContext } from '../types';
 
 const SECOND = 1000;
 
-const index = `rubot-${environment.NODE_ENV || 'undefined'}`;
-
 async function createBot(
   token: string,
   telegrafConfig: TelegrafOptions = {},
@@ -46,7 +44,7 @@ async function createBot(
         ).toISOString();
         const id = `M${ctx.update.message.message_id}C${ctx.update.message.chat.id}F${ctx.update.message.from.id}`;
         const body = { ...ctx.update.message, timestamp };
-        push(index, id, body).catch((error) => {
+        push(id, body).catch((error) => {
           console.error('Cant push to elastic', error); // eslint-disable-line no-console
         });
       }
