@@ -4,7 +4,7 @@ let client: Client;
 
 function elasticPing() {
   if (!client) {
-    client = new Client({ node: 'elasticsearch:9200' });
+    client = new Client({ node: 'http://elasticsearch:9200' });
   }
 
   return client.ping({}, { requestTimeout: 500 });
