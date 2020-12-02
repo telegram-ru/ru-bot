@@ -2,7 +2,8 @@ import * as Sentry from '@sentry/node';
 import Telegraf from 'telegraf';
 
 import { TelegrafOptions } from 'telegraf/typings/telegraf';
-import { environment } from '../config';
+import telegrafThrottler from 'telegraf-throttler';
+import { dev, environment } from '../config';
 import { assignAdditionalContextProps } from './assign-additional-context-props';
 import { push } from './elastic';
 import { featureGetId } from '../features/get-id';
@@ -22,7 +23,16 @@ async function createBot(
   console.log('createBot()', telegrafConfig);
   const bot = new Telegraf<BotContext>(token, telegrafConfig);
 
-  if (environment.NODE_ENV === 'development') {
+  const throttler = telegrafThrottler({
+    out: {
+      minTime: 25,
+      reservoir: 15,
+      reservoirRefreshAmount: 15,
+      reservoirRefreshInterval: 1000,
+    },
+  });
+  bot.use(throttler);
+  if (dev) {
     bot.use(Telegraf.log());
   }
 

@@ -30,7 +30,8 @@
     "pg": "^8.5.1",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
-    "telegraf": "^3.38.0"
+    "telegraf": "^3.38.0",
+    "telegraf-throttler": "^0.2.0"
   },
   "devDependencies": {
     "@types/validator": "^13.1.0",
