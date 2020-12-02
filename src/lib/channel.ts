@@ -60,7 +60,15 @@ class Channel<Bot extends Telegraf<any>, BotContext> extends TelegramGroup<
     );
   }
 
-  notifyKickBan({ fluder, chat, moder, reason }, extra?: Extra) {
+  notifyKickBan(
+    {
+      fluder,
+      chat,
+      moder,
+      reason,
+    }: { fluder?: any; chat: any; moder: any; reason?: string },
+    extra?: Extra,
+  ) {
     console.log('notifyKickBan', fluder.id, chat.id);
     return this.sendMessage(
       text.banHammer.fluderBannedIn({

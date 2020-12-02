@@ -1,4 +1,3 @@
-import Telegraf from 'telegraf'; // eslint-disable-line no-unused-vars
 import { Chat } from './chat';
 import { Hammer } from './hammer';
 import { Channel } from './channel';
@@ -11,7 +10,7 @@ import { Bot, BotContext } from '../types';
  * @param {string|number} chatId
  * @return {Chat}
  */
-function getChat(chatId: string): Chat {
+function getChat(chatId: string): Chat<Bot, BotContext> {
   if (!this.chats.has(chatId)) {
     this.chats.set(chatId, new Chat(chatId, this.rootInstance));
   }
@@ -28,7 +27,7 @@ function getHammer() {
  * @param {Chat} chat
  * @return {boolean}
  */
-function isChatInWhiteList(chat: Chat): boolean {
+function isChatInWhiteList(chat: Chat<Bot, BotContext>): boolean {
   return this.chats.has(chat.id);
 }
 
