@@ -10,18 +10,12 @@
  *   ])
  * }
  */
-function random(variants) {
+function random(variants: Array<(...any) => string>) {
   const count = variants.length;
 
   return (object) => variants[Math.floor(Math.random() * count)](object);
 }
 
-/**
- * Create full name of user "$first_name $last_name (@username)"
- * Example: Sergey Sova (@sergeysova)
- * @param {User} param0 Telegram User type
- * @return {string}
- */
 function fullName({ first_name: first, last_name: last, username }) {
   return [
     first && first.trim(),
@@ -59,26 +53,7 @@ function fullNameLink(user) {
   return `[${name}](tg://user?id=${user.id})`;
 }
 
-/**
- *
- * @param {Chat} param0
- * @return {string}
- */
-function chatTitle({ title, username, id, type }) {
-  const parts = [
-    title && title.trim(),
-    username && `(@${username.trim()})`,
-  ].filter(Boolean);
-
-  if (parts.length === 0) {
-    parts.push(`${type}:${id}`);
-  }
-
-  return parts.join(' ');
-}
-
-// eslint-disable-next-line no-unused-vars
-function chatLink({ title: titleRaw, username, id, type }) {
+function chatLink({ title: titleRaw, username }) {
   const title = titleRaw.trim() || '<[unnamed]>';
 
   if (username) {
@@ -98,36 +73,12 @@ function russianSpeaking(group) {
   return group;
 }
 
-/**
- * Like switch case, but function
- * Select key by $value from $cases
- * Return $defaultCase if $cases[$value] not found
- * @param {any} value
- * @param {{}} cases
- * @param {any} defaultCase
- */
-function select(value, cases, defaultCase) {
-  return cases[value] || defaultCase;
-}
-
-/**
- * Join list of messages with \n
- * @param {string[]} list
- * @return {string}
- */
-function column(...list) {
-  return list.join('\n');
-}
-
 export {
   random,
   fullName,
   fullNameId,
   fullNameIdLink,
   fullNameLink,
-  chatTitle,
   chatLink,
-  select,
-  column,
   russianSpeaking,
 };

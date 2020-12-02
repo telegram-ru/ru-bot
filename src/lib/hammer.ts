@@ -1,14 +1,17 @@
 import * as Sentry from '@sentry/node';
+
 import { Telegraf } from 'telegraf';
-import { TelegrafContext } from 'telegraf/typings/context';
 import { Blocked, Message } from '../models';
 
 /* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
 
-class Hammer {
-  bot: Telegraf<any>;
+class Hammer<
+  Bot extends Telegraf<any>,
+  BotContext extends { ownedChats: any }
+> {
+  bot: Bot;
 
-  ctx: TelegrafContext & { ownedChats: any[] };
+  ctx: BotContext;
 
   constructor(context) {
     this.bot = context.rootInstance;
@@ -23,13 +26,10 @@ class Hammer {
    */
   async blacklistUser(user, exceptChatIds = []) {
     console.log('blacklistUser', user.id);
-    const blacklistedIn = [];
-
     for (const chat of this.ctx.ownedChats) {
       if (!exceptChatIds.includes(chat.id)) {
         try {
           await chat.kickMember(user);
-          blacklistedIn.push(await this.bot.telegram.getChat(chat.id));
         } catch (error) {
           Sentry.captureException(error);
           console.log('blacklistUser:kickMember', error);
@@ -37,12 +37,7 @@ class Hammer {
       }
     }
 
-    await Blocked.create({
-      targetId: String(user.id),
-      type: 'user',
-    });
-
-    return blacklistedIn;
+    await Blocked.create({ targetId: String(user.id), type: 'user' });
   }
 
   /**
@@ -62,28 +57,8 @@ class Hammer {
     }
 
     await Blocked.destroy({
-      where: {
-        targetId: String(user.id),
-        type: 'user',
-      },
+      where: { targetId: String(user.id), type: 'user' },
     });
-  }
-
-  /**
-   * Add entity with url to blacklist
-   * @see https://core.telegram.org/bots/api#messageentity
-   * @param {MessageEntity} entity
-   */
-  async blacklistEntity(entity) {
-    if (entity.text_link) {
-      return Blocked.create({
-        targetId: entity.url,
-        type: 'url',
-      });
-    }
-
-    // TODO: return undefined?
-    return undefined;
   }
 
   /**

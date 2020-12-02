@@ -2,20 +2,14 @@ import Extra from 'telegraf/extra';
 import * as text from '../../text';
 import { allowWhiteListChat } from '../../middlewares/allowed-chat';
 import { adminRequiredSilenced } from '../../middlewares/admin-required';
+import { Bot, BotContext } from '../../types';
 
 /** 1 day in seconds */
 const RO_TIME = 86400;
 const SECOND = 1000;
 
-async function handleReadonlyCommand({
-  from,
-  privateChannel,
-  message,
-  match,
-  reply,
-  getChat,
-  chat,
-}) {
+async function handleReadonlyCommand(ctx: BotContext) {
+  const { from, privateChannel, message, match, reply, getChat, chat } = ctx;
   console.log('handleReadonlyCommand', message, match);
   const [, , reason] = match;
 
@@ -41,7 +35,7 @@ async function handleReadonlyCommand({
   }
 }
 
-export function featureReadonlyMode(bot) {
+export function featureReadonlyMode(bot: Bot) {
   bot.hears(
     new RegExp(`^(${text.commands.readonly()}|!ro)( .*)?`),
     allowWhiteListChat,

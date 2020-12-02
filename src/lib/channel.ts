@@ -1,8 +1,12 @@
+import { Extra, Telegraf } from 'telegraf';
 import * as text from '../text';
 import { TelegramGroup } from './telegram-group';
 
-class Channel extends TelegramGroup {
-  notifyBanInProgress({ reason, banned }, extra) {
+class Channel<Bot extends Telegraf<any>, BotContext> extends TelegramGroup<
+  Bot,
+  BotContext
+> {
+  notifyBanInProgress({ reason, banned }, extra?: Extra) {
     console.log('notifyBanInProgress', { reason, banned });
     return this.sendMessage(
       text.spamHammer.userBanInProgressWithReason({
@@ -13,58 +17,18 @@ class Channel extends TelegramGroup {
     );
   }
 
-  editBanMessage(
-    messageId,
-    { reason, originChat, chats, moder, banned },
-    extra,
-  ) {
-    console.log(
-      'editBanMessage',
-      reason,
-      chats,
-      originChat,
-      moder.id,
-      banned.id,
-    );
+  editBanMessage(messageId, { reason, originChat, moder, banned }, extra) {
+    console.log('editBanMessage', reason, originChat, moder.id, banned.id);
     return this.editMessageText(
       messageId,
       text.spamHammer.userBannedWithReason({
         reason,
-        chats,
         moder,
         banned,
         originChat,
       }),
       { ...extra, parse_mode: 'Markdown' },
     );
-  }
-
-  /**
-   * User banned with message
-   */
-  notifyBan({ reason, originChat, chats, moder, banned }, extra) {
-    console.log('notifyBan', reason, chats, originChat, moder.id, banned.id);
-    return this.sendMessage(
-      text.spamHammer.userBannedWithReason({
-        reason,
-        chats,
-        moder,
-        banned,
-        originChat,
-      }),
-      { ...extra, parse_mode: 'Markdown' },
-    );
-  }
-
-  /**
-   * User unspammed
-   */
-  notifyUnspam({ chats, moder, spammer }, extra) {
-    console.log('notifyUnspam', chats, moder.id, spammer.id);
-    return this.sendMessage(text.spamHammer.userUnspammed({ moder, spammer }), {
-      ...extra,
-      parse_mode: 'Markdown',
-    });
   }
 
   /**
@@ -83,7 +47,7 @@ class Channel extends TelegramGroup {
     return this.telegram.forwardMessage(this.id, chat.id, message.message_id);
   }
 
-  notifyReadonly({ fluder, chat, moder, reason }, extra) {
+  notifyReadonly({ fluder, chat, moder, reason }, extra?: Extra) {
     console.log('notifyReadonly', fluder.id, chat.id);
     return this.sendMessage(
       text.readonlyMode.fluderReadonlyIn({
@@ -96,7 +60,7 @@ class Channel extends TelegramGroup {
     );
   }
 
-  notifyKickBan({ fluder, chat, moder, reason }, extra) {
+  notifyKickBan({ fluder, chat, moder, reason }, extra?: Extra) {
     console.log('notifyKickBan', fluder.id, chat.id);
     return this.sendMessage(
       text.banHammer.fluderBannedIn({
