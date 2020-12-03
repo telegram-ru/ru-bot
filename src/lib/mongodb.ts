@@ -19,6 +19,7 @@ async function init() {
 }
 
 interface ElasticMessage<Message> {
+  createdAt: Date;
   _index: string;
   _type: '_doc';
   _id: string;
@@ -36,6 +37,7 @@ async function push(id: string, body: unknown) {
     .db('rubot')
     .collection<ElasticMessage<unknown>>('messages')
     .insertOne({
+      createdAt: new Date(),
       _id: id,
       _index: index,
       _score: 1,
