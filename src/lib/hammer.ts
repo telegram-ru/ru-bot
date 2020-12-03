@@ -3,8 +3,6 @@ import * as Sentry from '@sentry/node';
 import { Telegraf } from 'telegraf';
 import { Blocked, Message } from '../models';
 
-/* eslint-disable class-methods-use-this, no-restricted-syntax, no-await-in-loop */
-
 class Hammer<
   Bot extends Telegraf<any>,
   BotContext extends { ownedChats: any }

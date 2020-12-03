@@ -1,11 +1,12 @@
 import { allowWhiteListChat } from '../../middlewares/allowed-chat';
-import { keyboardUnspamUser } from '../spam-hammer/keyboards'; // TODO(ssova): remove outfeature import
+import { keyboardUnspamUser } from '../spam-hammer/keyboards';
+import { Bot, BotContext } from '../../types'; // TODO(ssova): remove outfeature import
 
 /**
  * Executes if bot exist in joined users
  * Add group to db, fetch admins and bot rights
  */
-async function onNewChatMembers(ctx) {
+async function onNewChatMembers(ctx: BotContext) {
   const {
     new_chat_members: newMembers,
     chat,
@@ -34,7 +35,7 @@ async function onNewChatMembers(ctx) {
   });
 }
 
-function featureBotParticipation(bot) {
+function featureBotParticipation(bot: Bot): void {
   bot.on('new_chat_members', allowWhiteListChat, onNewChatMembers);
 }
 

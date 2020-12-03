@@ -1,11 +1,14 @@
 import * as Sentry from '@sentry/node';
 import { Extra } from 'telegraf';
+import { Bot, BotContext } from '../../types';
 
-async function onIdCommand({ reply, chat, from, message }) {
+async function onIdCommand(ctx: BotContext) {
+  const { reply, chat, from, message } = ctx;
   console.log('on !id', chat);
   try {
     return await reply(
       `Chat: ${chat.id}\nUser: ${from.id}`,
+      // @ts-ignore
       Extra.inReplyTo(message.message_id),
     );
   } catch (error) {
@@ -15,6 +18,6 @@ async function onIdCommand({ reply, chat, from, message }) {
   }
 }
 
-export function featureGetId(bot) {
+export function featureGetId(bot: Bot) {
   bot.hears(/^!id$/, onIdCommand);
 }

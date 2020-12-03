@@ -4,8 +4,8 @@ import { readFileSync } from 'fs';
 import * as Sentry from '@sentry/node';
 
 import { bot as botConfig, environment } from './config';
+import { init } from './lib/mongodb';
 import { createBot } from './lib/runtime';
-import { elasticPing } from './lib/elastic';
 import { sequelize } from './models';
 
 Sentry.init({
@@ -32,14 +32,11 @@ try {
 }
 
 async function main() {
+  await init();
   const bot = await createBot(botConfig.token, {
     username: botConfig.username,
   });
   await sequelize.authenticate();
-
-  if (environment.ELASTICSEARCH_URL) {
-    await elasticPing();
-  }
 
   if (!(await bot.context.privateChannel.canPostMessages())) {
     throw new Error(
