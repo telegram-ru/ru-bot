@@ -18,14 +18,14 @@ async function init() {
   }
 }
 
-interface ElasticMessage<Message> {
+type ElasticMessage<Message> = {
   createdAt: Date;
   _index: string;
   _type: '_doc';
   _id: string;
   _score: 1;
   _source: Message;
-}
+};
 
 async function push(id: string, body: unknown) {
   const date = new Date();
