@@ -5,7 +5,7 @@ import { TelegrafOptions } from 'telegraf/typings/telegraf';
 import telegrafThrottler from 'telegraf-throttler';
 import { dev, environment } from '../config';
 import { assignAdditionalContextProps } from './assign-additional-context-props';
-import { push } from './elastic';
+import { push } from './mongodb';
 import { featureGetId } from '../features/get-id';
 import { featureSpamHammer } from '../features/spam-hammer';
 import { featureBanHammer } from '../features/ban-hammer';

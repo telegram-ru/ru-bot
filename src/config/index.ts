@@ -1,7 +1,6 @@
 import { parse } from 'url';
 import { config } from 'dotenv';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 import dbConfig from './database.json';
 
 config();
@@ -9,6 +8,7 @@ config();
 const environment = process.env;
 const {
   BOT_TOKEN,
+  MONGODB_URL,
   PRIVATE_CHANNEL_ID,
   BOT_USERNAME = 'ru_community_bot',
   NODE_ENV = 'development',
@@ -44,4 +44,4 @@ const bot = {
 const dev = NODE_ENV === 'development';
 const prod = NODE_ENV !== 'development';
 
-export { db, environment, bot, dev, prod };
+export { db, environment, bot, dev, prod, MONGODB_URL };
