@@ -11,7 +11,6 @@ import { featureSpamHammer } from '../features/spam-hammer';
 import { featureBanHammer } from '../features/ban-hammer';
 import { featureBotParticipation } from '../features/bot-participation';
 import { featureReadonlyMode } from '../features/readonly-mode';
-import { featurePrivateGreetings } from '../features/private-greetings';
 import { Bot, BotContext } from '../types';
 
 const SECOND = 1000;
@@ -65,7 +64,6 @@ async function createBot(
   featureBanHammer(bot);
   featureBotParticipation(bot);
   featureReadonlyMode(bot);
-  featurePrivateGreetings(bot);
 
   return bot;
 }

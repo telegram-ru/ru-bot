@@ -2,7 +2,7 @@ import Extra from 'telegraf/extra';
 import * as text from '../../text';
 import { allowWhiteListChat } from '../../middlewares/allowed-chat';
 import { adminRequiredSilenced } from '../../middlewares/admin-required';
-import { BotContext } from '../../types';
+import { Bot, BotContext } from '../../types';
 
 async function handleBanCommand(ctx: BotContext) {
   const {
@@ -38,7 +38,7 @@ async function handleBanCommand(ctx: BotContext) {
   }
 }
 
-export function featureBanHammer(bot) {
+export function featureBanHammer(bot: Bot) {
   bot.hears(
     new RegExp(`^(${text.commands.ban()}|!ban)( .*)?`),
     allowWhiteListChat,
