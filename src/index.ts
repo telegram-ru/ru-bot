@@ -63,20 +63,22 @@ main().catch((error) => {
   console.log(error); // eslint-disable-line no-console
 });
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', async (error) => {
   Sentry.captureException(error, {
     tags: {
       type: 'process',
     },
   });
+  await Sentry.close(2000)
   process.exit(1);
 });
 
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', async (error) => {
   Sentry.captureException(error, {
     tags: {
       type: 'process',
     },
   });
+  await Sentry.close(2000)
   process.exit(1);
 });
