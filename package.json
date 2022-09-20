@@ -28,7 +28,7 @@
     "dotenv": "^8.2.0",
     "mongodb": "^3.6.3",
     "pg": "^8.5.1",
-    "sequelize": "^6.3.5",
+    "sequelize": "^6.21.6",
     "sequelize-cli": "^6.2.0",
     "telegraf": "^3.38.0",
     "telegraf-throttler": "^0.2.0"
